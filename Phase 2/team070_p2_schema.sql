@@ -11,7 +11,7 @@ CREATE TABLE CorkBoard (
     corkboard_id SERIAL PRIMARY KEY,
     fk_user_id INTEGER REFERENCES CorkBoardItUser(user_id),
     email VARCHAR(250) NOT NULL,
-    date_time_posted TIMESTAMP NOT NULL,
+    date_time TIMESTAMP NOT NULL,
     title VARCHAR(50) NOT NULL,
     category VARCHAR(250) NOT NULL,
     visibility BOOLEAN NOT NULL
@@ -32,7 +32,7 @@ CREATE TABLE PushPin (
     pushpin_id SERIAL PRIMARY KEY,
     fk_user_id INTEGER REFERENCES CorkBoardItUser(user_id),
     fk_corkboard_id INTEGER REFERENCES CorkBoard(corkboard_id),
-    date_time_posted TIMESTAMP NOT NULL,
+    date_time TIMESTAMP NOT NULL,
     url VARCHAR(250) NOT NULL,
     description VARCHAR(200) NOT NULL
 );
@@ -44,7 +44,7 @@ CREATE TABLE Tag (
 
 CREATE TABLE Comment (
     comment_id SERIAL PRIMARY KEY,
-    date_time_posted TIMESTAMP NOT NULL,
+    date_time TIMESTAMP NOT NULL,
     text VARCHAR(250) NOT NULL,
     fk_user_id INTEGER REFERENCES CorkBoardItUser(user_id),
     fk_pushpin_id INTEGER REFERENCES PushPin(pushpin_id)
