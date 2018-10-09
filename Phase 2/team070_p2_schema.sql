@@ -34,7 +34,7 @@ CREATE TABLE PushPin (
     fk_corkboard_id INTEGER REFERENCES CorkBoard(corkboard_id),
     date_time_posted TIMESTAMP NOT NULL,
     url VARCHAR(250) NOT NULL,
-    description(200) NOT NULL
+    description VARCHAR(200) NOT NULL
 );
 
 CREATE TABLE Tag (
