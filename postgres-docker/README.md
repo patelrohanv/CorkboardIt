@@ -20,3 +20,13 @@ docker-compose run shell psql -h postgresdb1 -U postgres
 SELECT * FROM CorkBoard;
 ```
 
+### Reset everything
+```
+// Quit the psql
+\q
+// Quit the container bash
+ctrl + c
+// Kill containers
+docker-compose down
+```
+
