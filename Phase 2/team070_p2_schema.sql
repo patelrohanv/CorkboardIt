@@ -55,7 +55,7 @@ CREATE TABLE Watch (
     fk_public_corkboard_id INTEGER REFERENCES PublicCorkBoard(public_corkboard_id)
 );
 
-CREATE TABLE Like (
+CREATE TABLE Liked (
     fk_user_id INTEGER REFERENCES CorkBoardItUser(user_id),
     fk_pushpin_id INTEGER REFERENCES PushPin(pushpin_id)
 );

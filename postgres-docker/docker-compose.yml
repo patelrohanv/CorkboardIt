@@ -1,0 +1,18 @@
+version: '3'
+services: 
+  postgresdb:
+    image: postgres:latest
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    container_name: postgresdb1
+
+  shell:
+    restart: always
+    image: postgres:latest
+    depends_on:
+      - postgresdb
+
+# docker-compose run shell psql -h postgresdb1 -U postgres
+# docker run -it --rm --link my-postgres:postgres postgres psql -h postgres -U postgres
