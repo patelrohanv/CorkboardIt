@@ -1,3 +1,15 @@
 <div>
   <button mat-raised-button (clicK)="getPopularSites()">Popular Sites</button>
+  <button mat-raised-button (clicK)="getPopularTags()">Popular Tags</button>
+
+
+    <form>
+      <mat-form-field>
+        <input matInput placeholder="Search description, tags, and CorkBoard category"
+               [formControl]="searchFormControl" [([(ngModel)]="search_text")] name="search_text">
+        <mat-error *ngIf="searchFormControl.hasError('incorrect')">
+        </mat-error>
+      </mat-form-field>
+      <button mat-raised-button (clicK)="searchForPushpins(search_text)">PushPin Search</button>
+    </form>
 </div>

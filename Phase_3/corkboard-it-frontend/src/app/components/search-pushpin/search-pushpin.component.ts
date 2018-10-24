@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {FormControl, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-search-pushpin',
@@ -7,9 +8,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SearchPushpinComponent implements OnInit {
 
+  search_text : String
+
+  searchFormControl = new FormControl('', [Validators.required])
+
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  searchForPushpins(search_text){
+
+    //TODO make api call with search text
+
   }
 
 }
