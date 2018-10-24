@@ -1,3 +1,11 @@
-<p>
-  popular-sites works!
-</p>
+<h1>Popular Sites</h1>
+<div>
+  <table>
+  <tr *ngFor= "let site of popular_sites" >
+  <td title="Site">
+    {{site.site}}</td>
+  <td title="PushPins">
+    {{site.push_pins}}</td>
+  </tr>
+  </table>
+</div>
