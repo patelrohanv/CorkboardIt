@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit , } from '@angular/core';
+import {MatTableModule} from '@angular/material';
+import { CdkTableModule } from '@angular/cdk/table';
 
 export interface PopularSites {
   site: string;
@@ -13,7 +15,15 @@ export interface PopularSites {
 export class PopularSitesComponent implements OnInit {
 
   // vars
-  popular_sites : PopularSites[];
+  //  dummy data for now
+  popular_sites : PopularSites[] =  [
+    {site: 'www.google.com', push_pins: 4},
+    {site:'www.gatech.edu', push_pins: 5 },
+    {site: 'www.weather.com', push_pins: 2},
+    {site : 'www.reddit.com', push_pins:10}
+  ];
+
+  pop_sites_displayedColumns: string[] = ['site', 'push_pins'];
 
   constructor() { }
 
@@ -25,13 +35,7 @@ export class PopularSitesComponent implements OnInit {
     //  todo load into PopularSites obj
     //  todo display data
 
-    //  dummy data for now
-    this.popular_sites =  [
-      {site: 'www.google.com', push_pins: 4},
-      {site:'www.gatech.edu', push_pins: 5 },
-      {site: 'www.weather.com', push_pins: 2},
-      {site : 'www.reddit.com', push_pins:10}
-    ];
+
 
   }
 

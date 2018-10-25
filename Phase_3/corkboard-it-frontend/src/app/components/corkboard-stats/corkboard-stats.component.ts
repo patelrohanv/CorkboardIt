@@ -16,6 +16,9 @@ export interface CorkBoardStats {
 export class CorkboardStatsComponent implements OnInit {
 
   cork_board_stats : CorkBoardStats[];
+
+  cb_stats_displayedColumns: string[] = ['user', 'pub_cb', 'pub_pp', 'private_cb', 'private_pp'];
+
   constructor() { }
 
   ngOnInit() {

@@ -1,11 +1,20 @@
 <h1>Popular Sites</h1>
 <div>
-  <table>
-  <tr *ngFor= "let site of popular_sites" >
-  <td title="Site">
-    {{site.site}}</td>
-  <td title="PushPins">
-    {{site.push_pins}}</td>
-  </tr>
+  <table mat-table [dataSource]="popular_sites">
+    <!-- Site Column -->
+    <ng-container matColumnDef="site">
+      <th mat-header-cell *matHeaderCellDef> Site </th>
+      <td mat-cell *matCellDef="let site"> {{site.site}} </td>
+    </ng-container>
+
+    <!-- PushPin Column -->
+    <ng-container matColumnDef="pushpins">
+      <th mat-header-cell *matHeaderCellDef> PushPins </th>
+      <td mat-cell *matCellDef="let site"> {{site.push_pins}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="pop_sites_displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: pop_sites_displayedColumns;"></tr>
+
   </table>
 </div>

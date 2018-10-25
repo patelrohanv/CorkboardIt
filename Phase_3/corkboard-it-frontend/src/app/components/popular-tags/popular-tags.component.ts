@@ -14,6 +14,9 @@ export interface PopularTags {
 export class PopularTagsComponent implements OnInit {
 
   popular_tags : PopularTags[];
+
+  pop_tags_displayedColumns: string[] = ['tag', 'pushpins', 'unique_cb'];
+
   constructor() { }
 
   ngOnInit() {
