@@ -1,12 +1,11 @@
 <div>
   <button mat-raised-button (clicK)="getPopularSites()">Popular Sites</button>
   <button mat-raised-button (clicK)="getPopularTags()">Popular Tags</button>
-
-
+  <button mat-raised-button (clicK)="getCorkBoardStats()">CorkBoard Statistics</button>
     <form>
       <mat-form-field>
         <input matInput placeholder="Search description, tags, and CorkBoard category"
-               [formControl]="searchFormControl" [([(ngModel)]="search_text")] name="search_text">
+               [formControl]="searchFormControl" [([(ngModel)]="search_text")] name="search_text" width="400">
         <mat-error *ngIf="searchFormControl.hasError('incorrect')">
         </mat-error>
       </mat-form-field>

@@ -1,3 +1,17 @@
-<p>
-  corkboard-stats works!
-</p>
+<h1>CorkBoard Statistics</h1>
+<div>
+  <table>
+    <tr *ngFor= "let stat of cork_board_stats">
+      <td title="User">
+        {{stat.user}}</td>
+      <td title="Public CorkBoards">
+        {{stat.pub_cb}}</td>
+      <td title="Public PushPins">
+        {{stat.pub_pins}}</td>
+      <td title="Private CorkBoards">
+        {{stat.private_cb}}</td>
+      <td title="Private PushPins">
+        {{stat.private_pins}}</td>
+    </tr>
+  </table>
+</div>
