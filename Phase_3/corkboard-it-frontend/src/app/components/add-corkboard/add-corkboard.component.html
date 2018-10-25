@@ -1,3 +1,15 @@
-<p>
-  add-corkboard works!
-</p>
+<h1 mat-dialog-title>Add Corkboard</h1>
+<div mat-dialog-content>
+    <form>
+        <mat-form-field>
+            <input matInput 
+                placeholder="Title" 
+                [formControl]="emailFormControl"
+                [(ngModel)]="email" 
+                name="email">
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button (clicK)="checkPassword()">Login</button>
+</div>

@@ -1,24 +1,35 @@
-<div>
+<h1 mat-dialog-title>Login</h1>
+<div mat-dialog-content>
     <form>
         <mat-form-field>
-            <input matInput placeholder="email" [formControl]="emailFormControl" [([(ngModel)]="email")] name="email">
+            <input matInput 
+                placeholder="Email" 
+                [formControl]="emailFormControl" 
+                [(ngModel)]="email"
+                name="email">
             <mat-error *ngIf="emailFormControl.hasError('incorrect')">
                 Incorrect <strong>pin</strong>
             </mat-error>
         </mat-form-field>
 
         <mat-form-field>
-                <input matInput placeholder="pin" [formControl]="pinFormControl" [([(ngModel)]="pin")] name="pin">
-                <mat-error *ngIf="pinFormControl.hasError('incorrect')">
-                    Incorrect <strong>pin</strong>
-                </mat-error>
-                <mat-error *ngIf="pinFormControl.hasError('required')">
-                    Pin is <strong>required</strong>
-                </mat-error>
-                <mat-error *ngIf="pinFormControl.hasError('NaN')">
-                    Entered pin is  <strong>NaN</strong>
-                </mat-error>
-            </mat-form-field>
+            <input matInput 
+                placeholder="Pin" 
+                [formControl]="pinFormControl" 
+                [(ngModel)]="pin" 
+                name="pin">
+            <mat-error *ngIf="pinFormControl.hasError('incorrect')">
+                Incorrect <strong>pin</strong>
+            </mat-error>
+            <mat-error *ngIf="pinFormControl.hasError('required')">
+                Pin is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="pinFormControl.hasError('NaN')">
+                Entered pin is <strong>NaN</strong>
+            </mat-error>
+        </mat-form-field>
     </form>
+</div>
+<div mat-dialog-actions>
     <button mat-raised-button (clicK)="checkPassword()">Login</button>
 </div>

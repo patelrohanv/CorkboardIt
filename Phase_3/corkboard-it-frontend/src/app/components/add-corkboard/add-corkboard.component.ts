@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./add-corkboard.component.scss']
 })
 export class AddCorkboardComponent implements OnInit {
-
+  
   constructor() { }
 
   ngOnInit() {
