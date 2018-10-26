@@ -15,6 +15,9 @@ Endpoint is  `0.0.0.0:5001`
 
 Swagger documentation is the default - you will be able to see how to call them. I recommend using postman as well to visualise the requests.
 
+### Troubleshooting
+***IMPORTANT*** Any changes to the code will require the command: `docker-compose build` in the python server or docker containers
+
 ## Simple psql shell access
 ### Commands
 Unfortunately you will have to run this twice because I don't know how to run containers in order via one liner
