@@ -14,5 +14,13 @@ services:
     depends_on:
       - postgresdb
 
+  web:
+    restart: always
+    build: 
+      context: ./
+      dockerfile: flask.Dockerfile
+    ports:
+      - "5001:5001"
+
 # docker-compose run shell psql -h postgresdb1 -U postgres
 # docker run -it --rm --link my-postgres:postgres postgres psql -h postgres -U postgres
