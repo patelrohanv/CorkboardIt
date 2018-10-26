@@ -13,7 +13,10 @@ export interface PopularTags {
 })
 export class PopularTagsComponent implements OnInit {
 
-  popular_tags : PopularTags[];
+  popular_tags : PopularTags[] = [
+    {tag: "foo", pushpins: 5, unique_cb:3},
+    {tag: "bar", pushpins: 10, unique_cb:5}
+  ];
 
   pop_tags_displayedColumns: string[] = ['tag', 'pushpins', 'unique_cb'];
 
@@ -25,8 +28,6 @@ export class PopularTagsComponent implements OnInit {
   getPopularTags(){
 
     //TODO make api call to get popular tags
-    this.popular_tags = [];
-
 
   }
 
