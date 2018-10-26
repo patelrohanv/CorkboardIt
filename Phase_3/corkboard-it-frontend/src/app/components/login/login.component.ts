@@ -1,5 +1,4 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { FormControl, Validators } from '@angular/forms';
 
 @Component({
@@ -8,15 +7,12 @@ import { FormControl, Validators } from '@angular/forms';
     styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-    email: String
-    pin: String
 
-    emailFormControl = new FormControl('', [Validators.required])
-    pinFormControl = new FormControl('', [Validators.required])
+    email = new FormControl('', [Validators.required, Validators.email])
+    pin = new FormControl('', [Validators.required, Validators.maxLength(4), Validators.minLength(4)])
 
-    constructor(public dialogRef: MatDialogRef<LoginComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any) {
-        this.dialogRef.disableClose = true;
+    constructor() {
+        
     }
 
     ngOnInit() {
@@ -26,9 +22,7 @@ export class LoginComponent implements OnInit {
         // TODO make call to api to check if entered pin is the same as the one on the database
         let correct = true
 
-        if (this.pin.length != 4) { correct = false }
-
-        if (!correct) { this.pinFormControl.setErrors({ 'incorrect': true }) }
-        else { this.dialogRef.close() }
+        if (!correct) { this.pin.setErrors({ 'incorrect': true }) }
+        else { console.log(`${this.email.value}: ${this.pin.value}`) }
     }
 }

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { LoginComponent } from './components/login/login.component';
 
 @Component({
   selector: 'app-root',
@@ -15,10 +14,5 @@ export class AppComponent implements OnInit {
 
   }
   ngOnInit() {
-
-  }
-
-  openLogin(): void {
-    const dialogRef = this.dialog.open(LoginComponent)
   }
 }

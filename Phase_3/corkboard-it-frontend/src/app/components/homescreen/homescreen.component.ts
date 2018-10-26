@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-homescreen',
@@ -11,5 +12,17 @@ export class HomescreenComponent implements OnInit {
 
   ngOnInit() {
   }
+  getPopularSites(): void {
+    return null;
+  }
+
+  getPopularTags(): void {
+    return null;
+  }
+
+  getCorkBoardStats(): void {
+    return null;
+  }
+
 
 }

@@ -1,9 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
     MatDialogModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    MatCheckboxModule,
+    MatCardModule,
+    MatTableModule,
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -37,7 +41,11 @@ import { CorkboardStatsComponent } from './components/corkboard-stats/corkboard-
     ],
     imports: [
         BrowserModule,
+        BrowserAnimationsModule,
         AppRoutingModule,
+        MatCardModule,
+        MatCheckboxModule,
+        MatTableModule,
         FormsModule,
         ReactiveFormsModule,
         MatDialogModule,
@@ -47,6 +55,7 @@ import { CorkboardStatsComponent } from './components/corkboard-stats/corkboard-
     providers: [],
     bootstrap: [AppComponent],
     entryComponents: [LoginComponent,
+        HomescreenComponent,
         AddCorkboardComponent,
         AddPushpinComponent, 
         PopularTagsComponent, 
