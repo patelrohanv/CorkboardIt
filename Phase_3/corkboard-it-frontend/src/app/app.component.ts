@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,7 @@ import { MatDialog } from '@angular/material';
 export class AppComponent implements OnInit {
   title = 'corkboard-it-frontend';
 
-  constructor(public dialog: MatDialog) {
+  constructor(private router: Router) {
 
   }
   ngOnInit() {

@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { RouterModule, Router, Route } from '@angular/router';
 
 @Component({
     selector: 'app-login',
@@ -11,7 +12,7 @@ export class LoginComponent implements OnInit {
     email = new FormControl('', [Validators.required, Validators.email])
     pin = new FormControl('', [Validators.required, Validators.maxLength(4), Validators.minLength(4)])
 
-    constructor() {
+    constructor(private router: Router) {
         
     }
 
@@ -23,6 +24,9 @@ export class LoginComponent implements OnInit {
         let correct = true
 
         if (!correct) { this.pin.setErrors({ 'incorrect': true }) }
-        else { console.log(`${this.email.value}: ${this.pin.value}`) }
+        else {
+            console.log(`${this.email.value}: ${this.pin.value}`)
+            this.router.navigate(['/home/', this.email.value]);
+        }
     }
 }

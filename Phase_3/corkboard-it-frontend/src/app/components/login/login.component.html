@@ -20,7 +20,7 @@
                 <mat-error *ngIf="pin.hasError('required')">
                     Pin is <strong>required</strong>
                 </mat-error>
-                <mat-error *ngIf="pin.hasError('NaN')">
+                <mat-error *ngIf="pin.hasError('maxLength')">
                     Entered pin is <strong>NaN</strong>
                 </mat-error>
             </mat-form-field>

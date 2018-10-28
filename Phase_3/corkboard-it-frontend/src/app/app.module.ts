@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule } from '@angular/router';
 import {
     MatDialogModule,
     MatInputModule,
@@ -40,6 +41,7 @@ import { CorkboardStatsComponent } from './components/corkboard-stats/corkboard-
         CorkboardStatsComponent
     ],
     imports: [
+        RouterModule,
         BrowserModule,
         BrowserAnimationsModule,
         AppRoutingModule,
