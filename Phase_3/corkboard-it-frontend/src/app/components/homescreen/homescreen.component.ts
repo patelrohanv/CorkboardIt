@@ -1,28 +1,41 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { PopularTagsComponent } from '../popular-tags/popular-tags.component';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
-  selector: 'app-homescreen',
-  templateUrl: './homescreen.component.html',
-  styleUrls: ['./homescreen.component.scss']
+    selector: 'app-homescreen',
+    templateUrl: './homescreen.component.html',
+    styleUrls: ['./homescreen.component.scss']
 })
 export class HomescreenComponent implements OnInit {
 
-  constructor() { }
+    constructor(public dialog: MatDialog) { }
 
-  ngOnInit() {
-  }
-  getPopularSites(): void {
-    return null;
-  }
+    ngOnInit() {
+    }
+    getPopularSites(): void {
+        return null;
+    }
 
-  getPopularTags(): void {
-    return null;
-  }
+    getPopularTags(): void {
 
-  getCorkBoardStats(): void {
-    return null;
-  }
+        const dialogRef = this.dialog.open(PopularTagsComponent, {
+            width: '250px',
+            data: {}
+        });
 
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
+    }
+
+    getCorkBoardStats(): void {
+        return null;
+    }
+
+    addCorkBoard(): void {
+
+    }
 
 }

@@ -17,10 +17,14 @@
 		<mat-card-title>Home Page for </mat-card-title>
 	</mat-card-header>
 	<mat-card-content>
-		<h3>Recent Cord Board Updates</h3>
+		<h3>Recent Cord Board Updates
+			<button mat-flat-button color="primary" (click)="getPopularTags()">Popular Tags</button>
+		</h3>
 	</mat-card-content>
 	<mat-card-content>
-			<h3>My CorkBoards</h3>
+		<h3>My CorkBoards
+			<button mat-flat-button color="primary" (click)="addCorkBoard()">Add CorkBoard</button>
+		</h3>
 	</mat-card-content>
 	<mat-card-actions>
 		<form>

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 
 export interface PopularTags {
   tag: string;
@@ -20,7 +21,7 @@ export class PopularTagsComponent implements OnInit {
 
   pop_tags_displayedColumns: string[] = ['tag', 'pushpins', 'unique_cb'];
 
-  constructor() { }
+  constructor(public dialogRef: MatDialogRef<PopularTagsComponent>) { }
 
   ngOnInit() {
   }
