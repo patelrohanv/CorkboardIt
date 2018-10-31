@@ -26,32 +26,43 @@ export class UserServiceService {
     }
 
     // /homescreen/<user_id>
-    getHomescreen(user_id: string): void {
+    getHomescreen(user_id: string): Observable<Object> {
+        const requestURL = this.baseUrl + '/homescreen/' + user_id
+        return this.http.get<Object>(requestURL)
 
     }
-
     // /addCorkboard/<user_id>
-    postAddCorkboard(user_id: string): void {
+    postAddCorkboard(user_id: string): Observable<Object> {
+        const requestURL = this.baseUrl + '/addCorkboard/' + user_id
+        return this.http.post<Object>(requestURL, '')
 
     }
 
     // /viewCorkboard/<corkboard_id>
-    ViewCorkboard(corkboard_id: string): void {
+    ViewCorkboard(corkboard_id: string): Observable<Object> {
+        const requestURL = this.baseUrl + '/viewCorkboard/' + corkboard_id
+        return this.http.get<Object>(requestURL)
 
     }
 
     // /addPushpin/<corkboard_id>
-    postAddPushpin(corkboard_id: string): void {
-
+    postAddPushpin(corkboard_id: string): Observable<Object> {
+        const requestURL = this.baseUrl + '/addPushpin/' + corkboard_id
+        return this.http.post<Object>(requestURL, '')
+ 
     }
 
     // /viewPushpin/<pushpin_id>
-    ViewPushpin(pushpin_id: string): void {
+    ViewPushpin(pushpin_id: string): Observable<Object> {
+        const requestURL = this.baseUrl + '/viewPushpin/' + pushpin_id
+        return this.http.get<Object>(requestURL)
 
     }
 
     // /searchPushpin/<pushpin_id>
-    SearchPushpin(pushpin_id: string): void {
+    SearchPushpin(pushpin_id: string): Observable<Object> {
+        const requestURL = this.baseUrl + '/searchPushpin/' + pushpin_id
+        return this.http.get<Object>(requestURL)
 
     }
 
