@@ -1,3 +1,21 @@
-<p>
-  add-pushpin works!
-</p>
+<h1 mat-dialog-title>Add PushPin to {{current_cork_board}}</h1>
+<div mat-dialog-content class="example-container">
+  <p>
+    <mat-form-field style="width: 300px;">
+      <input matInput placeholder="URL" type="url" [formControl]="url">
+    </mat-form-field>
+    </p>
+  <p>
+    <mat-form-field hintLabel="Max 199 characters" style="width: 300px;">
+      <textarea matInput #input maxlength="199" placeholder="Description" [formControl]="description"></textarea>
+      <mat-hint align="end">{{input.value?.length || 0}}/199</mat-hint>
+    </mat-form-field>
+    </p>
+    <mat-form-field style="width: 300px;">
+      <textarea matInput placeholder="Tags" [formControl]="tags"></textarea>
+      <mat-hint>Comma separated</mat-hint>
+    </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button (clicK)="addPushPin()">Add</button>
+</div>
