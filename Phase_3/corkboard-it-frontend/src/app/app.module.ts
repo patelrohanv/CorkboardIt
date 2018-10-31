@@ -11,6 +11,7 @@ import {
     MatTableModule,
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import * as rxjs from 'rxjs'
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -25,6 +26,8 @@ import { PopularTagsComponent } from './components/popular-tags/popular-tags.com
 import { PopularSitesComponent } from './components/popular-sites/popular-sites.component';
 import { CorkboardStatsComponent } from './components/corkboard-stats/corkboard-stats.component';
 
+import { UserServiceService } from './services/user-service.service'
+
 
 @NgModule({
     declarations: [
@@ -38,7 +41,8 @@ import { CorkboardStatsComponent } from './components/corkboard-stats/corkboard-
         SearchPushpinComponent,
         PopularTagsComponent,
         PopularSitesComponent,
-        CorkboardStatsComponent
+        CorkboardStatsComponent,
+        UserServiceService
     ],
     imports: [
         RouterModule,
@@ -59,10 +63,10 @@ import { CorkboardStatsComponent } from './components/corkboard-stats/corkboard-
     entryComponents: [LoginComponent,
         HomescreenComponent,
         AddCorkboardComponent,
-        AddPushpinComponent, 
-        PopularTagsComponent, 
-        PopularTagsComponent, 
-        CorkboardStatsComponent, 
+        AddPushpinComponent,
+        PopularTagsComponent,
+        PopularTagsComponent,
+        CorkboardStatsComponent,
         SearchPushpinComponent]
 })
 export class AppModule { }
