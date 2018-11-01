@@ -26,7 +26,7 @@ import { PopularTagsComponent } from './components/popular-tags/popular-tags.com
 import { PopularSitesComponent } from './components/popular-sites/popular-sites.component';
 import { CorkboardStatsComponent } from './components/corkboard-stats/corkboard-stats.component';
 
-import { UserServiceService } from './services/user-service.service'
+import { UserService } from './services/user.service'
 
 
 @NgModule({
@@ -42,7 +42,7 @@ import { UserServiceService } from './services/user-service.service'
         PopularTagsComponent,
         PopularSitesComponent,
         CorkboardStatsComponent,
-        UserServiceService
+        UserService
     ],
     imports: [
         RouterModule,

@@ -8,7 +8,7 @@ import { Observable, ErrorObserver } from 'rxjs';
 @Injectable({
     providedIn: 'root'
 })
-export class UserServiceService {
+export class UserService {
     private baseUrl;
 
     constructor(private http: HttpClient) {
