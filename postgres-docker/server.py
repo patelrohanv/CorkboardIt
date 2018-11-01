@@ -3,9 +3,11 @@ import json
 from flasgger import Swagger
 import psycopg2
 from psycopg2 import sql
+from flask_cors import CORS
 
 app = Flask(__name__)                  #  Create a Flask WSGI application                     
 Swagger(app)
+CORS(app)
 
 connection = "host='postgresdb' dbname='postgres' user='postgres' password='secret'"
 conn = psycopg2.connect(connection)
