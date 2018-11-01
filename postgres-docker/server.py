@@ -50,6 +50,7 @@ def get_user_id():
         return jsonify(user_id = None), 404
     else:
         return jsonify(user_id = rows[0][0])
+
 @app.route('/homescreen/<user_id>')
 def get_home_screen(user_id):
     """
@@ -95,19 +96,24 @@ def get_home_screen(user_id):
 
 @app.route('/addcorkboard/<user_id>', methods =['POST'])
 def add_corkboard(user_id):
+    return 'being built rn'
 
 
 @app.route('/viewcorkboard/<corkboard_id>')
 def view_corkboard(corkboard_id):
+    return 'being built rn'
 
 @app.route('/addpushpin/<corkboard_id>', methods =['POST'])
 def add_pushpin(corkboard_id):
+    return 'being built rn'
 
 @app.route('/viewpushpin/<pushpin_id>')
 def view_pushpin(pushpin_id):
+    return 'being built rn'
 
 @app.route('/searchpushpin/<pushpin_id>')
 def search_pushpin(pushpin_id):
+    return 'being built rn'
 
 @app.route('/populartags')
 def popular_tags():
@@ -138,7 +144,7 @@ def popular_tags():
     return json.dumps(data)
 
 @app.route('/popularsites')
-def get_home_screen():
+def get_popular_sites():
         data = {
             'pop_sites': [
                 {
