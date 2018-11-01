@@ -12,6 +12,7 @@ import {
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import * as rxjs from 'rxjs'
+import { HttpClientModule } from '@angular/common/http'; 
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -25,8 +26,6 @@ import { SearchPushpinComponent } from './components/search-pushpin/search-pushp
 import { PopularTagsComponent } from './components/popular-tags/popular-tags.component';
 import { PopularSitesComponent } from './components/popular-sites/popular-sites.component';
 import { CorkboardStatsComponent } from './components/corkboard-stats/corkboard-stats.component';
-
-import { UserService } from './services/user.service'
 
 
 @NgModule({
@@ -42,7 +41,6 @@ import { UserService } from './services/user.service'
         PopularTagsComponent,
         PopularSitesComponent,
         CorkboardStatsComponent,
-        UserService
     ],
     imports: [
         RouterModule,
@@ -56,7 +54,8 @@ import { UserService } from './services/user.service'
         ReactiveFormsModule,
         MatDialogModule,
         MatInputModule,
-        MatButtonModule
+        MatButtonModule,
+        HttpClientModule
     ],
     providers: [],
     bootstrap: [AppComponent],
