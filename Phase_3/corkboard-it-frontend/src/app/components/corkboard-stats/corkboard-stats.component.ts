@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
-import { CorkboardStat } from '../../models/corkboardStat'
+import { CorkboardStat } from '../../models/corkboardStat';
 
 // export interface CorkBoardStats {
 //   user: string;
@@ -22,11 +22,11 @@ export class CorkboardStatsComponent implements OnInit {
     //   {user: 'John Doe', pub_cb: 5, pub_pins: 6, private_cb: 1, private_pins: 2},
     //   {user: 'Foo Bar', pub_cb: 7, pub_pins: 9, private_cb: 5, private_pins: 10},
     //   ];
-    cork_board_stats: CorkboardStat[] = []
+    cork_board_stats: CorkboardStat[] = [];
 
     cb_stats_displayedColumns: string[] = ['user', 'pub_cb', 'pub_pp', 'private_cb', 'private_pp'];
 
-    constructor(userService: UserService) {
+    constructor(private userService: UserService) {
         userService.CorkboardStats().subscribe((data: CorkboardStat) => this.cork_board_stats.push(data));
     }
 
@@ -35,10 +35,10 @@ export class CorkboardStatsComponent implements OnInit {
 
     getCorkBoardStats() {
 
-        //TODO make api call
+        // TODO make api call
         this.cork_board_stats = [];
 
-        //TODO color current user red
+        // TODO color current user red
 
 
     }

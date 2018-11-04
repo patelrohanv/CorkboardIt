@@ -17,7 +17,7 @@ export class UserService {
 
     // /login
     postLogin(user_id: string, password: string): void {
-        
+
     }
 
     // /user/
@@ -27,62 +27,61 @@ export class UserService {
 
     // /homescreen/<user_id>
     getHomescreen(user_id: string): Observable<Object> {
-        const requestURL = this.baseUrl + '/homescreen/' + user_id
-        return this.http.get<Object>(requestURL)
+        const requestURL = this.baseUrl + '/homescreen/' + user_id;
+        return this.http.get<Object>(requestURL);
 
     }
     // /addCorkboard/<user_id>
     postAddCorkboard(user_id: string): Observable<Object> {
-        const requestURL = this.baseUrl + '/addCorkboard/' + user_id
-        return this.http.post<Object>(requestURL, '')
+        const requestURL = this.baseUrl + '/addcorkboard/' + user_id;
+        return this.http.post<Object>(requestURL, '');
 
     }
 
     // /viewCorkboard/<corkboard_id>
     ViewCorkboard(corkboard_id: string): Observable<Object> {
-        const requestURL = this.baseUrl + '/viewCorkboard/' + corkboard_id
-        return this.http.get<Object>(requestURL)
+        const requestURL = this.baseUrl + '/viewcorkboard/' + corkboard_id;
+        return this.http.get<Object>(requestURL);
 
     }
 
     // /addPushpin/<corkboard_id>
     postAddPushpin(corkboard_id: string): Observable<Object> {
-        const requestURL = this.baseUrl + '/addPushpin/' + corkboard_id
-        return this.http.post<Object>(requestURL, '')
- 
+        const requestURL = this.baseUrl + '/addpushpin/' + corkboard_id;
+        return this.http.post<Object>(requestURL, '');
     }
 
     // /viewPushpin/<pushpin_id>
     ViewPushpin(pushpin_id: string): Observable<Object> {
-        const requestURL = this.baseUrl + '/viewPushpin/' + pushpin_id
-        return this.http.get<Object>(requestURL)
+        const requestURL = this.baseUrl + '/viewpushpin/' + pushpin_id;
+        return this.http.get<Object>(requestURL);
 
     }
 
     // /searchPushpin/<pushpin_id>
     SearchPushpin(pushpin_id: string): Observable<Object> {
-        const requestURL = this.baseUrl + '/searchPushpin/' + pushpin_id
-        return this.http.get<Object>(requestURL)
+        const requestURL = this.baseUrl + '/searchpushpin/' + pushpin_id;
+        return this.http.get<Object>(requestURL);
 
     }
 
     // /popularTags
     PopularTags(): Observable<Object> {
-        const requestURL = this.baseUrl + '/popularTags'
-        return this.http.get<Object>(requestURL)
+        const requestURL = this.baseUrl + '/populartags';
+        return this.http.get<Object>(requestURL);
 
     }
 
     // /popularSits
     PopularSites(): Observable<Object> {
-        const requestURL = this.baseUrl + '/popularSits'
-        return this.http.get<Object>(requestURL)
+        const requestURL = this.baseUrl + '/popularsites';
+        return this.http.get<Object>(requestURL);
     }
 
     // /corkboardStats
     CorkboardStats(): Observable<Object> {
-        const requestURL = this.baseUrl + '/corkboardStats'
-        return this.http.get<Object>(requestURL)
+        const requestURL = this.baseUrl + '/corkboardstats';
+        return this.http.get<Object>(requestURL);
     }
 
 }

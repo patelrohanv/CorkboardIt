@@ -1,3 +1,28 @@
-<p>
-  view-corkboard works!
-</p>
+<div>
+    <div>
+        <div>
+            {{fakeCd}}
+            <mat-button-toggle value="follow">
+                    Follow
+            </mat-button-toggle>
+            {{fakeCd}}
+            <br>
+            Last Updated {{fakeCd}}
+        </div>
+        <div>
+            {{fakeCd}}
+            <br>
+            <br>
+            <button mat-button>Add Pushpin</button>
+        </div>
+    </div>
+    <div *ngFor="let i of pushpins">
+        <img src={{i}}>
+    </div>
+    <div>
+        This Corkboard Has {{fakeCd}} watchers
+        <mat-button-toggle value="watch">
+                Watch
+        </mat-button-toggle>
+    </div>
+  </div>

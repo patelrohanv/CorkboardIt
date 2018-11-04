@@ -9,10 +9,11 @@ import {
     MatCheckboxModule,
     MatCardModule,
     MatTableModule,
+    MatButtonToggleModule,
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import * as rxjs from 'rxjs'
-import { HttpClientModule } from '@angular/common/http'; 
+import * as rxjs from 'rxjs';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -55,7 +56,8 @@ import { CorkboardStatsComponent } from './components/corkboard-stats/corkboard-
         MatDialogModule,
         MatInputModule,
         MatButtonModule,
-        HttpClientModule
+        HttpClientModule,
+        MatButtonToggleModule
     ],
     providers: [],
     bootstrap: [AppComponent],

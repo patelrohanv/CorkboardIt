@@ -25,7 +25,10 @@ export class PopularTagsComponent implements OnInit {
     pop_tags_displayedColumns: string[] = ['tag', 'pushpins', 'unique_cb'];
 
     constructor(public dialogRef: MatDialogRef<PopularTagsComponent>, private userService: UserService) {
-        userService.CorkboardStats().subscribe((data: PopularTag) => this.popular_tags.push(data));
+        userService.CorkboardStats().subscribe((data: PopularTag) => {
+            console.log(data)
+            this.popular_tags.push(data)
+        });
     }
 
     ngOnInit() {
