@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { PopularTagsComponent } from '../popular-tags/popular-tags.component';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { AddCorkboardComponent } from '../add-corkboard/add-corkboard.component';
 
 @Component({
     selector: 'app-homescreen',
@@ -35,7 +36,14 @@ export class HomescreenComponent implements OnInit {
     }
 
     addCorkBoard(): void {
+        const dialogRef = this.dialog.open(AddCorkboardComponent, {
+            width: '500px',
+            data: {}
+        });
 
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
     }
 
 }

@@ -10,6 +10,8 @@ import {
     MatCardModule,
     MatTableModule,
     MatButtonToggleModule,
+    MatSelectModule,
+    MatRadioModule,
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import * as rxjs from 'rxjs';
@@ -57,7 +59,9 @@ import { CorkboardStatsComponent } from './components/corkboard-stats/corkboard-
         MatInputModule,
         MatButtonModule,
         HttpClientModule,
-        MatButtonToggleModule
+        MatButtonToggleModule,
+        MatSelectModule,
+        MatRadioModule,
     ],
     providers: [],
     bootstrap: [AppComponent],
