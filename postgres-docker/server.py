@@ -225,7 +225,6 @@ def corkboard_stats():
         return jsonify(data = None), 404
     else:
         return jsonify(data)
-data)
 
 
 @app.route('/')
