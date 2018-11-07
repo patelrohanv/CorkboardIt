@@ -1,4 +1,4 @@
 export class PopularSite {
-    site: string
-    pushpin: number
+    site: string;
+    pushpin: number;
 }

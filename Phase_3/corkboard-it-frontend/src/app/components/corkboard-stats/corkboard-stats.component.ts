@@ -27,7 +27,10 @@ export class CorkboardStatsComponent implements OnInit {
     cb_stats_displayedColumns: string[] = ['user', 'pub_cb', 'pub_pp', 'private_cb', 'private_pp'];
 
     constructor(private userService: UserService) {
-        userService.CorkboardStats().subscribe((data: CorkboardStat) => this.cork_board_stats.push(data));
+        userService.CorkboardStats().subscribe((data: CorkboardStat) => {
+            console.log(data);
+            this.cork_board_stats.push(data);
+        });
     }
 
     ngOnInit() {
@@ -36,7 +39,7 @@ export class CorkboardStatsComponent implements OnInit {
     getCorkBoardStats() {
 
         // TODO make api call
-        this.cork_board_stats = [];
+        // this.cork_board_stats = [];
 
         // TODO color current user red
 

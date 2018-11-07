@@ -4,6 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { Observable, ErrorObserver } from 'rxjs';
+import { PopularTag } from '../models/popularTag';
+import { PopularSite } from '../models/popularSite';
+import { CorkboardStat } from '../models/corkboardStat';
 
 @Injectable({
     providedIn: 'root'
@@ -66,22 +69,22 @@ export class UserService {
     }
 
     // /popularTags
-    PopularTags(): Observable<Object> {
+    PopularTags(): Observable<PopularTag> {
         const requestURL = this.baseUrl + '/populartags';
-        return this.http.get<Object>(requestURL);
+        return this.http.get<PopularTag>(requestURL);
 
     }
 
     // /popularSits
-    PopularSites(): Observable<Object> {
+    PopularSites(): Observable<PopularSite> {
         const requestURL = this.baseUrl + '/popularsites';
-        return this.http.get<Object>(requestURL);
+        return this.http.get<PopularSite>(requestURL);
     }
 
     // /corkboardStats
-    CorkboardStats(): Observable<Object> {
+    CorkboardStats(): Observable<CorkboardStat> {
         const requestURL = this.baseUrl + '/corkboardstats';
-        return this.http.get<Object>(requestURL);
+        return this.http.get<CorkboardStat>(requestURL);
     }
 
 }

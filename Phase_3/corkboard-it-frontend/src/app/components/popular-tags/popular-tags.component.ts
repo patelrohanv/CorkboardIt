@@ -25,9 +25,9 @@ export class PopularTagsComponent implements OnInit {
     pop_tags_displayedColumns: string[] = ['tag', 'pushpins', 'unique_cb'];
 
     constructor(public dialogRef: MatDialogRef<PopularTagsComponent>, private userService: UserService) {
-        userService.CorkboardStats().subscribe((data: PopularTag) => {
-            console.log(data)
-            this.popular_tags.push(data)
+        userService.PopularTags().subscribe((data) => {
+            console.log(data);
+            this.popular_tags.push(data);
         });
     }
 
@@ -36,7 +36,7 @@ export class PopularTagsComponent implements OnInit {
 
     getPopularTags() {
 
-        //TODO make api call to get popular tags
+        // TODO make api call to get popular tags
 
     }
 

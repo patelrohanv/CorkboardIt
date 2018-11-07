@@ -1,6 +1,6 @@
 export class Corkboard {
-    id: number
-    title: string
-    visibility: boolean
-    pins_count: number
+    id: number;
+    title: string;
+    visibility: boolean;
+    pins_count: number;
 }
