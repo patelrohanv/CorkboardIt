@@ -165,7 +165,6 @@ def search_pushpin(pushpin_id):
 
 @app.route('/populartags')
 def popular_tags():
-<<<<<<< HEAD
     cur.execute("""SELECT Tag.tag, COUNT(Tag.Tag) AS pushpins, COUNT(DISTINCT Corkboard.corkboard_id) as unique_cb
     FROM Tag INNER JOIN PushPin ON Tag.fk_pushpin_id = PushPin.pushpin_id
     INNER JOIN CorkBoard ON CorkBoard.corkboard_id = PushPin.fk_corkboard_id
@@ -226,91 +225,7 @@ def corkboard_stats():
         return jsonify(data = None), 404
     else:
         return jsonify(data)
-=======
-    data = [
-        {
-            'tag': 'face',
-            'pushpin': 55,
-            'unique_cb': 22
-        },
-        {
-            'tag': 'atlanta',
-            'pushpin': 42,
-            'unique_cb': 24
-        },
-        {
-            'tag': 'beach',
-            'pushpin': 20,
-            'unique_cb': 18
-        },
-        {
-            'tag': 'art',
-            'pushpin': 14,
-            'unique_cb': 2
-        }
-    ]
-    return json.dumps(data)
-
-@app.route('/popularsites')
-def get_popular_sites():
-        data = [
-            {
-                'site': 'www.gatech.edu',
-                'pushpin': 12
-            },
-            {
-                'site': 'www.facebook.com',
-                'pushpin': 9
-            },
-            {
-                'site': 'poolswimmings.com',
-                'pushpin': 3
-            },
-            {
-                'site': 'www.amazon.com',
-                'pushpin': 2
-            }
-        ]
-        return json.dumps(data)
-
-@app.route('/corkboardstats')
-def corkboard_stats():
-    data = [
-        {
-            'first_name': 'Bing',
-            'last_name': 'Lin',
-            'public_cb': 9,
-            'pub_pushpins': 8,
-            'private_cb': 7,
-            'private_pushpins': 6
-        },
-        {
-            'first_name': 'David',
-            'last_name': 'Tsui',
-            'public_cb': 8,
-            'pub_pushpins': 7,
-            'private_cb': 6,
-            'private_pushpins': 5
-        },
-        {
-            'first_name': 'Julie',
-            'last_name': 'Machamer',
-            'public_cb': 7,
-            'pub_pushpins': 6,
-            'private_cb': 5,
-            'private_pushpins': 4
-        },
-        {
-            'first_name': 'Rohan',
-            'last_name': 'Patel',
-            'public_cb': 6,
-            'pub_pushpins': 5,
-            'private_cb': 4,
-            'private_pushpins': 3
-        }
-    ]
-    return json.dumps(data)
->>>>>>> 9893685a1768096d437f7bb8a6fd4cad381d4332
+data)
 
 
 @app.route('/')
