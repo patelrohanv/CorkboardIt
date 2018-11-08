@@ -1,9 +1,11 @@
-from flask import Flask, request, jsonify, redirect, g
+from flask import Flask, request, jsonify, redirect, g, make_response
 import json
 from flasgger import Swagger
 import psycopg2
 from psycopg2 import sql
 from flask_cors import CORS
+import sys
+
 
 app = Flask(__name__)                  #  Create a Flask WSGI application
 Swagger(app)
@@ -164,10 +166,9 @@ def search_pushpin(search_text):
 
     text = search_text
 
-    cur.execute("""SELECT DISTINCT ON (search.description) search.description,
-    search.title, search.first_name, search.last_name
-    FROM(SELECT PushPin.description, CorkBoard.title, CorkBoard.category,
-    CorkBoardItUser.first_name, CorkBoardItUser.last_name, Tag.tag
+    cur.execute("""
+    SELECT DISTINCT ON (search.description) search.description, search.title, search.first_name, search.last_name
+    FROM(SELECT PushPin.description, CorkBoard.title, CorkBoard.category, CorkBoardItUser.first_name, CorkBoardItUser.last_name, Tag.tag
     FROM CorkBoard INNER JOIN CorkBoardItUser ON CorkBoard.fk_user_id = CorkBoardItUser.user_id
     INNER JOIN PushPin ON CorkBoard.corkboard_id = PushPin.fk_corkboard_id
     FULL OUTER JOIN Tag ON Tag.fk_pushpin_id = PushPin.pushpin_id NATURAL JOIN PublicCorkBoard
@@ -249,7 +250,24 @@ def corkboard_stats():
     else:
         return jsonify(data)
 
+@app.route('/test_david/<search_text>')
+def test_david(search_text):
+    text = search_text
+    print(text, file=sys.stderr)
+    cur.execute("""SELECT C.email FROM CorkBoardItUser as C WHERE C.email LIKE %(search)s""", {'search': '%'+text+'%'})
+    headers = [x[0] for x in cur.description]
+    rows = cur.fetchall()
+    data = []
+    for stuff in rows:
+        data.append(dict(zip(headers, stuff)))
 
+    print(data, file=sys.stderr)
+
+    # if len(rows) == 0:
+    #     return jsonify(data = None), 404
+    # else:
+    #     return jsonify(data)
+    return jsonify(data)
 @app.route('/')
 def get_home():
     return redirect('/apidocs')
