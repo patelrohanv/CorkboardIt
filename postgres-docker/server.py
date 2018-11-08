@@ -159,9 +159,32 @@ def add_pushpin(corkboard_id):
 def view_pushpin(pushpin_id):
     return 'being built rn'
 
-@app.route('/searchpushpin/<pushpin_id>')
-def search_pushpin(pushpin_id):
-    return 'being built rn'
+@app.route('/searchpushpin/<search_text>)')
+def search_pushpin(search_text):
+
+    text = search_text
+
+    cur.execute("""SELECT DISTINCT ON (search.description) search.description,
+    search.title, search.first_name, search.last_name
+    FROM(SELECT PushPin.description, CorkBoard.title, CorkBoard.category,
+    CorkBoardItUser.first_name, CorkBoardItUser.last_name, Tag.tag
+    FROM CorkBoard INNER JOIN CorkBoardItUser ON CorkBoard.fk_user_id = CorkBoardItUser.user_id
+    INNER JOIN PushPin ON CorkBoard.corkboard_id = PushPin.fk_corkboard_id
+    FULL OUTER JOIN Tag ON Tag.fk_pushpin_id = PushPin.pushpin_id NATURAL JOIN PublicCorkBoard
+    WHERE description LIKE %(search)s OR category
+    LIKE %(search)s OR tag LIKE %(search)s)search
+    ORDER BY description ASC""", {'search': '%'+search_text+'%'})
+
+    headers = [x[0] for x in cur.description]
+    rows = cur.fetchall()
+    data = []
+    for stuff in rows:
+        data.append(dict(zip(headers, stuff)))
+
+    if len(rows) == 0:
+        return jsonify(data = None), 404
+    else:
+        return jsonify(data)
 
 @app.route('/populartags')
 def popular_tags():
