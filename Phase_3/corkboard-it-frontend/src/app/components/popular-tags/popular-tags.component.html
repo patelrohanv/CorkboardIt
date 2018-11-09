@@ -23,3 +23,9 @@
   <tr mat-row *matRowDef="let row; columns: pop_tags_displayedColumns;"></tr>
 
 </table>
+
+<ul>
+  <div *ngFor="let d of popular_tags">
+    {{d.tag}}
+  </div>
+</ul>

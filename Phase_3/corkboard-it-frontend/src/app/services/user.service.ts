@@ -69,9 +69,9 @@ export class UserService {
     }
 
     // /popularTags
-    PopularTags(): Observable<PopularTag> {
+    PopularTags(): Observable<PopularTag[]> {
         const requestURL = this.baseUrl + '/populartags';
-        return this.http.get<PopularTag>(requestURL);
+        return this.http.get<PopularTag[]>(requestURL);
 
     }
 

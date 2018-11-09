@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, AfterViewInit, Input } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { UserService } from '../../services/user.service';
 import { PopularTag } from '../../models/popularTag';
@@ -14,7 +14,7 @@ import { PopularTag } from '../../models/popularTag';
     templateUrl: './popular-tags.component.html',
     styleUrls: ['./popular-tags.component.scss']
 })
-export class PopularTagsComponent implements OnInit {
+export class PopularTagsComponent implements OnInit, AfterViewInit {
 
     // popular_tags : PopularTags[] = [
     //   {tag: "foo", pushpins: 5, unique_cb:3},
@@ -25,14 +25,24 @@ export class PopularTagsComponent implements OnInit {
     pop_tags_displayedColumns: string[] = ['tag', 'pushpins', 'unique_cb'];
 
     constructor(public dialogRef: MatDialogRef<PopularTagsComponent>, private userService: UserService) {
-        userService.PopularTags().subscribe((data) => {
-            console.log(data);
-            this.popular_tags.push(data);
-        });
+
     }
 
     ngOnInit() {
+        this.userService.PopularTags().subscribe((data) => {
+            console.log('data', data);
+            for(let d of data) {
+                console.log(d)
+                this.popular_tags.push(d)
+            }
+        });
     }
+
+    ngAfterViewInit() {
+
+    }
+
+
 
     getPopularTags() {
 
