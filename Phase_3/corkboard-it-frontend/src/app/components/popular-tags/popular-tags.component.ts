@@ -23,7 +23,7 @@ export class PopularTagsComponent implements OnInit {
     //   {tag: "bar", pushpin: 10, unique_cb:5}
     // ];
 
-    dataSource = new PopularTagDataSource(this.userService)
+    dataSource = new PopularTagDataSource(this.userService);
     pop_tags_displayedColumns: string[] = ['tag', 'pushpin', 'unique_cb'];
 
     constructor(public dialogRef: MatDialogRef<PopularTagsComponent>, private userService: UserService) { }
@@ -38,8 +38,8 @@ export class PopularTagDataSource extends DataSource<any> {
       super();
     }
     connect(): Observable<PopularTag[]> {
-        console.log('connecting')
-        return this.userService.PopularTags()
+        console.log('connecting');
+        return this.userService.PopularTags();
     }
     disconnect() {}
   }
