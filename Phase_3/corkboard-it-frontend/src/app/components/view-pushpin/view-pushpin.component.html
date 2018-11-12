@@ -1,3 +1,31 @@
-<p>
-  view-pushpin works!
-</p>
+<div>
+  <button mat-button>Follow</button>
+  <br>
+  <p>Pinned at on</p>
+</div>
+<div>
+
+</div>
+<div>
+  <button mat-button>Like!</button>
+</div>
+<div>
+  <mat-form-field>
+    <textarea matInput placeholder="Enter a comment"></textarea>
+    <button mat-button>Post Comment</button>
+  </mat-form-field>
+
+  <table mat-table [dataSource]="comments">
+
+    <ng-container matColumnDef="commenter">
+      <td mat-cell *matCellDef="let comment"> {{comment.commenter}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="comment">
+      <td mat-cell *matCellDef="let comment"> {{comment.comment}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="pushpin_displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: pushpin_displayedColumns;"></tr>
+  </table>
+</div>

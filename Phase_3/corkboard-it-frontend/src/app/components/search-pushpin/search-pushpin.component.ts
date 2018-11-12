@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl, Validators} from "@angular/forms";
+import {FormControl, Validators} from '@angular/forms';
+import { SearchResults} from '../../models/searchResults';
 
 @Component({
   selector: 'app-search-pushpin',
@@ -8,19 +9,19 @@ import {FormControl, Validators} from "@angular/forms";
 })
 export class SearchPushpinComponent implements OnInit {
 
-  search_text : String
-
-  searchFormControl = new FormControl('', [Validators.required])
-
+  // search_text: String;
+  // searchFormControl = new FormControl('', [Validators.required]);]
+  search_results: SearchResults[] = [];
+  search_displayedColumns: string[] = ['PushPin Description', 'CorkBoard', 'Owner'];
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  searchForPushpins(search_text){
+  searchForPushpins(search_text) {
 
-    //TODO make api call with search text
+    // TODO make api call with search text
 
   }
 
