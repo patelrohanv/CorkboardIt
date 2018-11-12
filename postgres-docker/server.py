@@ -206,7 +206,7 @@ def popular_tags():
         return jsonify(data = None), 404
     else:
         response = jsonify(data)
-        responseresponse.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Origin', '*')
         return response
 
 @app.route('/popularsites')
