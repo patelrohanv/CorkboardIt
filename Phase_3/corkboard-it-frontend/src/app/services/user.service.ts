@@ -82,9 +82,9 @@ export class UserService {
     }
 
     // /corkboardStats
-    CorkboardStats(): Observable<CorkboardStat> {
+    CorkboardStats(): Observable<CorkboardStat[]> {
         const requestURL = this.baseUrl + '/corkboardstats';
-        return this.http.get<CorkboardStat>(requestURL);
+        return this.http.get<CorkboardStat[]>(requestURL);
     }
 
 }

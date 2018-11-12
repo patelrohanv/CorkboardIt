@@ -22,6 +22,7 @@ export class HomescreenComponent implements OnInit {
 
     getPopularTags(): void {
 
+
         const dialogRef = this.dialog.open(PopularTagsComponent, {
             width: '250px',
             data: {}
@@ -34,7 +35,7 @@ export class HomescreenComponent implements OnInit {
 
     getCorkBoardStats(): void {
         const dialogRef = this.dialog.open(CorkboardStatsComponent, {
-            width: '250px',
+            width: '500x',
             data: {}
         });
 
