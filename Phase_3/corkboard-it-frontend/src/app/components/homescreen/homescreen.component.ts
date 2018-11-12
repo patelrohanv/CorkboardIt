@@ -4,6 +4,7 @@ import { PopularTagsComponent } from '../popular-tags/popular-tags.component';
 import { CorkboardStatsComponent } from '../corkboard-stats/corkboard-stats.component';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { AddCorkboardComponent } from '../add-corkboard/add-corkboard.component';
+import {PopularSitesComponent} from "../popular-sites/popular-sites.component";
 
 @Component({
     selector: 'app-homescreen',
@@ -17,14 +18,21 @@ export class HomescreenComponent implements OnInit {
     ngOnInit() {
     }
     getPopularSites(): void {
-        return null;
+      const dialogRef = this.dialog.open(PopularSitesComponent, {
+        width: '500x',
+        data: {}
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+      });
     }
 
     getPopularTags(): void {
 
 
         const dialogRef = this.dialog.open(PopularTagsComponent, {
-            width: '250px',
+            width: '400px',
             data: {}
         });
 

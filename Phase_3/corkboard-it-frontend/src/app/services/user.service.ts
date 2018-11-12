@@ -76,9 +76,9 @@ export class UserService {
     }
 
     // /popularSits
-    PopularSites(): Observable<PopularSite> {
+    PopularSites(): Observable<PopularSite[]> {
         const requestURL = this.baseUrl + '/popularsites';
-        return this.http.get<PopularSite>(requestURL);
+        return this.http.get<PopularSite[]>(requestURL);
     }
 
     // /corkboardStats
