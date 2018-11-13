@@ -23,8 +23,8 @@ export class PopularTagsComponent implements OnInit {
     //   {tag: "bar", pushpin: 10, unique_cb:5}
     // ];
 
-    dataSource = new PopularTagDataSource(this.userService);
-    pop_tags_displayedColumns: string[] = ['tag', 'pushpin', 'unique_cb'];
+    pop_tags_ds = new PopularTagDataSource(this.userService);
+    pop_tags_displayedColumns: string[] = ['tag', 'pushpins', 'unique_cb'];
 
     constructor(public dialogRef: MatDialogRef<PopularTagsComponent>, private userService: UserService) { }
 
