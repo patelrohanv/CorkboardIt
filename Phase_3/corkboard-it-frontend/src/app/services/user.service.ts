@@ -7,6 +7,7 @@ import { Observable, ErrorObserver } from 'rxjs';
 import { PopularTag } from '../models/popularTag';
 import { PopularSite } from '../models/popularSite';
 import { CorkboardStat } from '../models/corkboardStat';
+import {SearchResults} from "../models/searchResults";
 
 @Injectable({
     providedIn: 'root'
@@ -61,10 +62,10 @@ export class UserService {
 
     }
 
-    // /searchPushpin/<pushpin_id>
-    SearchPushpin(pushpin_id: string): Observable<Object> {
-        const requestURL = this.baseUrl + '/searchpushpin/' + pushpin_id;
-        return this.http.get<Object>(requestURL);
+    // '/searchpushpin/<search_text>)'
+    SearchPushpin(search_text: string): Observable<Object> {
+        const requestURL = this.baseUrl + '/searchpushpin/' + search_text;
+        return this.http.get<SearchResults[]>(requestURL);
 
     }
 

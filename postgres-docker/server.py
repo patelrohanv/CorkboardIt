@@ -161,7 +161,7 @@ def add_pushpin(corkboard_id):
 def view_pushpin(pushpin_id):
     return 'being built rn'
 
-@app.route('/searchpushpin/<search_text>)')
+@app.route('/searchpushpin/<search_text>')
 def search_pushpin(search_text):
 
     text = search_text

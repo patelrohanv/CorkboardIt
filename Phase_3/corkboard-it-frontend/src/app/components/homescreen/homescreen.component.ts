@@ -5,6 +5,13 @@ import { CorkboardStatsComponent } from '../corkboard-stats/corkboard-stats.comp
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { AddCorkboardComponent } from '../add-corkboard/add-corkboard.component';
 import {PopularSitesComponent} from "../popular-sites/popular-sites.component";
+import {SearchPushpinComponent} from "../search-pushpin/search-pushpin.component";
+import {DataSource} from "@angular/cdk/table";
+import {UserService} from "../../services/user.service";
+import {Observable} from "rxjs";
+import {PopularSite} from "../../models/popularSite";
+import {SearchResults} from "../../models/searchResults";
+
 
 @Component({
     selector: 'app-homescreen',
@@ -13,7 +20,9 @@ import {PopularSitesComponent} from "../popular-sites/popular-sites.component";
 })
 export class HomescreenComponent implements OnInit {
 
-    constructor(public dialog: MatDialog) { }
+  search_text = new FormControl('', [Validators.required, Validators.minLength(1)]);
+
+  constructor(public dialog: MatDialog) { }
 
     ngOnInit() {
     }
@@ -29,8 +38,6 @@ export class HomescreenComponent implements OnInit {
     }
 
     getPopularTags(): void {
-
-
         const dialogRef = this.dialog.open(PopularTagsComponent, {
             width: '400px',
             data: {}
@@ -63,4 +70,16 @@ export class HomescreenComponent implements OnInit {
         });
     }
 
-}
+    getPushPinSearchResults(): void {
+
+      const dialogRef = this.dialog.open(SearchPushpinComponent, {
+        width: '500px',
+        data: {}
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The SearchPushpin dialog was closed');
+      });
+    }
+    }
+
