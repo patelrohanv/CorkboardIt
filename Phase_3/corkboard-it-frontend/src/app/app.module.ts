@@ -3,15 +3,15 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import {
-    MatDialogModule,
-    MatInputModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatCardModule,
-    MatTableModule,
-    MatButtonToggleModule,
-    MatSelectModule,
-    MatRadioModule,
+  MatDialogModule,
+  MatInputModule,
+  MatButtonModule,
+  MatCheckboxModule,
+  MatCardModule,
+  MatTableModule,
+  MatButtonToggleModule,
+  MatSelectModule,
+  MatRadioModule, MatDialog
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import * as rxjs from 'rxjs';
@@ -63,7 +63,8 @@ import { CorkboardStatsComponent } from './components/corkboard-stats/corkboard-
         MatSelectModule,
         MatRadioModule,
     ],
-    providers: [],
+    providers: [MatDialog
+                ],
     bootstrap: [AppComponent],
     entryComponents: [LoginComponent,
         HomescreenComponent,

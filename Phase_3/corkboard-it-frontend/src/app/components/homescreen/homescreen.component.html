@@ -40,10 +40,10 @@
 		<form>
 			<mat-form-field>
 				<input matInput placeholder="Search description, tags, and CorkBoard category" [formControl]="search_text" name="search_text" >
-        <button mat-flat-button color="primary" (click)="getPushPinSearchResults()">PushPin Search</button>
 			</mat-form-field>
+      <mat-card-content>
+        <button mat-flat-button color="primary" (click)="getPushPinSearchResults()">PushPin Search</button>
+      </mat-card-content>
 		</form>
 	</mat-card-actions>
 </mat-card>
-
-<!--<app-search-pushpin>[search_string] = search_text</app-search-pushpin>-->
