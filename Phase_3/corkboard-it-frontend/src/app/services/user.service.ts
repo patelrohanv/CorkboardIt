@@ -29,11 +29,17 @@ export class UserService {
     }
 
     // /homescreen/<user_id>
-    getHomescreen(user_id: string): Observable<Object> {
-        const requestURL = this.baseUrl + '/homescreen/' + user_id;
+    getHomescreenOwned(user_id: string): Observable<Object> {
+        const requestURL = this.baseUrl + '/homescreen_owned/' + user_id;
         return this.http.get<Object>(requestURL);
 
     }
+
+    getHomescreenRecent(user_id: string): Observable<Object> {
+        const requestURL = this.baseUrl + '/homescreen_recent/' + user_id;
+        return this.http.get<Object>(requestURL);
+    }
+
     // /addCorkboard/<user_id>
     postAddCorkboard(user_id: string): Observable<Object> {
         const requestURL = this.baseUrl + '/addcorkboard/' + user_id;
