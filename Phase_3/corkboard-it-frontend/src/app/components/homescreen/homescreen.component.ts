@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { PopularTagsComponent } from '../popular-tags/popular-tags.component';
 import { CorkboardStatsComponent } from '../corkboard-stats/corkboard-stats.component';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { AddCorkboardComponent } from '../add-corkboard/add-corkboard.component';
 import {PopularSitesComponent} from "../popular-sites/popular-sites.component";
+import { UserService } from 'src/app/services/user.service';
+import { Corkboard } from 'src/app/models/corkboard';
+import { User } from 'src/app/models/user';
 
 @Component({
     selector: 'app-homescreen',
@@ -12,10 +15,26 @@ import {PopularSitesComponent} from "../popular-sites/popular-sites.component";
     styleUrls: ['./homescreen.component.scss']
 })
 export class HomescreenComponent implements OnInit {
+    current_user: User = {
+        email: 'binglin@',
+        id: '1',
+        first_name: 'Bing',
+        last_name: 'Lin' 
+    } 
+    owned_corkboards: Corkboard[]
+    recent_corkboards: Corkboard[]
 
-    constructor(public dialog: MatDialog) { }
+    constructor(public dialog: MatDialog, private userService: UserService) { }
 
     ngOnInit() {
+        this.getOwnedCorkBoards()
+        this.getRecentCorkBoards()
+        this.current_user = {    
+            email: 'binglin@',
+            id: '1',
+            first_name: 'Bing',
+            last_name: 'Ling'
+        }
     }
     getPopularSites(): void {
       const dialogRef = this.dialog.open(PopularSitesComponent, {
@@ -29,8 +48,6 @@ export class HomescreenComponent implements OnInit {
     }
 
     getPopularTags(): void {
-
-
         const dialogRef = this.dialog.open(PopularTagsComponent, {
             width: '400px',
             data: {}
@@ -61,6 +78,18 @@ export class HomescreenComponent implements OnInit {
         dialogRef.afterClosed().subscribe(result => {
             console.log('The dialog was closed');
         });
+    }
+
+    getOwnedCorkBoards() {
+        this.userService.getHomescreenOwned(this.current_user.id).subscribe((res: Corkboard[]) => {
+            this.owned_corkboards = res
+        })
+    }
+
+    getRecentCorkBoards() {
+        this.userService.getHomescreenRecent(this.current_user.id).subscribe((res: Corkboard[]) => {
+            this.recent_corkboards = res
+        })
     }
 
 }

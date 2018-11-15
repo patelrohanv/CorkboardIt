@@ -1,46 +1,22 @@
-<!-- <div>
-  <button mat-raised-button (clicK)="getPopularSites()">Popular Sites</button>
-  <button mat-raised-button (clicK)="getPopularTags()">Popular Tags</button>
-  <button mat-raised-button (clicK)="getCorkBoardStats()">CorkBoard Statistics</button>
-    <form>
-      <mat-form-field>
-        <input matInput placeholder="Search description, tags, and CorkBoard category"
-               [formControl]="searchFormControl" [(ngModel)]="search_text" name="search_text" width="400">
-        <mat-error *ngIf="searchFormControl.hasError('incorrect')">
-        </mat-error>
-      </mat-form-field>
-      <button mat-raised-button (clicK)="searchForPushpins(search_text)">PushPin Search</button>
-    </form>
-</div> -->
-<mat-card>
-	<mat-card-header>
-		<mat-card-title>Home Page for </mat-card-title>
-	</mat-card-header>
-	<mat-card-content>
-		<h3>Recent Cord Board Updates
-			<button mat-flat-button color="primary" (click)="getPopularTags()">Popular Tags</button>
-		</h3>
-	</mat-card-content>
-  <mat-card-content>
-    <h3>Recent Cord Board Updates
-      <button mat-flat-button color="primary" (click)="getCorkBoardStats()">Corkboard Statistics</button>
-    </h3>
-  </mat-card-content>
-  <mat-card-content>
-    <h3>Recent Cord Board Updates
-      <button mat-flat-button color="primary" (click)="getPopularSites()">Popular Sites</button>
-    </h3>
-  </mat-card-content>
-	<mat-card-content>
-		<h3>My CorkBoards
-			<button mat-flat-button color="primary" (click)="addCorkBoard()">Add CorkBoard</button>
-		</h3>
-	</mat-card-content>
-	<mat-card-actions>
-		<form>
-			<mat-form-field>
-				<input matInput placeholder="Search description, tags, and CorkBoard category">
-			</mat-form-field>
-		</form>
-	</mat-card-actions>
-</mat-card>
+<mat-toolbar>Welcome {{current_user.first_name}} {{current_user.last_name}}</mat-toolbar>
+
+<button mat-flat-button color="primary" (click)="getPopularTags()">Popular Tags</button>
+<button mat-flat-button color="primary" (click)="getPopularSites()">Popular Sites</button>
+<button mat-flat-button color="primary" (click)="getCorkBoardStats()">Corkboard Statistics</button>
+<button mat-flat-button color="primary" (click)="addCorkBoard()">Add CorkBoard</button>
+
+<h3>Recent CorkBoards</h3>
+<li *ngFor="let corkboard of recent_corkboards">
+    <app-corkboard-tile [corkboard]="corkboard"></app-corkboard-tile>
+</li>
+  
+<h3>My CorkBoards</h3>
+<li *ngFor="let corkboard of owned_corkboards">
+    <app-corkboard-tile [corkboard]="corkboard"></app-corkboard-tile>
+</li>
+  
+<form>
+  <mat-form-field>
+    <input matInput placeholder="Search description, tags, and CorkBoard category">
+  </mat-form-field>
+</form>
