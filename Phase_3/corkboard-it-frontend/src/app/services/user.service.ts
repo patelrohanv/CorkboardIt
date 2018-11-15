@@ -69,7 +69,7 @@ export class UserService {
     }
 
     // '/searchpushpin/<search_text>)'
-    SearchPushpin(search_text: string): Observable<Object> {
+    SearchPushpin(search_text: string): Observable<SearchResults[]> {
         const requestURL = this.baseUrl + '/searchpushpin/' + search_text;
         return this.http.get<SearchResults[]>(requestURL);
 

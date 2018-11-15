@@ -30,7 +30,7 @@ export class HomescreenComponent implements OnInit {
     owned_corkboards: Corkboard[]
     recent_corkboards: Corkboard[]
 
-  search_text = new FormControl('', [Validators.required, Validators.minLength(1)]);
+  public search_text = new FormControl('', [Validators.required, Validators.minLength(1)]);
 
   constructor(public dialog: MatDialog, private userService: UserService) { }
 
@@ -102,10 +102,12 @@ export class HomescreenComponent implements OnInit {
 
     getPushPinSearchResults(): void {
 
-        const dialogRef = this.dialog.open(SearchPushpinComponent, {
+    console.log("sent data");
+    console.log(this.search_text);
+      const dialogRef = this.dialog.open(SearchPushpinComponent, {
         width: '500px',
-        data: {}
-        });
+        data: {dataKey: this.search_text.value.toString()}
+      });
 
         dialogRef.afterClosed().subscribe(result => {
         console.log('The SearchPushpin dialog was closed');
