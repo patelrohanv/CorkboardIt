@@ -17,13 +17,6 @@ export class CorkboardStatsComponent implements OnInit {
 
   cb_stats_displayedColumns: string[] = ['user_name', 'public_cb', 'pub_pushpins', 'private_cb', 'private_pushpins'];
 
-  // constructor(private userService: UserService) {
-  //   userService.CorkboardStats().subscribe((data: CorkboardStat) => {
-  //     console.log(data);
-  //     this.cork_board_stats.push(data);
-  //   });
-  // }
-
   constructor(public dialogRef: MatDialogRef<CorkboardStatsComponent>, private userService: UserService) { }
 
   ngOnInit() {

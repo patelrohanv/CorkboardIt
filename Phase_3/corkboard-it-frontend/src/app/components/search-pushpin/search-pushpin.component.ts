@@ -1,6 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import { SearchResults} from '../../models/searchResults';
+import {PopularSitesDataSource} from "../popular-sites/popular-sites.component";
+import {MatDialogRef} from "@angular/material";
+import {UserService} from "../../services/user.service";
+import {DataSource} from "@angular/cdk/table";
+import {Observable} from "rxjs";
+
 
 @Component({
   selector: 'app-search-pushpin',
@@ -9,20 +15,28 @@ import { SearchResults} from '../../models/searchResults';
 })
 export class SearchPushpinComponent implements OnInit {
 
-  // search_text: String;
-  // searchFormControl = new FormControl('', [Validators.required]);]
-  search_results: SearchResults[] = [];
-  search_displayedColumns: string[] = ['PushPin Description', 'CorkBoard', 'Owner'];
+  // @Input search_string :string;
 
-  constructor() { }
+  search_string :string = 'my';
+
+  search_results_ds = new SearchResultsDataSource(this.userService, this.search_string);
+  search_displayedColumns: string[] = ['description', 'corkBoard', 'owner'];
+
+  constructor(public dialogRef: MatDialogRef<SearchPushpinComponent>, private userService: UserService) { }
 
   ngOnInit() {
   }
+}
 
-  searchForPushpins(search_text) {
-
-    // TODO make api call with search text
-
+export class SearchResultsDataSource extends DataSource<any> {
+  private _search_string: string;
+  constructor(private userService: UserService, search_string: string) {
+    super();
+    this._search_string = search_string;
   }
-
+  connect(): Observable<SearchResults[]> {
+    console.log('connecting');
+    return this.userService.SearchPushpin(this._search_string);
+  }
+  disconnect() {}
 }

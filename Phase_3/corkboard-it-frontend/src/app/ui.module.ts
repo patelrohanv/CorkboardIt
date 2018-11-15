@@ -15,6 +15,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
     exports: [
+        MatDialogModule,
         MatCardModule,
         MatCheckboxModule,
         MatTableModule,

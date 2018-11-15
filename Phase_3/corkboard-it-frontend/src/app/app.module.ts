@@ -41,7 +41,6 @@ import { UiModule } from './ui.module';
         HttpClientModule,
         UiModule
     ],
-    providers: [],
     bootstrap: [AppComponent],
     entryComponents: [
         LoginComponent,
