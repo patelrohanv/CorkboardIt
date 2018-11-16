@@ -509,7 +509,7 @@ def post_comment():
 """
 SEARCH PUSHPIN
 """
-@app.route('/searchpushpin/<search_text>)')
+@app.route('/searchpushpin/<search_text>')
 def search_pushpin(search_text):
     cur.execute("""SELECT DISTINCT ON (search.description) search.description,
     search.title, search.first_name, search.last_name
