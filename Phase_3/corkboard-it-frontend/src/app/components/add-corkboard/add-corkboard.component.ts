@@ -15,7 +15,7 @@ export class AddCorkboardComponent implements OnInit {
     title = new FormControl('', [Validators.required]);
     category = new FormControl('', [Validators.required]);
     visibility = new FormControl('', [Validators.required]);
-    password = new FormControl({disabled: this.public}, []);
+    password = new FormControl('', []);
 
     categories: string[];
 

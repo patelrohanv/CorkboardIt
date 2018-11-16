@@ -7,20 +7,20 @@
     <br>
     <mat-form-field>
       <mat-select placeholder="Category" [formControl]="category">
-        <mat-option *ngFor="let c of categories">
+        <mat-option *ngFor="let c of categories" [value]="c">
           {{c}}
         </mat-option>
       </mat-select>
     </mat-form-field>
     <br>
     <mat-form-field>
-        <mat-select placeholder="Visbility" [formControl]="visbility" (change)=disablePassword()>
+        <mat-select placeholder="Visbility" [formControl]="visibility" (change)=disablePassword()>
           <mat-option value="true" (click)="public = true">Public</mat-option>
           <mat-option value="false" (click)="public = false">Private</mat-option>
         </mat-select>
       </mat-form-field>
     <mat-form-field>
-      <input matInput placeholder="Password" [formControl]="password" [disabled]="!public">
+      <input matInput placeholder="Password" [formControl]="password" [disabled]="!public"> 
     </mat-form-field>
   </form>
 </div>
