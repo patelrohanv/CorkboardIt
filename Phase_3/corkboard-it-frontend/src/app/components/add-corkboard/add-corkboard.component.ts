@@ -23,7 +23,6 @@ export class AddCorkboardComponent implements OnInit {
         this.categories = Categories;
     }
     ngOnInit() {
-        console.log(this.categories);
     }
 
     addCorkBoard() {
