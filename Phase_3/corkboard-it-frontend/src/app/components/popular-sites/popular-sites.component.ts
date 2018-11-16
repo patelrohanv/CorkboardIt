@@ -4,7 +4,7 @@ import {CdkTableModule, DataSource} from '@angular/cdk/table';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { UserService } from '../../services/user.service';
 import { PopularSite } from '../../models/popularSite';
-import {Observable} from "rxjs";
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-popular-sites',
