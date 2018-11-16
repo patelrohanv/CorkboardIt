@@ -32,6 +32,7 @@ def get_is_valid():
     """
     if request.method == 'POST':
         content = request.get_json()
+        print('CONTENT:', content, file=sys.stderr)
         user_id = content['user_id']
         password = content['pin']
         print(user_id, file=sys.stderr)
@@ -95,7 +96,7 @@ def owned_corkboards(user_id):
     """
     user_id = user_id
 
-    cur.execute("""SELECT board.title, board.visibility, pins_count.pins_count
+    cur.execute("""SELECT board.corkboard_id, board.title, board.visibility, pins_count.pins_count
     FROM (SELECT owned_corkboard.corkboard_id, COUNT(pin.fk_corkboard_id) as pins_count
     FROM (SELECT board.title, board.visibility, board.corkboard_id
     FROM CorkBoard board
@@ -130,25 +131,30 @@ def recent_updates(user_id):
     """
     user_id = user_id
 
-    cur.execute("""SELECT fcorkboard.title, fcorkboard.date_time, fcorkboard.visibility
+    cur.execute("""
+    SELECT ckbd.corkboard_id, ckbd.title, ckbd.date_time, ckbd.visibility, CorkBoardItUser.first_name, CorkBoardItUser.last_name
+    FROM (
+    SELECT fcorkboard.corkboard_id, fcorkboard.title, fcorkboard.date_time, fcorkboard.visibility, fcorkboard.fk_user_id
     FROM (SELECT Follow.fk_user_follower_id
     FROM Follow
     WHERE Follow.fk_user_followee_id = %(user)s) fid
-    INNER JOIN CorkBoard  fcorkboard
+    INNER JOIN CorkBoard fcorkboard
     ON fcorkboard.fk_user_id = fid.fk_user_follower_id
     UNION
-    SELECT wcorkboard.title, wcorkboard.date_time, wcorkboard.visibility
+    SELECT wcorkboard.corkboard_id, wcorkboard.title, wcorkboard.date_time, wcorkboard.visibility, wcorkboard.fk_user_id
     FROM (SELECT w.fk_public_corkboard_id
     FROM Watch w
     WHERE w.fk_user_id = %(user)s) wid
     INNER JOIN CorkBoard wcorkboard
     ON wcorkboard.corkboard_id = wid.fk_public_corkboard_id
     UNION
-    SELECT CorkBoard.title, CorkBoard.date_time, CorkBoard.visibility
+    SELECT CorkBoard.corkboard_id, CorkBoard.title, CorkBoard.date_time, CorkBoard.visibility, CorkBoard.fk_user_id
     FROM CorkBoard
     WHERE CorkBoard.fk_user_id = %(user)s
     ORDER BY date_time DESC
-    LIMIT 4;""", {"user": user_id})
+    LIMIT 4) ckbd
+    INNER JOIN CorkBoardItUser
+    ON CorkBoardItUser.user_id = ckbd.fk_user_id;""", {"user": user_id})
 
     headers = [x[0] for x in cur.description]
     rows = cur.fetchall()

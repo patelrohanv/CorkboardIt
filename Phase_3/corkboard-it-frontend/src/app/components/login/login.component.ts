@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
     checkPassword() {
         console.log(this.email_input, this.pin_input)
         this.userService.getUser_Email(this.email_input).subscribe((user) => {
-            const id = user['user_id']
+            const id = user['id']
             console.log(user);
             this.userService.postLogin(id, this.pin_input).subscribe((user) => {
                 console.log(user);

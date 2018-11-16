@@ -1,0 +1,13 @@
+<mat-card>
+    <mat-card-header>
+      <!-- <div mat-card-avatar class="example-header-image"></div> -->
+      <mat-card-title>{{corkboard.title}} 
+        <div *ngIf="corkboard.visibility">Private</div>
+      </mat-card-title>
+      <mat-card-subtitle>Updated by {{corkboard.first_name}} {{corkboard.last_name}} on {{corkboard.date_time}}</mat-card-subtitle>
+    </mat-card-header>
+</mat-card>
+
+<!-- title: string;
+visibility: boolean;
+pins_count: number; -->

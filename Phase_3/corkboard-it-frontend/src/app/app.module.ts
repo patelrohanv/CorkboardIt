@@ -63,7 +63,7 @@ import { UiModule } from './ui.module';
         LoginComponent,
         AddCorkboardComponent,
         AddPushpinComponent,
-        PopularTagsComponent,
+        PopularTagsComponent,   
         PopularTagsComponent,
         CorkboardStatsComponent,
         SearchPushpinComponent]

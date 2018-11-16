@@ -12,8 +12,9 @@ import { Observable } from 'rxjs';
 import { PopularSite } from '../../models/popularSite';
 import { SearchResults } from '../../models/searchResults';
 import { User } from 'src/app/models/user';
-import { Corkboard } from 'src/app/models/corkboard';
 import { Router, ActivatedRoute } from '@angular/router';
+import { OwnedCorkBoard } from 'src/app/models/ownedCorkBoard';
+import { RecentCorkBoard } from 'src/app/models/recentCorkBoard';
 
 
 @Component({
@@ -23,8 +24,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class HomescreenComponent implements OnInit {
     current_user: User
-    owned_corkboards: Corkboard[]
-    recent_corkboards: Corkboard[]
+    owned_corkboards: OwnedCorkBoard[]
+    recent_corkboards: RecentCorkBoard[]
 
     public search_text = new FormControl('', [Validators.required, Validators.minLength(1)]);
 
@@ -85,13 +86,13 @@ export class HomescreenComponent implements OnInit {
     }
 
     getOwnedCorkBoards() {
-        this.userService.getHomescreenOwned(this.current_user.id).subscribe((res: Corkboard[]) => {
+        this.userService.getHomescreenOwned(this.current_user.id).subscribe((res: OwnedCorkBoard[]) => {
             this.owned_corkboards = res
         })
     }
 
     getRecentCorkBoards() {
-        this.userService.getHomescreenRecent(this.current_user.id).subscribe((res: Corkboard[]) => {
+        this.userService.getHomescreenRecent(this.current_user.id).subscribe((res: RecentCorkBoard[]) => {
             this.recent_corkboards = res;
         });
     }

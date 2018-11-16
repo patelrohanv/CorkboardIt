@@ -7,12 +7,12 @@
 
 <h3>Recent CorkBoards</h3>
 <div *ngFor="let corkboard of recent_corkboards">
-    <app-corkboard-tile [corkboard]="corkboard"></app-corkboard-tile>
+    <app-recentCorkboard-tile [corkboard]="corkboard"></app-recentCorkboard-tile>
 </div>
   
 <h3>My CorkBoards</h3>
 <div *ngFor="let corkboard of owned_corkboards">
-    <app-corkboard-tile [corkboard]="corkboard"></app-corkboard-tile>
+    <app-ownedCorkboard-tile [corkboard]="corkboard"></app-ownedCorkboard-tile>
 </div>
   
 <form>
