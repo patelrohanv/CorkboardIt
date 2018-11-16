@@ -2,6 +2,19 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
+import {
+    MatDialogModule,
+    MatInputModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatCardModule,
+    MatTableModule,
+    MatButtonToggleModule,
+    MatSelectModule,
+    MatRadioModule,
+    MatFormFieldModule,
+} from '@angular/material';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import * as rxjs from 'rxjs';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
@@ -39,7 +52,11 @@ import { UiModule } from './ui.module';
         BrowserAnimationsModule,
         AppRoutingModule,
         HttpClientModule,
-        UiModule
+        UiModule,
+        MatButtonToggleModule,
+        MatSelectModule,
+        MatRadioModule,
+        MatFormFieldModule,
     ],
     bootstrap: [AppComponent],
     entryComponents: [

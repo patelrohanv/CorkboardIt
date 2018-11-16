@@ -9,11 +9,11 @@ import { RouterModule, Router, Route } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-    email = new FormControl('', [Validators.required, Validators.email])
-    pin = new FormControl('', [Validators.required, Validators.maxLength(4), Validators.minLength(4)])
+    email = new FormControl('', [Validators.required, Validators.email]);
+    pin = new FormControl('', [Validators.required, Validators.maxLength(4), Validators.minLength(4)]);
 
     constructor(private router: Router) {
-        
+
     }
 
     ngOnInit() {
@@ -21,11 +21,12 @@ export class LoginComponent implements OnInit {
 
     checkPassword() {
         // TODO make call to api to check if entered pin is the same as the one on the database
-        let correct = true
+        const correct = true;
 
-        if (!correct) { this.pin.setErrors({ 'incorrect': true }) }
-        else {
-            console.log(`${this.email.value}: ${this.pin.value}`)
+        if (!correct) {
+            this.pin.setErrors({ 'incorrect': true });
+        } else {
+            console.log(`${this.email.value}: ${this.pin.value}`);
             this.router.navigate(['/home/', this.email.value]);
         }
     }

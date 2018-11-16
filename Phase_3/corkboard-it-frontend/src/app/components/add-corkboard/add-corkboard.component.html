@@ -1,27 +1,29 @@
 <h1 mat-dialog-title>Add Corkboard</h1>
 <div mat-dialog-content>
-    <form>
-        <mat-form-field>
-            <input matInput placeholder="Title" [formControl]="titleFormControl" name="email">
-        </mat-form-field>
-        <mat-form-field>
-                <mat-select placeholder="Category">
-                  <mat-option *ngFor="let c of Categories" [formControl]="category">
-                    {{c}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-        <mat-form-field>
-            <mat-radio-group class="example-radio-group" [formControl]="visbility">
-                <mat-radio-button value="public">Public</mat-radio-button>
-                <mat-radio-button value="private">Private 
-                    <mat-form-field class="example-full-width">
-                        <input matInput placeholder="Password" [formControl]="passwor">
-                     </mat-form-field></mat-radio-button>
-            </mat-radio-group>
-        </mat-form-field>
-    </form>
+  <form>
+    <mat-form-field>
+      <input matInput placeholder="Title"  [formControl]="title">
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+      <mat-select placeholder="Category" [formControl]="category">
+        <mat-option *ngFor="let c of categories">
+          {{c}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-select placeholder="Visbility" [formControl]="visbility" (change)=disablePassword()>
+          <mat-option value="true" (click)="public = true">Public</mat-option>
+          <mat-option value="false" (click)="public = false">Private</mat-option>
+        </mat-select>
+      </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Password" [formControl]="password" [disabled]="!public">
+    </mat-form-field>
+  </form>
 </div>
 <div mat-dialog-actions>
-    <button mat-raised-button (clicK)="addCorkBoard()">Add</button>
+  <button mat-raised-button (click)="addCorkBoard()">Add</button>
 </div>
