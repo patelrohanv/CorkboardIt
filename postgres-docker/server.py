@@ -194,7 +194,7 @@ VIEW CORKBOARD
 """
 @app.route('/viewcorkboard/<corkboard_id>')
 def view_corkboard(corkboard_id):
-    view_corkboard = []
+    data = []
 
     cur.execute("""SELECT first_name, last_name
     FROM CorkBoard AS cb
@@ -204,10 +204,8 @@ def view_corkboard(corkboard_id):
 
     headers = [x[0] for x in cur.description]
     rows = cur.fetchall()
-    data = []
     for stuff in rows:
         data.append(dict(zip(headers, stuff)))
-    view_corkboard.append(data)
 
     cur.execute("""SELECT title, category, date_time, cb.email, COUNT(w.fk_user_id)
     FROM CorkBoard AS cb
@@ -221,10 +219,8 @@ def view_corkboard(corkboard_id):
 
     headers = [x[0] for x in cur.description]
     rows = cur.fetchall()
-    data = []
     for stuff in rows:
         data.append(dict(zip(headers, stuff)))
-    view_corkboard.append(data)
 
     cur.execute("""SELECT url
     FROM Pushpin AS p
@@ -235,10 +231,8 @@ def view_corkboard(corkboard_id):
 
     headers = [x[0] for x in cur.description]
     rows = cur.fetchall()
-    data = []
     for stuff in rows:
         data.append(dict(zip(headers, stuff)))
-    view_corkboard.append(data)
 
     cur.execute("""SELECT u.user_id
     FROM CorkBoardItUser AS u
@@ -251,12 +245,10 @@ def view_corkboard(corkboard_id):
 
     headers = [x[0] for x in cur.description]
     rows = cur.fetchall()
-    data = []
     for stuff in rows:
         data.append(dict(zip(headers, stuff)))
-    view_corkboard.append(data)
 
-    return jsonify(view_corkboard)
+    return jsonify(data)
 
 """
 FOLLOW CORKBOARD
@@ -367,14 +359,20 @@ def add_pushpin():
 """
 VIEW PUSHPIN
 """
-@app.route('/viewpushpin/<pushpin_id>')
-def view_pushpin(pushpin_id):
+@app.route('/viewpushpin/<corkboard_id>/<pushpin_id>')
+def view_pushpin(corkboard_id, pushpin_id):
+    data = []
     cur.execute("""SELECT first_name, last_name
     FROM CorkBoard AS cb
     INNER JOIN CorkBoardItUser AS u
     ON u.user_id = cb.fk_user_id
     WHERE cb.corkboard_id = %(corkboard_id)s
     """, {"corkboard_id": corkboard_id})
+
+    headers = [x[0] for x in cur.description]
+    rows = cur.fetchall()
+    for stuff in rows:
+        data.append(dict(zip(headers, stuff)))
 
     cur.execute("""SELECT pp. date_time
     FROM PushPin AS pp
@@ -383,6 +381,11 @@ def view_pushpin(pushpin_id):
     WHERE cb.corkboard_id = %(corkboard_id)s
     """, {"corkboard_id": corkboard_id})
 
+    headers = [x[0] for x in cur.description]
+    rows = cur.fetchall()
+    for stuff in rows:
+        data.append(dict(zip(headers, stuff)))
+
     cur.execute("""SELECT title
     FROM PushPin AS pp
     INNER JOIN CorkBoard AS cb
@@ -390,10 +393,20 @@ def view_pushpin(pushpin_id):
     WHERE cb.corkboard_id = %(corkboard_id)s
     """, {"corkboard_id": corkboard_id})
 
+    headers = [x[0] for x in cur.description]
+    rows = cur.fetchall()
+    for stuff in rows:
+        data.append(dict(zip(headers, stuff)))
+
     cur.execute("""SELECT url, description
     FROM PushPin as pp
     WHERE pp.pushpin_id = %(pushpin_id)s
     """, {"pushpin_id": pushpin_id})
+
+    headers = [x[0] for x in cur.description]
+    rows = cur.fetchall()
+    for stuff in rows:
+        data.append(dict(zip(headers, stuff)))
 
     cur.execute("""SELECT tag
     FROM Tag AS t
@@ -401,6 +414,11 @@ def view_pushpin(pushpin_id):
     ON pp.pushpin_id = t.fk_pushpin_id
     WHERE t.fk_pushpin_id = %(pushpin_id)s
     """, {"pushpin_id": pushpin_id})
+
+    headers = [x[0] for x in cur.description]
+    rows = cur.fetchall()
+    for stuff in rows:
+        data.append(dict(zip(headers, stuff)))
 
     cur.execute("""SELECT first_name, last_name
     FROM CorkBoardItUser AS u
@@ -411,6 +429,11 @@ def view_pushpin(pushpin_id):
     WHERE  pp.pushpin_id = %(pushpin_id)s
     """, {"pushpin_id": pushpin_id})
 
+    headers = [x[0] for x in cur.description]
+    rows = cur.fetchall()
+    for stuff in rows:
+        data.append(dict(zip(headers, stuff)))
+
     cur.execute("""SELECT c.fk_user_id, c.text, c.date_time
     FROM Comment AS c
     INNER JOIN CorkBoardItUser AS u
@@ -420,7 +443,13 @@ def view_pushpin(pushpin_id):
     WHERE c.fk_pushpin_id = %(pushpin_id)s
     ORDER BY c.date_time DESC
     """, {"pushpin_id": pushpin_id})
-    return 'being built rn'
+
+    headers = [x[0] for x in cur.description]
+    rows = cur.fetchall()
+    for stuff in rows:
+        data.append(dict(zip(headers, stuff)))
+
+    return jsonify(data)
 
 """
 FOLLOW FOR PUSHPIN
