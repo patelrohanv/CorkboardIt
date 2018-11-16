@@ -5,6 +5,7 @@ import psycopg2
 from psycopg2 import sql
 from flask_cors import CORS
 import sys
+from decimal import *
 
 
 app = Flask(__name__)                  #  Create a Flask WSGI application
@@ -13,6 +14,7 @@ CORS(app)
 
 connection = "host='postgresdb' dbname='postgres' user='postgres' password='secret'"
 conn = psycopg2.connect(connection)
+conn.set_session(autocommit=True)
 cur = conn.cursor()
 
 @app.route('/login', methods=['POST'])
@@ -29,10 +31,26 @@ def get_is_valid():
 
     """
     if request.method == 'POST':
-        user_id = request.args.get('user_id')
-        password = request.args.get('password')
+        content = request.get_json()
+        user_id = content['user_id']
+        password = content['pin']
+        print(user_id, file=sys.stderr)
+        print(password, file=sys.stderr)
+        cur.execute("SELECT first_name, last_name, email, pin FROM CorkBoardItUser WHERE CorkBoardItUser.user_id=%(lname)s", {"lname": user_id})
+        rows = cur.fetchall()
+        print(rows, file=sys.stderr)
 
-        return jsonify(is_valid = True)
+        password = Decimal(password)
+        if len(rows) == 0 or password != rows[0][3]:
+            return jsonify(user = None), 404
+        else:
+            user_dict = {
+                'first_name': rows[0][0],
+                'last_name': rows[0][1],
+                'email': rows[0][2]
+            }
+        
+            return jsonify(user_dict)
 
 @app.route('/user/')
 def get_user_id():
@@ -45,15 +63,25 @@ def get_user_id():
         in: query
     """
     user_email = request.args.get('email')
+    user_id = request.args.get('id')
 
-    cur.execute("SELECT user_id FROM CorkBoardItUser WHERE CorkBoardItUser.email=%(lname)s", {"lname": user_email})
-
+    if user_email is not None:
+        cur.execute("SELECT first_name, last_name, user_id, email FROM CorkBoardItUser WHERE CorkBoardItUser.email=%(lname)s;", {"lname": user_email})
+    else:
+        cur.execute("SELECT first_name, last_name, user_id, email FROM CorkBoardItUser WHERE CorkBoardItUser.user_id=%(lname)s;", {"lname": user_id})
     rows = cur.fetchall()
 
     if len(rows) == 0:
-        return jsonify(user_id = None), 404
+        return jsonify(user = None), 404
     else:
-        return jsonify(user_id = rows[0][0])
+        user_dict = {
+            'id': rows[0][2],
+            'first_name': rows[0][0],
+            'last_name': rows[0][1],
+            'email': rows[0][3]
+        }
+        
+        return jsonify(user_dict)
 
 @app.route('/homescreen_owned/<user_id>')
 def owned_corkboards(user_id):
@@ -77,7 +105,7 @@ def owned_corkboards(user_id):
     GROUP BY owned_corkboard.corkboard_id) pins_count
     INNER JOIN CorkBoard board
     ON board.corkboard_id=pins_count.corkboard_id
-    ORDER BY board.title ASC""", {"user": user_id})
+    ORDER BY board.title ASC;""", {"user": user_id})
 
     headers = [x[0] for x in cur.description]
     rows = cur.fetchall()
@@ -120,7 +148,7 @@ def recent_updates(user_id):
     FROM CorkBoard
     WHERE CorkBoard.fk_user_id = %(user)s
     ORDER BY date_time DESC
-    LIMIT 4""", {"user": user_id})
+    LIMIT 4;""", {"user": user_id})
 
     headers = [x[0] for x in cur.description]
     rows = cur.fetchall()

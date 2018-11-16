@@ -13,6 +13,7 @@ import {PopularSite} from "../../models/popularSite";
 import {SearchResults} from "../../models/searchResults";
 import { User } from 'src/app/models/user';
 import { Corkboard } from 'src/app/models/corkboard';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -21,29 +22,24 @@ import { Corkboard } from 'src/app/models/corkboard';
     styleUrls: ['./homescreen.component.scss']
 })
 export class HomescreenComponent implements OnInit {
-    current_user: User = {
-        email: 'binglin@',
-        id: '1',
-        first_name: 'Bing',
-        last_name: 'Lin' 
-    } 
+    current_user: User
     owned_corkboards: Corkboard[]
     recent_corkboards: Corkboard[]
 
   public search_text = new FormControl('', [Validators.required, Validators.minLength(1)]);
 
-  constructor(public dialog: MatDialog, private userService: UserService) { }
+  constructor(public dialog: MatDialog, private userService: UserService, private router: ActivatedRoute) { }
 
     ngOnInit() {
-        this.getOwnedCorkBoards()
-        this.getRecentCorkBoards()
-        this.current_user = {    
-            email: 'binglin@',
-            id: '1',
-            first_name: 'Bing',
-            last_name: 'Ling'
-        }
+
+        const uid = this.router.snapshot.params['cbuid']
+        this.userService.getUser_ID(uid).subscribe((user: User) => {
+            this.current_user = user;
+            this.getOwnedCorkBoards()
+            this.getRecentCorkBoards() 
+        })
     }
+
     getPopularSites(): void {
       const dialogRef = this.dialog.open(PopularSitesComponent, {
         width: '500x',
@@ -91,6 +87,7 @@ export class HomescreenComponent implements OnInit {
     getOwnedCorkBoards() {
         this.userService.getHomescreenOwned(this.current_user.id).subscribe((res: Corkboard[]) => {
             this.owned_corkboards = res
+            console.log(this.owned_corkboards)
         })
     }
 

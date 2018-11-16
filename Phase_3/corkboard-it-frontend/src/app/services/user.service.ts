@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
@@ -8,6 +8,7 @@ import { PopularTag } from '../models/popularTag';
 import { PopularSite } from '../models/popularSite';
 import { CorkboardStat } from '../models/corkboardStat';
 import {SearchResults} from "../models/searchResults";
+import {RequestOptions} from "@angular/http"
 
 @Injectable({
     providedIn: 'root'
@@ -19,14 +20,28 @@ export class UserService {
         this.baseUrl = environment.baseUrl;
     }
 
-    // /login
-    postLogin(user_id: string, password: string): void {
-
+    // /logi
+    postLogin(user_id: string, password: string): Observable<Object> {
+        const requestURL = this.baseUrl + '/login';
+        const user_login = {'user_id': user_id, 'pin': password};
+        const httpOptions = {
+            headers: new HttpHeaders({
+              'Content-Type':  'application/json',
+            })
+        }
+        return this.http.post<Object>(requestURL, user_login, httpOptions);
     }
 
     // /user/
-    user(email: string): void {
+    getUser_ID(id: string): Observable<Object> {
+        const requestURL = this.baseUrl + '/user/?id=' + id
+        return this.http.get<Object>(requestURL);
+    }
 
+    // /user/
+    getUser_Email(email: string): Observable<Object> {
+        const requestURL = this.baseUrl + '/user/?email=' + email
+        return this.http.get<Object>(requestURL);
     }
 
     // /homescreen/<user_id>

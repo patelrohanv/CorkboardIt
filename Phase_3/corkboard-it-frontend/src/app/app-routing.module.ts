@@ -11,6 +11,7 @@ import { SearchPushpinComponent } from './components/search-pushpin/search-pushp
 import { PopularTagsComponent } from './components/popular-tags/popular-tags.component';
 import { PopularSitesComponent } from './components/popular-sites/popular-sites.component';
 import { CorkboardStatsComponent } from './components/corkboard-stats/corkboard-stats.component';
+import { User } from './models/user';
 
 const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},

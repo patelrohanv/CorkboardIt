@@ -1,4 +1,4 @@
-<mat-toolbar>Welcome {{current_user.first_name}} {{current_user.last_name}}</mat-toolbar>
+<mat-toolbar>Welcome {{current_user?.first_name}} {{current_user?.last_name}}</mat-toolbar>
 
 <button mat-flat-button color="primary" (click)="getPopularTags()">Popular Tags</button>
 <button mat-flat-button color="primary" (click)="getPopularSites()">Popular Sites</button>
@@ -6,14 +6,14 @@
 <button mat-flat-button color="primary" (click)="addCorkBoard()">Add CorkBoard</button>
 
 <h3>Recent CorkBoards</h3>
-<li *ngFor="let corkboard of recent_corkboards">
+<div *ngFor="let corkboard of recent_corkboards">
     <app-corkboard-tile [corkboard]="corkboard"></app-corkboard-tile>
-</li>
+</div>
   
 <h3>My CorkBoards</h3>
-<li *ngFor="let corkboard of owned_corkboards">
+<div *ngFor="let corkboard of owned_corkboards">
     <app-corkboard-tile [corkboard]="corkboard"></app-corkboard-tile>
-</li>
+</div>
   
 <form>
   <mat-form-field>

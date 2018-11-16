@@ -5,7 +5,7 @@
     <mat-card-content>
         <form>
             <mat-form-field>
-                <input matInput placeholder="Email" [formControl]="email" type="email" name="email">
+                <input [(ngModel)]="email_input" matInput placeholder="Email" [formControl]="email" type="email" name="email">
                 <mat-error *ngIf="email.hasError('required')">
                     Incorrect <strong>Email</strong>
                 </mat-error>
@@ -13,7 +13,7 @@
             <br>
             <br>
             <mat-form-field>
-                <input matInput placeholder="Pin" [formControl]="pin" type="password" name="pin">
+                <input [(ngModel)]="pin_input" matInput placeholder="Pin" [formControl]="pin" type="password" name="pin">
                 <mat-error *ngIf="pin.hasError('incorrect')">
                     Incorrect <strong>pin</strong>
                 </mat-error>
