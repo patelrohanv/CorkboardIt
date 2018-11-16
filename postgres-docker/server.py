@@ -4,6 +4,8 @@ from flasgger import Swagger
 import psycopg2
 from psycopg2 import sql
 from flask_cors import CORS
+import sys
+from decimal import *
 
 app = Flask(__name__)                  #  Create a Flask WSGI application
 Swagger(app)
