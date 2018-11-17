@@ -290,17 +290,30 @@ ADD CORKBOARD
 @app.route('/addcorkboard', methods=['POST'])
 def add_corkboard():
     if request.method == 'POST':
-        user_id = request.args.get('user_id')
-        email = request.args.get('email')
-        date_time = request.args.get('date_time')
-        title = request.args.get('title')
-        category = request.args.get('category')
-        visibility = request.args.get('visibility')
+        content = request.get_json()
+        print(content, file=sys.stderr)
+        #user_id = request.args.get('user_id')
+        user_id = content['user_id']
+        #print(user_id, file=sys.stderr)
+        #email = request.args.get('email')
+        email = content['email']
+        #print(email, file=sys.stderr)
+        #date_time = request.args.get('date_time')
+        date_time = content['date_time']
+        #print(date_time, file=sys.stderr)
+        #title = request.args.get('title')
+        title = content['title']
+        #print(title, file=sys.stderr)
+        #category = request.args.get('category')
+        category = content['category']
+        #print(category, file=sys.stderr)
+        #visibility = request.args.get('visibility')
+        visibility = content['visibility']
         if visibility == False:
-            password = request.args.get('password')
+            password = content['password']
 
-    cur.execute("""INSERT INTO CorkBoard (fk_user_id, email, date_time, title, category, visibility)
-    VALUES (%(user_id)s,%(email)s, %(date_time)s, %(title)s, %(category)s, %(visibility)s)
+    cur.execute("""INSERT INTO CorkBoard (corkboard_id, fk_user_id, email, date_time, title, category, visibility)
+    VALUES (DEFAULT,%(user_id)s,%(email)s, %(date_time)s, %(title)s, %(category)s, %(visibility)s)
     RETURNING corkboard_id""",
     {"user_id": user_id, "email": email, "date_time": date_time, "title": title, "category": category, "visibility": visibility})
 
@@ -308,7 +321,7 @@ def add_corkboard():
     corkboard_id = rows[0][0]
 
     if visibility == True:
-        cur.excute("""INSERT INTO PublicCorkBoard (fk_corkboard_id)
+        cur.execute("""INSERT INTO PublicCorkBoard (fk_corkboard_id)
         VALUES(%(corkboard_id)s)""", {"corkboard_id": corkboard_id})
     else:
         cur.execute("""INSERT INTO PrivateCorkBoard  (fk_corkboard_id, password)
@@ -342,14 +355,16 @@ def corkboard_title(corkboard_id):
 
 @app.route('/addpushpin', methods=['POST'])
 def add_pushpin():
-    user_id = request.args.get('user_id')
-    corkboard_id = request.args.get('corkboard_id')
-    date_time = request.args.get('date_time')
-    url = request.args.get('url')
-    description = request.args.get('description')
+    if request.method == 'POST':
+        content = request.get_json()
+        user_id = content['user_id']
+        corkboard_id = content['corkboard_id']
+        date_time = content['date_time']
+        url = content['url']
+        description = content['description']
 
-    cur.execute("""INSERT INTO PushPin (fk_user_id, fk_corkboard_id, date_time, url, description)
-    VALUES (%(user_id)s, %(corkboard_id)s, %(date_time)s, %(url)s, %(description)s)
+    cur.execute("""INSERT INTO PushPin (pushpin_id, fk_user_id, fk_corkboard_id, date_time, url, description)
+    VALUES (DEFAULT, %(user_id)s, %(corkboard_id)s, %(date_time)s, %(url)s, %(description)s)
     """, {"user_id": user_id, "corkboard_id": corkboard_id, "date_time": date_time, "url": url, "description": description})
 
     #return corkboard_id
@@ -385,8 +400,7 @@ def view_pushpin(corkboard_id, pushpin_id):
 
     headers = [x[0] for x in cur.description]
     rows = cur.fetchall()
-    for stuff in rows:
-        data.append(dict(zip(headers, stuff)))
+    data.append({headers[0]:rows[0][0]})
 
     cur.execute("""SELECT title
     FROM PushPin AS pp
@@ -397,8 +411,7 @@ def view_pushpin(corkboard_id, pushpin_id):
 
     headers = [x[0] for x in cur.description]
     rows = cur.fetchall()
-    for stuff in rows:
-        data.append(dict(zip(headers, stuff)))
+    data.append({headers[0]:rows[0][0]})
 
     cur.execute("""SELECT url, description
     FROM PushPin as pp
@@ -452,6 +465,7 @@ def view_pushpin(corkboard_id, pushpin_id):
         data.append(dict(zip(headers, stuff)))
 
     return jsonify(data)
+
 
 """
 FOLLOW FOR PUSHPIN
@@ -613,7 +627,6 @@ def corkboard_stats():
         return jsonify(data = None), 404
     else:
         return jsonify(data)
-
 
 @app.route('/')
 def get_home():
