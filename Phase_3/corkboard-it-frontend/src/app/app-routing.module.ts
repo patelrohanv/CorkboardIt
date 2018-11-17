@@ -20,7 +20,7 @@ const routes: Routes = [
   {path: "addcorkboard", component: AddCorkboardComponent},
   {path: "viewcorkboard/:cbid", component: ViewCorkboardComponent},
   {path: "viewcorkboard/:cbid", component: AddPushpinComponent},
-  {path: "viewcorkboard/:ppid", component: ViewPushpinComponent},
+  {path: "viewpushpin/:ppid", component: ViewPushpinComponent},
   {path: "search", component: SearchPushpinComponent},
   {path: "populartags", component: PopularTagsComponent},
   {path: "popularsites", component: PopularSitesComponent},

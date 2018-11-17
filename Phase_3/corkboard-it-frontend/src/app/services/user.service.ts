@@ -9,6 +9,7 @@ import { PopularSite } from '../models/popularSite';
 import { CorkboardStat } from '../models/corkboardStat';
 import {SearchResults} from "../models/searchResults";
 import {RequestOptions} from "@angular/http"
+import {ViewPushPin} from "../models/ViewPushPin";
 
 @Injectable({
     providedIn: 'root'
@@ -77,10 +78,10 @@ export class UserService {
     }
 
     // /viewPushpin/<pushpin_id>
-    ViewPushpin(pushpin_id: string): Observable<Object> {
-        const requestURL = this.baseUrl + '/viewpushpin/' + pushpin_id;
+    ViewPushpin(corkboard_id: string, pushpin_id: string, ): Observable<Object> {
+        const requestURL = this.baseUrl + '/viewpushpin/' + corkboard_id +'/' + pushpin_id;
+        console.log(requestURL);
         return this.http.get<Object>(requestURL);
-
     }
 
     // '/searchpushpin/<search_text>)'
