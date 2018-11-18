@@ -93,10 +93,10 @@ VALUES
 
 INSERT INTO PushPin (fk_user_id, fk_corkboard_id, date_time, url, description)
 VALUES
-    (1, 1, '2018-06-22 19:10:25-07', 'bing.com', 'my first adventure'),
-    (1, 1, '2018-06-22 19:10:25-07', 'bing.com', 'my second adventure'),
-    (1, 2, '2018-06-21 19:10:25-07', 'bing.com', 'my spicy meme 1'),
-    (5, 4, '2018-06-22 19:10:25-07', 'yahoo.com', 'hell train');
+    (1, 1, '2018-06-22 19:10:25-07', 'https://image.redbull.com/rbcom/052/2018-04-18/3defc76b-795c-4cfa-a005-c2fabd43f6fb/0012/0/130/0/2008/2816/1500/1/adventure-travel-cliff.jpg', 'my first adventure'),
+    (1, 1, '2018-06-22 19:10:25-07', 'https://media.treehugger.com/assets/images/2018/04/hiking_in_South_Africa.jpg.860x0_q70_crop-scale.jpg', 'my second adventure'),
+    (1, 2, '2018-06-21 19:10:25-07', 'https://hips.hearstapps.com/del.h-cdn.co/assets/18/10/1024x537/gallery-1520361809-skittles-sweet-heat-image-1024.jpg', 'my spicy meme 1'),
+    (5, 4, '2018-06-22 19:10:25-07', 'https://media.newyorker.com/photos/597c214e3f7572208e963e46/master/w_1800,c_limit/CVN_TNY_08_07_17RGB.jpg', 'hell train');
 
 INSERT INTO Tag (fk_pushpin_id, tag)
 VALUES
