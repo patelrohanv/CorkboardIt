@@ -29,14 +29,14 @@ export class ViewPushpinComponent implements OnInit {
 
 
   constructor(public dialogRef: MatDialogRef<ViewPushpinComponent>, private userService: UserService,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
+              @Inject(MAT_DIALOG_DATA) public pushpin_data: any) {
   }
 
   ngOnInit() {
-    console.log("pushpin id ", this.data.pushpin_id);
-    console.log("cb id ", this.data.corkboard_id);
-    this.pushpin_id = this.data.pushpin_id;
-    this.corkboard_id = this.data.corkboard_id;
+    console.log("pushpin id ", this.pushpin_data.pushpin_id);
+    console.log("cb id ", this.pushpin_data.corkboard_id);
+    this.pushpin_id = this.pushpin_data.pushpin_id;
+    this.corkboard_id = this.pushpin_data.corkboard_id;
     this.get_view_pushpin_data();
     //this.view_pushpin_ds = new ViewPushPinDataSource(this.userService, this.data.pushpin_id);
   }

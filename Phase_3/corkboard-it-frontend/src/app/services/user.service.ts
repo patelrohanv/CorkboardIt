@@ -77,7 +77,7 @@ export class UserService {
         return this.http.post<Object>(requestURL, '');
     }
 
-    // /viewPushpin/<pushpin_id>
+    // /viewPushpin/<corkboard_id>/<pushpin_id>
     ViewPushpin(corkboard_id: string, pushpin_id: string, ): Observable<Object> {
         const requestURL = this.baseUrl + '/viewpushpin/' + corkboard_id +'/' + pushpin_id;
         console.log(requestURL);
