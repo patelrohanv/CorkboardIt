@@ -4,7 +4,6 @@ import {DataSource} from "@angular/cdk/table";
 import {UserService} from "../../services/user.service";
 import {Observable} from "rxjs";
 import {SearchResults} from "../../models/searchResults";
-import {ViewPushPin} from "../../models/ViewPushPin";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {SearchResultsDataSource} from "../search-pushpin/search-pushpin.component";
 @Component({
@@ -19,7 +18,6 @@ export class ViewPushpinComponent implements OnInit {
 
   comments: Comment[] = [];
   pushpin_displayedColumns: string[] = ['Commenter', 'Comment'];
-  private data: Observable<ViewPushPin>;
 
   private name: any;
   private date: any;
