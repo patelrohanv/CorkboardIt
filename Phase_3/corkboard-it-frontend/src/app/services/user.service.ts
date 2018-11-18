@@ -9,7 +9,6 @@ import { PopularSite } from '../models/popularSite';
 import { CorkboardStat } from '../models/corkboardStat';
 import {SearchResults} from "../models/searchResults";
 import {RequestOptions} from "@angular/http"
-import {ViewPushPin} from "../models/ViewPushPin";
 
 @Injectable({
     providedIn: 'root'
