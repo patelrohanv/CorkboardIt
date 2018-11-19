@@ -15,6 +15,7 @@ import { User } from 'src/app/models/user';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OwnedCorkBoard } from 'src/app/models/ownedCorkBoard';
 import { RecentCorkBoard } from 'src/app/models/recentCorkBoard';
+import {ViewPushpinComponent} from "../view-pushpin/view-pushpin.component";
 
 
 @Component({
@@ -84,6 +85,18 @@ export class HomescreenComponent implements OnInit {
             console.log('The dialog was closed');
         });
     }
+
+  addPP(): void {
+    const dialogRef = this.dialog.open(ViewPushpinComponent, {
+      width: '500px',
+      height: '500px',
+      data: {corkboard_id: '1', pushpin_id: '1'}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
 
     getOwnedCorkBoards() {
         this.userService.getHomescreenOwned(this.current_user.id).subscribe((res: OwnedCorkBoard[]) => {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import {HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
@@ -81,6 +81,37 @@ export class UserService {
         const requestURL = this.baseUrl + '/viewpushpin/' + corkboard_id +'/' + pushpin_id;
         console.log(requestURL);
         return this.http.get<Object[]>(requestURL);
+    }
+
+    //postcomment
+    //     date_time = request.args.get('date_time')
+    //     text = request.args.get('text')
+    //     user_id = request.args.get('user_id')
+    //     pushpin_id = request.args.get('pushpin_id')
+
+    postComment(pushpin_id: string, user_id: string, text: string, date_time: string): Observable<Object>  {
+      const requestURL = this.baseUrl + '/postcomment';
+      const body = {'pushpin_id': pushpin_id,
+                    'user_id': user_id,
+                    'text': text,
+                    'date_time': date_time};
+
+        // let body = new HttpParams();
+        // body=body.set('pushpin_id', pushpin_id);
+        // body=body.set('user_id', user_id);
+        // body=body.set('text', text);
+        // body=body.set('date_time', date_time);
+
+        const httpOptions = {
+          headers: new HttpHeaders({
+            'Content-Type':  'application/json',
+          })
+        }
+
+      console.log(body);
+        console.log(requestURL);
+        console.log(httpOptions)
+      return this.http.post<Object>(requestURL, body, httpOptions);
     }
 
     // '/searchpushpin/<search_text>)'

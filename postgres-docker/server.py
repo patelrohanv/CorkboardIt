@@ -507,16 +507,52 @@ POST COMMENT FOR PUSHPIN
 """
 @app.route('/postcomment', methods = ['POST'])
 def post_comment():
-    date_time = request.args.get('date_time')
-    text = request.args.get('text')
-    user_id = request.args.get('user_id')
-    pushpin_id = request.args.get('pushpin_id')
 
-    cur.execute("""INSERT INTO Comment (comment_id, date_time, text, fk_user_id, fk_pushpin_id)
-    VALUES ($comment_id, $date_time, $text,
-    (SELECT user_id FROM CorkBoardItUser AS u WHERE u.user_id = %(user_id)s),
-    (SELECT fk_user_id FROM PushPin WHERE pushpin.pushpin_id = %(pushpin_id)s))
-    """, {"user_id": user_id, "pushpin_id": pushpin_id})
+    """
+    ---
+    tags:
+        - Comments on pushpins
+    parameters:
+        - name: pushpin_id
+          in: body
+        - name: text
+          in: body
+        - name: user_id
+           in: body
+        - name: date_time
+           in: body
+    """
+    if request.method == 'POST':
+        content = request.get_json()
+        print('CONTENT:', content, file=sys.stderr)
+        date_time = content['date_time']
+        text = content['text']
+        user_id = content['user_id']
+        pushpin_id = content['pushpin_id']
+        print(date_time, file=sys.stderr)
+        print(text, file=sys.stderr)
+        print(user_id, file=sys.stderr)
+        print(pushpin_id, file=sys.stderr)
+
+
+        #print('posting comment')
+        #date_time = request.args.get('date_time')
+        #text = request.args.get('text')
+        #user_id = request.args.get('user_id')
+        #pushpin_id = request.args.get('pushpin_id')
+
+        #cur.execute("""INSERT INTO Comment (comment_id, date_time, text, fk_user_id, fk_pushpin_id)
+        #VALUES ($comment_id, $date_time, $text,
+        #(SELECT user_id FROM CorkBoardItUser AS u WHERE u.user_id = %(user_id)s),
+        #(SELECT fk_user_id FROM PushPin WHERE pushpin.pushpin_id = %(pushpin_id)s))
+        #""", {"user_id": user_id, "pushpin_id": pushpin_id})
+
+        cur.execute("""INSERT INTO comment (date_time, text, fk_user_id, fk_pushpin_id)
+        VALUES (%s, %s, %s, %s)""", (date_time, text, user_id,
+        pushpin_id))
+
+
+        return jsonify(status_code=201)
 #########################################################################################################
 #########################################################################################################
 #########################################################################################################
