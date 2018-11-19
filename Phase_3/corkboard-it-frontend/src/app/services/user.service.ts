@@ -77,10 +77,10 @@ export class UserService {
     }
 
     // /viewPushpin/<corkboard_id>/<pushpin_id>
-    ViewPushpin(corkboard_id: string, pushpin_id: string, ): Observable<Object> {
+    ViewPushpin(corkboard_id: string, pushpin_id: string, ): Observable<Object[]> {
         const requestURL = this.baseUrl + '/viewpushpin/' + corkboard_id +'/' + pushpin_id;
         console.log(requestURL);
-        return this.http.get<Object>(requestURL);
+        return this.http.get<Object[]>(requestURL);
     }
 
     // '/searchpushpin/<search_text>)'
