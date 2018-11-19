@@ -58,7 +58,7 @@ export class ViewPushpinComponent implements OnInit {
         // 0 = owner
         this.name = pushpin[0]['first_name'];
         this.name = this.name + " " + pushpin[0]['last_name'];
-        console.log(this.name);
+        //console.log(this.name);
 
         // 1 = date
         this.date = pushpin[1]['date_time'];
@@ -91,7 +91,7 @@ export class ViewPushpinComponent implements OnInit {
             //set comment
             this.comments.push({comment: cmt, commenter: usr.toString()});
 
-            console.log(this.comments)
+            //console.log(this.comments)
           }
         }
         // set comment2 with value of comment
@@ -108,16 +108,23 @@ export class ViewPushpinComponent implements OnInit {
 
   postComment() {
     // get current user
+    let dt = new Date();
+    let iso_str = dt.toISOString().split('T');
+    let date = iso_str[0];
+    let time = iso_str[1].split('.')[0]
+
+    let dt_str = date.toString() +  ' ' + time.toString();
+
+    console.log(dt_str.toString());
+
     this.userService.postComment(this.pushpin_id, '3', this.comment_text.value.toString(),
-      '2018-06-22 19:10:25').subscribe((cmt) => {
+      dt_str).subscribe((cmt) => {
       console.log(cmt);
       if (cmt) {
         console.log('comment posted!');
 
         this.refresh_comments();
 
-
-        //this.tableDS = new MatTableDataSource(this.comments);
       }
     });
   }
@@ -151,7 +158,7 @@ export class ViewPushpinComponent implements OnInit {
 
         this.comments.push({comment: cmt, commenter: usr.toString()});
 
-        console.log(this.comments)
+        //console.log(this.comments)
       }
     }
       this.tableDS = new MatTableDataSource(this.comments);
