@@ -1,5 +1,5 @@
 <div>
-{{name}} <button mat-button>Follow</button>
+{{name}} <button mat-flat-button color="primary" (click)="followUser()">Follow</button>
   <br>
   <p>Pinned {{date}} on <a routerLink="/viewcorkboard/{{corkboard_id}}" routerLinkActive="active">{{title}}</a> </p>
 </div>
@@ -9,7 +9,7 @@
   <p>Tags: <b>{{tags}}</b></p>
 </div>
 <div>
-  <p>Likers: {{likers}}</p><button mat-button>Like!</button>
+  <p>Likers: {{likers}}<button mat-flat-button color="primary" (click)="likePushpin()">Like!</button></p>
 </div>
 
 <div>

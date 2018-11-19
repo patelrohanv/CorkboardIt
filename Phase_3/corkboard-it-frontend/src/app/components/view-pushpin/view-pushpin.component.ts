@@ -27,6 +27,7 @@ export class ViewPushpinComponent implements OnInit {
   private url: any;
   private tags: String = '';
   private likers: String = '';
+  private like_btn_disable = false;
 
   public comment_text = new FormControl('', [Validators.required, Validators.minLength(1)]);
 
@@ -102,6 +103,10 @@ export class ViewPushpinComponent implements OnInit {
               this.likers = this.likers + ", "
             }
             this.likers = this.likers + pushpin[i]['first_name'] + ' ' + pushpin[i]['last_name'];
+
+            //if current user already liked
+            this.like_btn_disable = true;
+
             // console.log(this.likers)
           }
 
@@ -178,6 +183,22 @@ export class ViewPushpinComponent implements OnInit {
 
     this.comment_text.reset('');
       });
+
+    }
+
+  likePushpin(){
+
+    //get current user
+    //post like
+
+    //this.userService.like
+
+      console.log('hi')
+    }
+
+    followUser(){
+
+    console.log('follow')
 
     }
     }
