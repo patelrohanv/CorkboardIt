@@ -26,6 +26,7 @@ export class ViewPushpinComponent implements OnInit {
   private description: any;
   private url: any;
   private tags: String = '';
+  private likers: String = '';
 
   public comment_text = new FormControl('', [Validators.required, Validators.minLength(1)]);
 
@@ -54,7 +55,7 @@ export class ViewPushpinComponent implements OnInit {
   get_view_pushpin_data() {
 
 
-    this.userService.ViewPushpin(this.corkboard_id, this.pushpin_id,).subscribe((pushpin) => {
+    this.userService.ViewPushpin(this.corkboard_id, this.pushpin_id).subscribe((pushpin) => {
         // 0 = owner
         this.name = pushpin[0]['first_name'];
         this.name = this.name + " " + pushpin[0]['last_name'];
@@ -93,6 +94,18 @@ export class ViewPushpinComponent implements OnInit {
 
             //console.log(this.comments)
           }
+
+          //if liked
+          if (pushpin[i].hasOwnProperty("first_name") && pushpin[i].hasOwnProperty("last_name")) {
+
+            if (this.likers != '') {
+              this.likers = this.likers + ", "
+            }
+            this.likers = this.likers + pushpin[i]['first_name'] + ' ' + pushpin[i]['last_name'];
+            // console.log(this.likers)
+          }
+
+
         }
         // set comment2 with value of comment
         // needed to do this because mat-table uses a constant of the datasource.. if you just use comment, it wasnt

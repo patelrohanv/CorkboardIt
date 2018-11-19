@@ -90,7 +90,7 @@ export class HomescreenComponent implements OnInit {
     const dialogRef = this.dialog.open(ViewPushpinComponent, {
       width: '500px',
       height: '500px',
-      data: {corkboard_id: '1', pushpin_id: '1'}
+      data: {corkboard_id: '4', pushpin_id: '4'}
     });
 
     dialogRef.afterClosed().subscribe(result => {
