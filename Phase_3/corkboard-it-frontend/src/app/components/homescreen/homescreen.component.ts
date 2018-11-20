@@ -86,12 +86,12 @@ export class HomescreenComponent implements OnInit {
         });
     }
 
-   // julie testing
+  //  //julie testing, i know this is wrong 
   // viewPP(): void {
   //   const dialogRef = this.dialog.open(ViewPushpinComponent, {
   //     width: '500px',
   //     height: '500px',
-  //     data: {corkboard_id: '1', pushpin_id: '1'}
+  //     data: {corkboard_id: '1', pushpin_id: '1', current_user: '2', cb_owner:'1'}
   //   });
   //
   //   dialogRef.afterClosed().subscribe(result => {
