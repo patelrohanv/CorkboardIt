@@ -268,7 +268,7 @@ def validate_private_corkboard_login(corkboard_id):
             return jsonify(isValid = False)
         else:
             return jsonify(isValid = True)
-    
+
 """
 FOLLOW CORKBOARD
 """
