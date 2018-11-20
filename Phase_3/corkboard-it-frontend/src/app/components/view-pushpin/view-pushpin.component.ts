@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Inject, OnInit} from '@angular/core';
 import {Comment} from '../../models/comment';
 import {UserService} from "../../services/user.service";
 import {MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource} from "@angular/material";
@@ -10,7 +10,7 @@ import {ActivatedRoute} from "@angular/router";
   templateUrl: './view-pushpin.component.html',
   styleUrls: ['./view-pushpin.component.scss']
 })
-export class ViewPushpinComponent implements OnInit {
+export class ViewPushpinComponent implements OnInit, AfterViewInit {
 
   pushpin_id: string;
   corkboard_id: string;
@@ -23,6 +23,8 @@ export class ViewPushpinComponent implements OnInit {
   private description: any;
   private url: any;
   private tags: String = '';
+
+  private total_data;
 
   private likers: String = '';
   private like = true;
@@ -46,31 +48,36 @@ export class ViewPushpinComponent implements OnInit {
   }
 
   ngOnInit() {
+    // this.ngAfterViewInit();
+  }
+
+  ngAfterViewInit() {
+
     const ppid = this.router.snapshot.params['ppid'];
     console.log("pushpin id ", ppid);
     //console.log("cb id ", this.pushpin_data.corkboard_id);
     //this.pushpin_id = this.pushpin_data.pushpin_id;
-      this.pushpin_id = ppid.toString();
-      this.corkboard_id = '1';
-      this.cb_owner = '1';
-      this.cur_usr = '3';
+    this.pushpin_id = ppid.toString();
+    this.corkboard_id = '1';
+    this.cb_owner = '1';
+    this.cur_usr = '3';
     // this.corkboard_id = this.pushpin_data.corkboard_id;
     // this.cur_usr = this.pushpin_data.current_user;
     // this.cb_owner = this.pushpin_data.cb_owner;
 
+    console.log(this.total_data);
+
     this.get_view_pushpin_data();
 
-    //run these initially
-    // each will be update afterwards if necessary
-    this.refresh_tags();
-    this.refresh_comments();
-    this.refresh_likes();
-    this.refresh_follow_data();
+
   }
 
   // gets the pushpin data dealing with pin owner name, board name, date it was pinned
   // title, url and description.
   get_view_pushpin_data() {
+
+    console.log(this.corkboard_id);
+    console.log(this.pushpin_id);
     this.userService.ViewPushpin(this.corkboard_id, this.pushpin_id).subscribe((pushpin) => {
         // 0 = owner
         this.name = pushpin[0]['first_name'];
@@ -85,27 +92,98 @@ export class ViewPushpinComponent implements OnInit {
         //3 = desc & url
         this.description = pushpin[3]['description'];
         this.url = pushpin[3]['url'];
+
+      //run these initially
+      // each will be update afterwards if necessary
+        this.load_tags(pushpin);
+        this.load_comments(pushpin);
+        this.load_likers(pushpin);
+
       }
     );
   }
+
+  // get tag data ouf of pushpin
+  load_tags(pushpin){
+
+    for (var i = 4; i < (pushpin.length); i++) {
+
+      //if tag
+      if (pushpin[i].hasOwnProperty("tag")) {
+        // add comma if more than 1
+        if (this.tags != '') {
+          this.tags = this.tags + ", "
+        }
+        // concat tags
+        this.tags = this.tags + pushpin[i]['tag'];
+      }
+    }
+  }
+
+  //get comment data put of pushpin
+  load_comments(pushpin){
+
+    // loop through array of json objs
+    for (var i = 0; i < (pushpin.length); i++) {
+
+      // if comment
+      if (pushpin[i].hasOwnProperty("text") && pushpin[i].hasOwnProperty("first_name") &&
+        pushpin[i].hasOwnProperty("last_name")) {
+
+        //get user_id & text
+        const usr = pushpin[i]['first_name'] + ' ' + pushpin[i]['last_name'];
+        const cmt = pushpin[i]['text'];
+
+        // //set comment
+        this.comments.push({comment: cmt, commenter: usr.toString()});
+
+      }
+    }
+
+    // must create a new MatTableDataSource so that the table will update
+    this.tableDS = new MatTableDataSource(this.comments);
+
+    // clear the comment form
+    this.comment_text.reset('');
+
+  }
+
+
+// get like data out of pushpin
+  load_likers(pushpin){
+
+    for (var i = 4; i < (pushpin.length); i++) {
+      //if liked
+      if (pushpin[i].hasOwnProperty("first_name") && pushpin[i].hasOwnProperty("last_name") &&
+        !pushpin[i].hasOwnProperty("text")) {
+
+        // add comma if more than 1
+        if (this.likers != '') {
+          this.likers = this.likers + ", "
+        }
+        this.likers = this.likers + pushpin[i]['first_name'] + ' ' + pushpin[i]['last_name'];
+
+        //if current user already liked
+        //TODO
+        if (pushpin[i].hasOwnProperty("user_id")) {
+          if (pushpin[i]['user_id'] == this.cur_usr.toString()) {
+            //this.like = false;
+          }
+        }
+      }
+    }
+
+  }
+
 
   // gets the tag data from the database
   refresh_tags(){
     // reset the tags, even though this should only be called once
     this.tags = '';
     this.userService.ViewPushpin(this.corkboard_id, this.pushpin_id).subscribe((pushpin) => {
-      for (var i = 4; i < (pushpin.length); i++) {
 
-        //if tag
-        if (pushpin[i].hasOwnProperty("tag")) {
-          // add comma if more than 1
-          if (this.tags != '') {
-            this.tags = this.tags + ", "
-          }
-          // concat tags
-          this.tags = this.tags + pushpin[i]['tag'];
-        }
-      }
+      this.load_tags(pushpin);
+
     });
   }
 
@@ -143,30 +221,12 @@ export class ViewPushpinComponent implements OnInit {
     //clear comments
     this.comments = [];
 
-    //get the comments
+    // //get the comments
     this.userService.ViewPushpin(this.corkboard_id, this.pushpin_id,).subscribe((pushpin) => {
 
-      // loop through array of json objs
-      for (var i = 0; i < (pushpin.length); i++) {
+      this.load_comments(pushpin);
 
-        // if comment
-        if (pushpin[i].hasOwnProperty("text") && pushpin[i].hasOwnProperty("first_name") &&
-          pushpin[i].hasOwnProperty("last_name")) {
 
-          //get user_id & text
-          const usr = pushpin[i]['first_name'] + ' ' + pushpin[i]['last_name'];
-          const cmt = pushpin[i]['text'];
-
-          // //set comment
-          this.comments.push({comment: cmt, commenter: usr.toString()});
-
-        }
-      }
-      // must create a new MatTableDataSource so that the table will update
-      this.tableDS = new MatTableDataSource(this.comments);
-
-      // clear the comment form
-      this.comment_text.reset('');
     });
 
   }
@@ -209,26 +269,8 @@ export class ViewPushpinComponent implements OnInit {
       // reset likers, this will be update with new likers data
       this.likers = '';
 
-      for (var i = 4; i < (pushpin.length); i++) {
-        //if liked
-        if (pushpin[i].hasOwnProperty("first_name") && pushpin[i].hasOwnProperty("last_name") &&
-        !pushpin[i].hasOwnProperty("text")) {
+      this.load_likers(pushpin);
 
-          // add comma if more than 1
-          if (this.likers != '') {
-            this.likers = this.likers + ", "
-          }
-          this.likers = this.likers + pushpin[i]['first_name'] + ' ' + pushpin[i]['last_name'];
-
-          //if current user already liked
-          //TODO
-          if (pushpin[i].hasOwnProperty("user_id")) {
-            if (pushpin[i]['user_id'] == this.cur_usr.toString()) {
-              //this.like = false;
-            }
-          }
-        }
-      }
     });
 
     if(this.cb_owner == this.cur_usr){
