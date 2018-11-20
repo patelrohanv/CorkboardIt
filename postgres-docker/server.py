@@ -591,6 +591,8 @@ def post_comment():
         VALUES (%(date_time)s, %(text)s, %(user_id)s, %(pushpin_id)s)
         """, {"date_time": date_time, "text": text, "user_id": user_id, "pushpin_id": pushpin_id})
 
+        conn.commit()
+
         return jsonify(status_code=201)
 
 #########################################################################################################

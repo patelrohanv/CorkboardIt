@@ -24,8 +24,6 @@ export class ViewPushpinComponent implements OnInit, AfterViewInit {
   private url: any;
   private tags: String = '';
 
-  private total_data;
-
   private likers: String = '';
   private like = true;
   private like_btn_txt = 'Like!';
@@ -40,11 +38,8 @@ export class ViewPushpinComponent implements OnInit, AfterViewInit {
   private comments: Comment[] = [];
   tableDS: MatTableDataSource<Comment>;
 
-  //public dialogRef: MatDialogRef<ViewPushpinComponent>,
 
-  constructor( private userService: UserService,
-             // @Inject(MAT_DIALOG_DATA) public pushpin_data: any,
-              private router: ActivatedRoute) {
+  constructor( private userService: UserService, private router: ActivatedRoute) {
   }
 
   ngOnInit() {
@@ -58,17 +53,19 @@ export class ViewPushpinComponent implements OnInit, AfterViewInit {
     //console.log("cb id ", this.pushpin_data.corkboard_id);
     //this.pushpin_id = this.pushpin_data.pushpin_id;
     this.pushpin_id = ppid.toString();
+
+    //TODO : need these values from somewhere
     this.corkboard_id = '1';
     this.cb_owner = '1';
-    this.cur_usr = '3';
-    // this.corkboard_id = this.pushpin_data.corkboard_id;
-    // this.cur_usr = this.pushpin_data.current_user;
-    // this.cb_owner = this.pushpin_data.cb_owner;
+    this.cur_usr = '1';
 
-    console.log(this.total_data);
+    //disable like btn
+    if(this.cb_owner == this.cur_usr){
+      this.like_btn_disable = true;
+    }
 
+    // get initial data
     this.get_view_pushpin_data();
-
 
   }
 
@@ -272,10 +269,6 @@ export class ViewPushpinComponent implements OnInit, AfterViewInit {
       this.load_likers(pushpin);
 
     });
-
-    if(this.cb_owner == this.cur_usr){
-      this.like_btn_disable = true;
-    }
   }
 
   // post follow
