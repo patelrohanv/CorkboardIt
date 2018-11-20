@@ -326,6 +326,9 @@ def add_corkboard():
         #print(category, file=sys.stderr)
         #visibility = request.args.get('visibility')
         visibility = content['visibility']
+
+        password = ''
+        
         if visibility == False:
             password = content['password']
 
