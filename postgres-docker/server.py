@@ -470,21 +470,43 @@ def view_pushpin(corkboard_id, pushpin_id):
 """
 FOLLOW FOR PUSHPIN
 """
-@app.route('/followpushpin/<user_id>', methods = ['POST'])
-def follow_pushpin(user_id):
-    cur.execute("""INSERT INTO Follow (fk_user_follower_id, fk_user_followee_id)
-    VALUES ((SELECT user_id FROM CorkBoardItUser AS u
-    WHERE u.user_id = $UserID), (SELECT fk_user_id
-    FROM CorkBoard WHERE corkboard.corkboard_id = $CorkBoardID
-    AND corkboard.fk_user_id != %(user_id)s))
-    """, {"user_id": user_id})
-    return 'being built rn'
+@app.route('/followpushpin', methods = ['POST'])
+def follow_pushpin():
+    """
+    ---
+    tags:
+        - Comments on pushpins
+    parameters:
+        - name: pushpin_id
+          in: body
+        - name: text
+    """
+    if request.method == 'POST':
+        content = request.get_json()
+        user_id = content['user_id']
+        cur.execute("""INSERT INTO Follow (fk_user_follower_id, fk_user_followee_id)
+        VALUES ((SELECT user_id FROM CorkBoardItUser AS u
+        WHERE u.user_id = $UserID), (SELECT fk_user_id
+        FROM CorkBoard WHERE corkboard.corkboard_id = $CorkBoardID
+        AND corkboard.fk_user_id != %(user_id)s))
+        """, {"user_id": user_id})
+        return 'being built rn'
 
 """
 LIKE FOR PUSHPIN
 """
 @app.route('/likepushpin', methods = ['POST'])
 def like_pushpin():
+    """
+    ---
+    tags:
+        - like on pushpins
+    parameters:
+        - name: user_id
+          in: body
+        - name: pushpin_id
+           in: body
+    """
     if request.method == 'POST':
         content = request.get_json()
         print('CONTENT:', content, file=sys.stderr)
@@ -560,7 +582,7 @@ SEARCH PUSHPIN
 @app.route('/searchpushpin/<search_text>')
 def search_pushpin(search_text):
     cur.execute("""SELECT DISTINCT ON (search.description) search.description,
-    search.title, search.first_name, search.last_name
+    search.title, search.first_name, search.last_name, PushPin.pushpin_id
     FROM(SELECT PushPin.description, CorkBoard.title, CorkBoard.category,
     CorkBoardItUser.first_name, CorkBoardItUser.last_name, Tag.tag
     FROM CorkBoard INNER JOIN CorkBoardItUser ON CorkBoard.fk_user_id = CorkBoardItUser.user_id
