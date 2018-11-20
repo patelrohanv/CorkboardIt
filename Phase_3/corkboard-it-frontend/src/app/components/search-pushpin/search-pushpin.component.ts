@@ -18,6 +18,7 @@ export class SearchPushpinComponent implements OnInit {
 
     search_displayedColumns: string[] = ['description', 'corkBoard', 'owner'];
     private search_results_ds: SearchResultsDataSource;
+    private search_txt;
 
     constructor(public dialogRef: MatDialogRef<SearchPushpinComponent>, private userService: UserService,
         @Inject(MAT_DIALOG_DATA) public data: any) { }
@@ -25,6 +26,7 @@ export class SearchPushpinComponent implements OnInit {
     ngOnInit() {
         console.log('received data');
         console.log(this.data);
+        this.search_txt = this.data.dataKey;
         this.search_results_ds = new SearchResultsDataSource(this.userService, this.data.dataKey);
 
     }

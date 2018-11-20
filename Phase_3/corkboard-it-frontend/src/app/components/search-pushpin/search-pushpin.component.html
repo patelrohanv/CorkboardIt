@@ -1,8 +1,8 @@
 <div>
-  <p>Pushpin Search Results</p>
+  <p>Pushpin Search Results for '{{search_txt}}'</p>
 </div>
 <div>
-  <table mat-table [dataSource]="search_results_ds">
+  <table mat-table [dataSource]="search_results_ds" class="mat-elevation-z8">
 
     <ng-container matColumnDef="description">
       <th mat-header-cell *matHeaderCellDef> PushPin Description </th>
