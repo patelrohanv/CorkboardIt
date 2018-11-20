@@ -3,6 +3,7 @@ import {Comment} from '../../models/comment';
 import {UserService} from "../../services/user.service";
 import {MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource} from "@angular/material";
 import {FormControl, Validators} from "@angular/forms";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-view-pushpin',
@@ -25,7 +26,7 @@ export class ViewPushpinComponent implements OnInit {
 
   private likers: String = '';
   private like = true;
-  private like_btn_txt = 'Like!'
+  private like_btn_txt = 'Like!';
   private like_btn_disable = false;
 
   private cur_usr: string;
@@ -37,18 +38,25 @@ export class ViewPushpinComponent implements OnInit {
   private comments: Comment[] = [];
   tableDS: MatTableDataSource<Comment>;
 
+  //public dialogRef: MatDialogRef<ViewPushpinComponent>,
 
-  constructor(public dialogRef: MatDialogRef<ViewPushpinComponent>, private userService: UserService,
-              @Inject(MAT_DIALOG_DATA) public pushpin_data: any) {
+  constructor( private userService: UserService,
+             // @Inject(MAT_DIALOG_DATA) public pushpin_data: any,
+              private router: ActivatedRoute) {
   }
 
   ngOnInit() {
-    console.log("pushpin id ", this.pushpin_data.pushpin_id);
-    console.log("cb id ", this.pushpin_data.corkboard_id);
-    this.pushpin_id = this.pushpin_data.pushpin_id;
-    this.corkboard_id = this.pushpin_data.corkboard_id;
-    this.cur_usr = this.pushpin_data.current_user;
-    this.cb_owner = this.pushpin_data.cb_owner;
+    const ppid = this.router.snapshot.params['ppid'];
+    console.log("pushpin id ", ppid);
+    //console.log("cb id ", this.pushpin_data.corkboard_id);
+    //this.pushpin_id = this.pushpin_data.pushpin_id;
+      this.pushpin_id = ppid.toString();
+      this.corkboard_id = '1';
+      this.cb_owner = '1';
+      this.cur_usr = '3';
+    // this.corkboard_id = this.pushpin_data.corkboard_id;
+    // this.cur_usr = this.pushpin_data.current_user;
+    // this.cb_owner = this.pushpin_data.cb_owner;
 
     this.get_view_pushpin_data();
 

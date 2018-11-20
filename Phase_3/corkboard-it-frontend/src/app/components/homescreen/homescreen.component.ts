@@ -86,19 +86,6 @@ export class HomescreenComponent implements OnInit {
         });
     }
 
-  //  //julie testing, i know this is wrong 
-  // viewPP(): void {
-  //   const dialogRef = this.dialog.open(ViewPushpinComponent, {
-  //     width: '500px',
-  //     height: '500px',
-  //     data: {corkboard_id: '1', pushpin_id: '1', current_user: '2', cb_owner:'1'}
-  //   });
-  //
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     console.log('The dialog was closed');
-  //   });
-  // }
-
     getOwnedCorkBoards() {
         this.userService.getHomescreenOwned(this.current_user.id).subscribe((res: OwnedCorkBoard[]) => {
             this.owned_corkboards = res

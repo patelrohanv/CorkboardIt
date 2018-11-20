@@ -66,6 +66,6 @@ import { UiModule } from './ui.module';
         PopularTagsComponent,   
         PopularTagsComponent,
         CorkboardStatsComponent,
-        SearchPushpinComponent]
+        SearchPushpinComponent, ViewPushpinComponent]
 })
 export class AppModule { }
