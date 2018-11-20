@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { Pushpin } from 'src/app/models/pushpin';
 
 @Component({
     selector: 'app-add-pushpin',
@@ -19,8 +20,8 @@ export class AddPushpinComponent implements OnInit {
     }
 
     addPushPin() {
-        console.log(this.url.value);
-        console.log(this.description.value);
-        console.log(this.tags.value);
+        const pushpin = new Pushpin;
+        pushpin.url = this.url.value;
+        pushpin.description = this.description.value;
     }
 }
