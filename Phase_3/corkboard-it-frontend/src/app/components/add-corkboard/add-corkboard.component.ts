@@ -44,8 +44,8 @@ export class AddCorkboardComponent implements OnInit {
         }
         console.log(cb);
         this.userService.postAddCorkboard(cb).subscribe((corkboard) => {
-            const id = corkboard['id'];
-            this.router.navigate(['/viewcorkboard/', id]);
+            console.log(corkboard)
+            this.router.navigate(['/viewcorkboard/', corkboard]);
         });
     }
 
