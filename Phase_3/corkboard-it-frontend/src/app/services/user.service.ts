@@ -32,6 +32,20 @@ export class UserService {
         return this.http.post<Object>(requestURL, user_login, httpOptions);
     }
 
+
+    // login for private corkboard
+    postLoginPrivateCorkBoard(corkboard_id: string, password: string): Observable<Object> {
+        const requestURL = this.baseUrl + '/private_login/' + corkboard_id;
+        const user_login = {'password': password};
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type':  'application/json',
+              })
+        }
+
+        return this.http.post<Object>(requestURL, user_login, httpOptions);
+    }
+
     // /user/
     getUser_ID(id: string): Observable<Object> {
         const requestURL = this.baseUrl + '/user/?id=' + id
