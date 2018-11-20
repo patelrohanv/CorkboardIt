@@ -86,17 +86,18 @@ export class HomescreenComponent implements OnInit {
         });
     }
 
-  addPP(): void {
-    const dialogRef = this.dialog.open(ViewPushpinComponent, {
-      width: '500px',
-      height: '500px',
-      data: {corkboard_id: '4', pushpin_id: '4'}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
-  }
+   // julie testing
+  // viewPP(): void {
+  //   const dialogRef = this.dialog.open(ViewPushpinComponent, {
+  //     width: '500px',
+  //     height: '500px',
+  //     data: {corkboard_id: '1', pushpin_id: '1'}
+  //   });
+  //
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     console.log('The dialog was closed');
+  //   });
+  // }
 
     getOwnedCorkBoards() {
         this.userService.getHomescreenOwned(this.current_user.id).subscribe((res: OwnedCorkBoard[]) => {

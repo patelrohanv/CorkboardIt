@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import { Comment } from '../../models/comment';
+import {Comment} from '../../models/comment';
 import {DataSource} from "@angular/cdk/table";
 import {UserService} from "../../services/user.service";
 import {Observable} from "rxjs";
@@ -8,10 +8,11 @@ import {MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource} from "@angular/materi
 import {SearchResultsDataSource} from "../search-pushpin/search-pushpin.component";
 import {FormControl, Validators} from "@angular/forms";
 import {User} from "../../models/user";
+
 @Component({
-    selector: 'app-view-pushpin',
-    templateUrl: './view-pushpin.component.html',
-    styleUrls: ['./view-pushpin.component.scss']
+  selector: 'app-view-pushpin',
+  templateUrl: './view-pushpin.component.html',
+  styleUrls: ['./view-pushpin.component.scss']
 })
 export class ViewPushpinComponent implements OnInit {
 
@@ -28,6 +29,8 @@ export class ViewPushpinComponent implements OnInit {
   private tags: String = '';
   private likers: String = '';
   private like_btn_disable = false;
+  private cur_usr: string;
+  private follow_btn_disable = false;
 
   public comment_text = new FormControl('', [Validators.required, Validators.minLength(1)]);
 
@@ -36,6 +39,8 @@ export class ViewPushpinComponent implements OnInit {
   // has to deal with mat-table function. 
   //private tmp_comments: Comment[] = [];
   private comments: Comment[] = [];
+  private comments2: Comment[];
+  private comment_with_names: Comment[] = [];
 
   tableDS: MatTableDataSource<Comment>;
 
@@ -44,17 +49,18 @@ export class ViewPushpinComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public pushpin_data: any) {
   }
 
-
   ngOnInit() {
     console.log("pushpin id ", this.pushpin_data.pushpin_id);
     console.log("cb id ", this.pushpin_data.corkboard_id);
     this.pushpin_id = this.pushpin_data.pushpin_id;
     this.corkboard_id = this.pushpin_data.corkboard_id;
+    this.cur_usr = this.pushpin_data.current_usr;
+
     this.get_view_pushpin_data();
+    //this.get_follow_data();
   }
 
   get_view_pushpin_data() {
-
 
     this.userService.ViewPushpin(this.corkboard_id, this.pushpin_id).subscribe((pushpin) => {
         // 0 = owner
@@ -83,18 +89,6 @@ export class ViewPushpinComponent implements OnInit {
             this.tags = this.tags + pushpin[i]['tag'];
             //console.log(this.tags)
           }
-          // if comment
-          if (pushpin[i].hasOwnProperty("text") && pushpin[i].hasOwnProperty("fk_user_id")) {
-
-            //get user_id & text
-            const usr = pushpin[i]['fk_user_id'];
-            const cmt = pushpin[i]['text'];
-
-            //set comment
-            this.comments.push({comment: cmt, commenter: usr.toString()});
-
-            //console.log(this.comments)
-          }
 
           //if liked
           if (pushpin[i].hasOwnProperty("first_name") && pushpin[i].hasOwnProperty("last_name")) {
@@ -104,22 +98,28 @@ export class ViewPushpinComponent implements OnInit {
             }
             this.likers = this.likers + pushpin[i]['first_name'] + ' ' + pushpin[i]['last_name'];
 
+            //console.log(this.cur_usr.toString());
             //if current user already liked
-            this.like_btn_disable = true;
-
-            // console.log(this.likers)
+            if (pushpin[i].hasOwnProperty("user_id")) {
+              if (pushpin[i]['user_id'] == this.cur_usr.toString()) {
+                this.like_btn_disable = true;
+              }
+            }
           }
 
+          // if comment
+          if (pushpin[i].hasOwnProperty("text") && pushpin[i].hasOwnProperty("fk_user_id")) {
 
+            //get user_id & text
+            const usr = pushpin[i]['fk_user_id'];
+            const cmt = pushpin[i]['text'];
+
+            // //set comment
+            this.comments.push({comment: cmt, commenter: usr.toString()});
+            console.log(this.comments);
+          }
         }
-        // set comment2 with value of comment
-        // needed to do this because mat-table uses a constant of the datasource.. if you just use comment, it wasnt
-        // using the values that were added to it after instantiation. There might be a better way to do this,
-        // but this was the workaround I found.
-        //this.comments = this.tmp_comments;
-
-        this.tableDS = new MatTableDataSource(this.comments);
-
+      this.tableDS = new MatTableDataSource(this.comments);
       }
     );
   }
@@ -131,7 +131,7 @@ export class ViewPushpinComponent implements OnInit {
     let date = iso_str[0];
     let time = iso_str[1].split('.')[0]
 
-    let dt_str = date.toString() +  ' ' + time.toString();
+    let dt_str = date.toString() + ' ' + time.toString();
 
     console.log(dt_str.toString());
 
@@ -153,53 +153,53 @@ export class ViewPushpinComponent implements OnInit {
 
     this.userService.ViewPushpin(this.corkboard_id, this.pushpin_id,).subscribe((pushpin) => {
 
-    //get comment & tag out of Object[]
-    for (var i = 0; i < (pushpin.length); i++) {
+      //get comment & tag out of Object[]
+      for (var i = 0; i < (pushpin.length); i++) {
 
+        // if comment
+        if (pushpin[i].hasOwnProperty("text") && pushpin[i].hasOwnProperty("fk_user_id")) {
 
-      // if comment
-      if (pushpin[i].hasOwnProperty("text") && pushpin[i].hasOwnProperty("fk_user_id")) {
+          //get user_id & text
+          const usr = pushpin[i]['fk_user_id'];
+          const cmt = pushpin[i]['text'];
 
+          this.comments.push({comment: cmt, commenter: usr.toString()});
 
-
-        //get user_id & text
-        const usr = pushpin[i]['fk_user_id'];
-        const cmt = pushpin[i]['text'];
-
-        // this.userService.getUser_ID(usr).subscribe((user: User) => {
-        //   var user_nam = user.first_name + " "
-        //
-        //   //set comment
-        //   this.comments.push({comment: cmt, commenter: current_user.});
-        //
-        // })
-
-        this.comments.push({comment: cmt, commenter: usr.toString()});
-
-        //console.log(this.comments)
+        }
       }
-    }
       this.tableDS = new MatTableDataSource(this.comments);
 
-    this.comment_text.reset('');
-      });
+      this.comment_text.reset('');
+    });
 
-    }
+  }
 
-  likePushpin(){
+  likePushpin() {
 
-    //get current user
+
+    //get cur user
     //post like
+    // refresh
 
-    //this.userService.like
 
-      console.log('hi')
-    }
+    console.log('like')
+  }
 
-    followUser(){
+  followUser() {
+
+    //get owner of cb
+    //  if current user doesnt follow owner
 
     console.log('follow')
 
-    }
-    }
+  }
+
+  get_follow_data(){
+
+    //get follow data
+    // if current user follows cb_owner or current user is owner disable follow
+
+    //this.follow_btn_disable = true;
+  }
+}
 
