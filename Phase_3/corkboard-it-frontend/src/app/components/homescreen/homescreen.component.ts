@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { PopularTagsComponent } from '../popular-tags/popular-tags.component';
 import { CorkboardStatsComponent } from '../corkboard-stats/corkboard-stats.component';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogConfig } from '@angular/material';
 import { AddCorkboardComponent } from '../add-corkboard/add-corkboard.component';
 import { PopularSitesComponent } from '../popular-sites/popular-sites.component';
 import { SearchPushpinComponent } from '../search-pushpin/search-pushpin.component';
@@ -16,7 +16,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { OwnedCorkBoard } from 'src/app/models/ownedCorkBoard';
 import { RecentCorkBoard } from 'src/app/models/recentCorkBoard';
 import {ViewPushpinComponent} from "../view-pushpin/view-pushpin.component";
-
 
 @Component({
     selector: 'app-homescreen',
@@ -75,19 +74,6 @@ export class HomescreenComponent implements OnInit {
         });
     }
 
-    addCorkBoard(): void {
-        const dialogRef = this.dialog.open(AddCorkboardComponent, {
-            width: '500px',
-            data: {
-                user: this.current_user
-            }
-        });
-
-        dialogRef.afterClosed().subscribe(result => {
-            console.log('The dialog was closed');
-        });
-    }
-
     getOwnedCorkBoards() {
         this.userService.getHomescreenOwned(this.current_user.id).subscribe((res: OwnedCorkBoard[]) => {
             this.owned_corkboards = res;
@@ -114,6 +100,13 @@ export class HomescreenComponent implements OnInit {
         });
     }
 
+    addCorkBoard(): void {
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.autoFocus = true;
+        dialogConfig.data = this.current_user
+    
+        const dialogRef = this.dialog.open(AddCorkboardComponent, dialogConfig);
+      }
 
 }
 

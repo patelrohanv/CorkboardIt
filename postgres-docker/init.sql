@@ -76,10 +76,10 @@ VALUES
 
 INSERT INTO CorkBoard (fk_user_id, email, date_time, title, category, visibility)
 VALUES
-    (1, 'icyling@gg.com', '2018-06-22 19:10:25-07', 'Adventures in Iceland', 'cat1, cat2', false),
-    (1, 'icyling@gg.com', '2018-06-21 19:10:25-07', 'Spicy Memes', 'cat1', false),
-    (2, 'ronpatel@gg.com', '2018-06-22 19:10:25-07', 'Super Secret', 'cat1', true),
-    (5, 'bamthe25th@gg.com', '2018-06-20 19:10:25-07', 'Friends4Life', 'cat1, cat2, cat3', false);
+    (1, 'icyling@gg.com', '2018-06-22 19:10:25-07', 'Adventures in Iceland', 'cat1, cat2', true),
+    (1, 'icyling@gg.com', '2018-06-21 19:10:25-07', 'Spicy Memes', 'cat1', true),
+    (2, 'ronpatel@gg.com', '2018-06-22 19:10:25-07', 'Super Secret', 'cat1', false),
+    (5, 'bamthe25th@gg.com', '2018-06-20 19:10:25-07', 'Friends4Life', 'cat1, cat2, cat3', true);
 
 INSERT INTO PublicCorkBoard(fk_corkboard_id)
 VALUES 

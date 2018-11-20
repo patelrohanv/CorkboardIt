@@ -19,7 +19,7 @@ export class OwnedCorkboardTileComponent implements OnInit {
   }
 
   openCorkBoard(): void {
-    if (this.corkboard.visibility == true) {
+    if (this.corkboard.visibility == false) {
       this.openLoginDialog()
       return;
     } else {

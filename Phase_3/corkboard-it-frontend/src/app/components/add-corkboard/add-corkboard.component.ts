@@ -34,8 +34,8 @@ export class AddCorkboardComponent implements OnInit {
         console.log(this.data);
         const cb = new Corkboard();
         cb.title = this.title.value;
-        cb.fk_user_id = +this.data.id;
-        cb.email = this.data.id;
+        cb.fk_user_id = parseInt(this.data.id);
+        cb.email = this.data.email;
         cb.date_time = new Date().toLocaleString();
         cb.category = this.category.value;
         cb.visibility = this.visibility.value;
