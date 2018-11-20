@@ -9,6 +9,7 @@ import { PopularSite } from '../models/popularSite';
 import { CorkboardStat } from '../models/corkboardStat';
 import {SearchResults} from "../models/searchResults";
 import {RequestOptions} from "@angular/http"
+import { Corkboard } from '../models/corkboard';
 
 @Injectable({
     providedIn: 'root'
@@ -54,7 +55,7 @@ export class UserService {
 
     // /user/
     getUser_Email(email: string): Observable<Object> {
-        const requestURL = this.baseUrl + '/user/?email=' + email
+        const requestURL = this.baseUrl + '/user/?email=' + email;
         return this.http.get<Object>(requestURL);
     }
 
@@ -71,9 +72,9 @@ export class UserService {
     }
 
     // /addCorkboard/<user_id>
-    postAddCorkboard(user_id: string): Observable<Object> {
-        const requestURL = this.baseUrl + '/addcorkboard/' + user_id;
-        return this.http.post<Object>(requestURL, '');
+    postAddCorkboard(cb: Corkboard): Observable<Object> {
+        const requestURL = this.baseUrl + '/addcorkboard';
+        return this.http.post<Object>(requestURL, cb);
 
     }
 

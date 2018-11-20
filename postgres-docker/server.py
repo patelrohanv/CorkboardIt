@@ -310,7 +310,7 @@ def add_corkboard():
         content = request.get_json()
         print(content, file=sys.stderr)
         #user_id = request.args.get('user_id')
-        user_id = content['user_id']
+        user_id = content['fk_user_id']
         #print(user_id, file=sys.stderr)
         #email = request.args.get('email')
         email = content['email']
