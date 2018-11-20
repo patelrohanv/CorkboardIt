@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Categories } from 'src/app/models/category';
-import { inject } from '@angular/core/testing';
 import { DISABLED } from '@angular/forms/src/model';
+import { Corkboard } from '../../models/corkboard';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { User } from 'src/app/models/user';
+import { UserService } from 'src/app/services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-add-corkboard',
@@ -11,7 +15,6 @@ import { DISABLED } from '@angular/forms/src/model';
 })
 export class AddCorkboardComponent implements OnInit {
     public = true;
-
     title = new FormControl('', [Validators.required]);
     category = new FormControl('', [Validators.required]);
     visibility = new FormControl('', [Validators.required]);
@@ -19,17 +22,31 @@ export class AddCorkboardComponent implements OnInit {
 
     categories: string[];
 
-    constructor() {
+    constructor( private router: Router, private userService: UserService,
+        dialogRef: MatDialogRef<AddCorkboardComponent>,
+        @Inject(MAT_DIALOG_DATA) public data: User) {
         this.categories = Categories;
     }
     ngOnInit() {
     }
 
     addCorkBoard() {
-        console.log(this.title.value);
-        console.log(this.category.value);
-        console.log(this.visibility.value);
-        console.log(this.password.value);
+        console.log(this.data);
+        const cb = new Corkboard();
+        cb.title = this.title.value;
+        cb.fk_user_id = +this.data.id;
+        cb.email = this.data.id;
+        cb.date_time = new Date().toLocaleString();
+        cb.category = this.category.value;
+        cb.visibility = this.visibility.value;
+        if (!cb.visibility) {
+            cb.password = this.password.value;
+        }
+        console.log(cb);
+        this.userService.postAddCorkboard(cb).subscribe((corkboard) => {
+            const id = corkboard['id'];
+            this.router.navigate(['/viewcorkboard/', id]);
+        });
     }
 
     disablePassword() {

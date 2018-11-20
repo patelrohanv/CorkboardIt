@@ -16,9 +16,7 @@ conn = psycopg2.connect(connection)
 cur = conn.cursor()
 
 """
-
 LOGIN
-
 """
 @app.route('/login', methods=['POST'])
 def get_is_valid():
@@ -96,9 +94,7 @@ def get_user_id():
 #########################################################################################################
 #########################################################################################################
 """
-
 HOME SCREEN
-
 """
 """
 OWNED CORKBOARD(S)
@@ -175,7 +171,7 @@ def recent_updates(user_id):
     ORDER BY date_time DESC
     LIMIT 4) ckbd
     INNER JOIN CorkBoardItUser
-    ON CorkBoardItUser.user_id = ckbd.fk_user_id;""", {"user": user_id})
+    ON CorkBoardItUser.user_id = ckbd.fk_user_id""", {"user": user_id})
 
     headers = [x[0] for x in cur.description]
     rows = cur.fetchall()
@@ -253,6 +249,27 @@ def view_corkboard(corkboard_id):
     return jsonify(data)
 
 """
+PRIVATE CORKBOARD - LOGIN
+"""
+@app.route('/private_login/<corkboard_id>', methods=['POST'])
+def validate_private_corkboard_login(corkboard_id):
+    if request.method == 'POST':
+    # print(corkboard_id, file=sys.stderr)
+        content = request.get_json()
+        password = content['password']
+
+        cur.execute("""SELECT password
+        FROM PrivateCorkBoard
+        WHERE PrivateCorkBoard.fk_corkboard_id=%(lname)s""", {"lname": corkboard_id})
+        rows = cur.fetchall()
+        print(rows, file=sys.stderr)
+
+        if len(rows) == 0 or password != rows[0][0]:
+            return jsonify(isValid = False)
+        else:
+            return jsonify(isValid = True)
+    
+"""
 FOLLOW CORKBOARD
 """
 @app.route('/followcorkboard/<corkboard_id>', methods=['POST'])
@@ -293,7 +310,7 @@ def add_corkboard():
         content = request.get_json()
         print(content, file=sys.stderr)
         #user_id = request.args.get('user_id')
-        user_id = content['user_id']
+        user_id = content['fk_user_id']
         #print(user_id, file=sys.stderr)
         #email = request.args.get('email')
         email = content['email']

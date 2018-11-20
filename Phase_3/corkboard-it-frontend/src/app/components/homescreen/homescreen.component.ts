@@ -15,6 +15,7 @@ import { User } from 'src/app/models/user';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OwnedCorkBoard } from 'src/app/models/ownedCorkBoard';
 import { RecentCorkBoard } from 'src/app/models/recentCorkBoard';
+import {ViewPushpinComponent} from "../view-pushpin/view-pushpin.component";
 
 
 @Component({
@@ -23,9 +24,9 @@ import { RecentCorkBoard } from 'src/app/models/recentCorkBoard';
     styleUrls: ['./homescreen.component.scss']
 })
 export class HomescreenComponent implements OnInit {
-    current_user: User
-    owned_corkboards: OwnedCorkBoard[]
-    recent_corkboards: RecentCorkBoard[]
+    current_user: User;
+    owned_corkboards: OwnedCorkBoard[];
+    recent_corkboards: RecentCorkBoard[];
 
     public search_text = new FormControl('', [Validators.required, Validators.minLength(1)]);
 
@@ -33,12 +34,12 @@ export class HomescreenComponent implements OnInit {
 
     ngOnInit() {
 
-        const uid = this.router.snapshot.params['cbuid']
+        const uid = this.router.snapshot.params['cbuid'];
         this.userService.getUser_ID(uid).subscribe((user: User) => {
             this.current_user = user;
-            this.getOwnedCorkBoards()
-            this.getRecentCorkBoards() 
-        })
+            this.getOwnedCorkBoards();
+            this.getRecentCorkBoards();
+        });
     }
 
     getPopularSites(): void {
@@ -77,7 +78,9 @@ export class HomescreenComponent implements OnInit {
     addCorkBoard(): void {
         const dialogRef = this.dialog.open(AddCorkboardComponent, {
             width: '500px',
-            data: {}
+            data: {
+                user: this.current_user
+            }
         });
 
         dialogRef.afterClosed().subscribe(result => {
@@ -87,8 +90,8 @@ export class HomescreenComponent implements OnInit {
 
     getOwnedCorkBoards() {
         this.userService.getHomescreenOwned(this.current_user.id).subscribe((res: OwnedCorkBoard[]) => {
-            this.owned_corkboards = res
-        })
+            this.owned_corkboards = res;
+        });
     }
 
     getRecentCorkBoards() {
@@ -110,6 +113,8 @@ export class HomescreenComponent implements OnInit {
             console.log('The SearchPushpin dialog was closed');
         });
     }
+
+
 }
 
 

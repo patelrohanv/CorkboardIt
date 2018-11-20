@@ -19,7 +19,7 @@ const routes: Routes = [
   {path: "home/:cbuid", component: HomescreenComponent},
   {path: "addcorkboard", component: AddCorkboardComponent},
   {path: "viewcorkboard/:cbid", component: ViewCorkboardComponent},
-  {path: "viewcorkboard/:cbid", component: AddPushpinComponent},
+  {path: "addpushpin/:cbid", component: AddPushpinComponent},
   {path: "viewpushpin/:ppid", component: ViewPushpinComponent},
   {path: "search", component: SearchPushpinComponent},
   {path: "populartags", component: PopularTagsComponent},

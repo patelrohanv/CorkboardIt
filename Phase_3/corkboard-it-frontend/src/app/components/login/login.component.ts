@@ -36,16 +36,6 @@ export class LoginComponent implements OnInit {
                 }
             })
         })
-        // TODO make call to api to check if entered pin is the same as the one on the database
-        // const correct = true;
-        // this.userService.getUserID(this.email).subscribe((user_id) => {
-
-        // })
-        // if (!correct) {
-        //     this.pin.setErrors({ 'incorrect': true });
-        // } else {
-        //     console.log(`${this.email.value}: ${this.pin.value}`);
-        //     this.router.navigate(['/home/', this.email.value]);
-        // }
+      
     }
 }

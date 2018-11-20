@@ -6,7 +6,8 @@
 
     <ng-container matColumnDef="description">
       <th mat-header-cell *matHeaderCellDef> PushPin Description </th>
-      <td mat-cell *matCellDef="let result"> {{result.description}} </td>
+      <td mat-cell *matCellDef="let result" > <a routerLink="/viewpushpin/{{pushpin_id}}"
+      routerLinkActive="active"  (click)="dialogRef.close()">{{result.description}} </a></td>
     </ng-container>
 
     <ng-container matColumnDef="corkBoard">
