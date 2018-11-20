@@ -363,12 +363,12 @@ def add_pushpin():
         url = content['url']
         description = content['description']
 
-    cur.execute("""INSERT INTO PushPin (pushpin_id, fk_user_id, fk_corkboard_id, date_time, url, description)
-    VALUES (DEFAULT, %(user_id)s, %(corkboard_id)s, %(date_time)s, %(url)s, %(description)s)
-    """, {"user_id": user_id, "corkboard_id": corkboard_id, "date_time": date_time, "url": url, "description": description})
+        cur.execute("""INSERT INTO PushPin (pushpin_id, fk_user_id, fk_corkboard_id, date_time, url, description)
+        VALUES (DEFAULT, %(user_id)s, %(corkboard_id)s, %(date_time)s, %(url)s, %(description)s)
+        """, {"user_id": user_id, "corkboard_id": corkboard_id, "date_time": date_time, "url": url, "description": description})
 
-    #return corkboard_id
-    return jsonify(corkboard_id)
+        #return corkboard_id
+        return jsonify(corkboard_id)
 
 #########################################################################################################
 #########################################################################################################
@@ -449,7 +449,7 @@ def view_pushpin(corkboard_id, pushpin_id):
     for stuff in rows:
         data.append(dict(zip(headers, stuff)))
 
-    cur.execute("""SELECT c.fk_user_id, c.text, c.date_time
+    cur.execute("""SELECT u.first_name, u.last_name, c.text, c.date_time
     FROM Comment AS c
     INNER JOIN CorkBoardItUser AS u
     ON u.user_id = c.fk_user_id
@@ -483,14 +483,29 @@ def follow_pushpin(user_id):
 """
 LIKE FOR PUSHPIN
 """
-@app.route('/likepushpin/<user_id>/<corkboard_id>', methods = ['POST'])
-def like_pushpin(user_id, corkboard_id):
-    cur.execute("""INSERT INTO Liked (fk_user_id, fk_pushpin_id)
-    VALUES ((SELECT user_id FROM CorkBoardItUser AS u WHERE u.user_id = %(user_id)s),
-    (SELECT fk_user_id FROM CorkBoard WHERE corkboard.corkboard_id = %(corkboard_id)s
-    AND corkboard.fk_user_id != %(user_id)s))
-    """, {"user_id": user_id, "corkboard_id": corkboard_id})
-    return 'being built rn'
+@app.route('/likepushpin', methods = ['POST'])
+def like_pushpin():
+    if request.method == 'POST':
+        content = request.get_json()
+        print('CONTENT:', content, file=sys.stderr)
+        user_id = content['user_id']
+        pushpin_id = content['pushpin_id']
+
+        cur.execute("""INSERT INTO Liked (fk_user_id, fk_pushpin_id)
+        VALUES (%(user_id)s, %(pushpin_id)s)
+        """, {"user_id": user_id, "pushpin_id": pushpin_id})
+
+        cur.execute("""SELECT first_name, last_name, user_id
+        FROM CorkBoardItUser
+        WHERE CorkBoardItUser.user_id=%(user_id)s;""", {"user_id": user_id})
+
+        headers = [x[0] for x in cur.description]
+        data = []
+        rows = cur.fetchall()
+        for stuff in rows:
+            data.append(dict(zip(headers, stuff)))
+
+        return jsonify(data)
 
 """
 UNLIKE FOR PUSHPIN
@@ -507,16 +522,35 @@ POST COMMENT FOR PUSHPIN
 """
 @app.route('/postcomment', methods = ['POST'])
 def post_comment():
-    date_time = request.args.get('date_time')
-    text = request.args.get('text')
-    user_id = request.args.get('user_id')
-    pushpin_id = request.args.get('pushpin_id')
+    """
+    ---
+    tags:
+        - Comments on pushpins
+    parameters:
+        - name: pushpin_id
+          in: body
+        - name: text
+          in: body
+        - name: user_id
+           in: body
+        - name: date_time
+           in: body
+    """
 
-    cur.execute("""INSERT INTO Comment (comment_id, date_time, text, fk_user_id, fk_pushpin_id)
-    VALUES ($comment_id, $date_time, $text,
-    (SELECT user_id FROM CorkBoardItUser AS u WHERE u.user_id = %(user_id)s),
-    (SELECT fk_user_id FROM PushPin WHERE pushpin.pushpin_id = %(pushpin_id)s))
-    """, {"user_id": user_id, "pushpin_id": pushpin_id})
+    if request.method == 'POST':
+        content = request.get_json()
+        print('CONTENT:', content, file=sys.stderr)
+        date_time = content['date_time']
+        text = content['text']
+        user_id = content['user_id']
+        pushpin_id = content['pushpin_id']
+
+        cur.execute("""INSERT INTO comment (date_time, text, fk_user_id, fk_pushpin_id)
+        VALUES (%(date_time)s, %(text)s, %(user_id)s, %(pushpin_id)s)
+        """, {"date_time": date_time, "text": text, "user_id": user_id, "pushpin_id": pushpin_id})
+
+        return jsonify(status_code=201)
+
 #########################################################################################################
 #########################################################################################################
 #########################################################################################################
