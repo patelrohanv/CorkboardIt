@@ -309,26 +309,15 @@ def add_corkboard():
     if request.method == 'POST':
         content = request.get_json()
         print(content, file=sys.stderr)
-        #user_id = request.args.get('user_id')
         user_id = content['fk_user_id']
-        #print(user_id, file=sys.stderr)
-        #email = request.args.get('email')
         email = content['email']
-        #print(email, file=sys.stderr)
-        #date_time = request.args.get('date_time')
         date_time = content['date_time']
-        #print(date_time, file=sys.stderr)
-        #title = request.args.get('title')
         title = content['title']
-        #print(title, file=sys.stderr)
-        #category = request.args.get('category')
         category = content['category']
-        #print(category, file=sys.stderr)
-        #visibility = request.args.get('visibility')
         visibility = content['visibility']
 
         password = ''
-        
+
         if visibility == False:
             password = content['password']
 
@@ -340,6 +329,7 @@ def add_corkboard():
     rows = cur.fetchall()
     corkboard_id = rows[0][0]
 
+    conn.commit()
     if visibility == True:
         cur.execute("""INSERT INTO PublicCorkBoard (fk_corkboard_id)
         VALUES(%(corkboard_id)s)""", {"corkboard_id": corkboard_id})
@@ -387,6 +377,7 @@ def add_pushpin():
         VALUES (DEFAULT, %(user_id)s, %(corkboard_id)s, %(date_time)s, %(url)s, %(description)s)
         """, {"user_id": user_id, "corkboard_id": corkboard_id, "date_time": date_time, "url": url, "description": description})
 
+        conn.commit()
         #return corkboard_id
         return jsonify(corkboard_id)
 
@@ -510,6 +501,7 @@ def follow_pushpin():
         FROM CorkBoard WHERE corkboard.corkboard_id = $CorkBoardID
         AND corkboard.fk_user_id != %(user_id)s))
         """, {"user_id": user_id})
+        conn.commit()
         return 'being built rn'
 
 """
@@ -537,6 +529,8 @@ def like_pushpin():
         VALUES (%(user_id)s, %(pushpin_id)s)
         """, {"user_id": user_id, "pushpin_id": pushpin_id})
 
+        conn.commit()
+
         cur.execute("""SELECT first_name, last_name, user_id
         FROM CorkBoardItUser
         WHERE CorkBoardItUser.user_id=%(user_id)s;""", {"user_id": user_id})
@@ -552,13 +546,31 @@ def like_pushpin():
 """
 UNLIKE FOR PUSHPIN
 """
-@app.route('/unlikepushpin/<user_id>/<pushpin_id>', methods = ['POST'])
-def unlike_pushpin(user_id, pushpin_id):
-    cur.execute("""DELETE FROM Liked
-    WHERE Liked.fk_user_id = %(user_id)s
-    AND Liked.fk_pushpin_id = %(pushpin_id)s
-    """, {"user_id": user_id, "pushpin_id": pushpin_id})
-    return 'being built rn'
+@app.route('/unlikepushpin', methods = ['POST'])
+def unlike_pushpin():
+    """
+    ---
+    tags:
+        - unlike on pushpins
+    parameters:
+        - name: user_id
+          in: body
+        - name: pushpin_id
+           in: body
+    """
+    if request.method == 'POST':
+        content = request.get_json()
+        print('CONTENT:', content, file=sys.stderr)
+        user_id = content['user_id']
+        pushpin_id = content['pushpin_id']
+
+        cur.execute("""DELETE FROM Liked
+        WHERE Liked.fk_user_id = %(user_id)s
+        AND Liked.fk_pushpin_id = %(pushpin_id)s
+        """, {"user_id": user_id, "pushpin_id": pushpin_id})
+
+        conn.commit()
+        return 'being built rn'
 """
 POST COMMENT FOR PUSHPIN
 """
