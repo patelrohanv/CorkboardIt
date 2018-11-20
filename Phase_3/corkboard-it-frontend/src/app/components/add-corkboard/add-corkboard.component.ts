@@ -15,7 +15,6 @@ import { Router } from '@angular/router';
 })
 export class AddCorkboardComponent implements OnInit {
     public = true;
-    user: User;
     title = new FormControl('', [Validators.required]);
     category = new FormControl('', [Validators.required]);
     visibility = new FormControl('', [Validators.required]);
@@ -26,21 +25,17 @@ export class AddCorkboardComponent implements OnInit {
     constructor( private router: Router, private userService: UserService,
         dialogRef: MatDialogRef<AddCorkboardComponent>,
         @Inject(MAT_DIALOG_DATA) public data: User) {
-            console.log(data);
         this.categories = Categories;
-        this.user = data;
-        console.log(this.user);
     }
     ngOnInit() {
     }
 
     addCorkBoard() {
-        const user_id = this.user.id;
-        const email = this.user.email;
-        let cb = new Corkboard();
+        console.log(this.data);
+        const cb = new Corkboard();
         cb.title = this.title.value;
-        cb.fk_user_id = +user_id;
-        cb.email = email;
+        cb.fk_user_id = +this.data.id;
+        cb.email = this.data.id;
         cb.date_time = new Date().toLocaleString();
         cb.category = this.category.value;
         cb.visibility = this.visibility.value;
