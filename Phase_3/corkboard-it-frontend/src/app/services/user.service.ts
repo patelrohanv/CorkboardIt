@@ -9,7 +9,6 @@ import { PopularSite } from '../models/popularSite';
 import { CorkboardStat } from '../models/corkboardStat';
 import {SearchResults} from "../models/searchResults";
 import {RequestOptions} from "@angular/http"
-import {ViewPushPin} from "../models/ViewPushPin";
 
 @Injectable({
     providedIn: 'root'
@@ -30,6 +29,20 @@ export class UserService {
               'Content-Type':  'application/json',
             })
         }
+        return this.http.post<Object>(requestURL, user_login, httpOptions);
+    }
+
+
+    // login for private corkboard
+    postLoginPrivateCorkBoard(corkboard_id: string, password: string): Observable<Object> {
+        const requestURL = this.baseUrl + '/private_login/' + corkboard_id;
+        const user_login = {'password': password};
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type':  'application/json',
+              })
+        }
+
         return this.http.post<Object>(requestURL, user_login, httpOptions);
     }
 

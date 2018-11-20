@@ -110,6 +110,8 @@ export class HomescreenComponent implements OnInit {
             console.log('The SearchPushpin dialog was closed');
         });
     }
+
+
 }
 
 
