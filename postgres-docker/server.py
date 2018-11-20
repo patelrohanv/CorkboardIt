@@ -598,9 +598,9 @@ SEARCH PUSHPIN
 """
 @app.route('/searchpushpin/<search_text>')
 def search_pushpin(search_text):
-    cur.execute("""SELECT DISTINCT ON (search.description) search.description,
-    search.title, search.first_name, search.last_name, PushPin.pushpin_id
-    FROM(SELECT PushPin.description, CorkBoard.title, CorkBoard.category,
+    cur.execute("""SELECT DISTINCT ON (search.description) search.description,  search.pushpin_id,
+    search.title, search.first_name, search.last_name
+    FROM(SELECT PushPin.description,  PushPin.pushpin_id, CorkBoard.title, CorkBoard.category,
     CorkBoardItUser.first_name, CorkBoardItUser.last_name, Tag.tag
     FROM CorkBoard INNER JOIN CorkBoardItUser ON CorkBoard.fk_user_id = CorkBoardItUser.user_id
     INNER JOIN PushPin ON CorkBoard.corkboard_id = PushPin.fk_corkboard_id
