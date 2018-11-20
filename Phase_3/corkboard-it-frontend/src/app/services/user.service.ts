@@ -142,8 +142,8 @@ export class UserService {
   PostFollow(current_user_id: string, follow_user_id: string): Observable<Object>{
 
     const requestURL = this.baseUrl + '/followuser';
-    const body = {'user_follower_id': current_user_id,
-      'user_followee_id ': follow_user_id};
+    const body = {'follower_id' : current_user_id,
+                  'followee_id': follow_user_id};
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
@@ -153,8 +153,9 @@ export class UserService {
   }
 
   // TODO: need this call
-  GetFollow(): Observable<Object[]> {
-    const requestURL = this.baseUrl + '/searchpushpin';
+  GetFollow(current_user_id: string): Observable<Object[]> {
+    const requestURL = this.baseUrl + '/getfollowers/' + current_user_id;
+
     return this.http.get<Object[]>(requestURL);
   }
 

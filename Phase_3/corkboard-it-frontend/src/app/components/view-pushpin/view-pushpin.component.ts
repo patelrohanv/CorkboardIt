@@ -10,7 +10,7 @@ import {ActivatedRoute} from "@angular/router";
   templateUrl: './view-pushpin.component.html',
   styleUrls: ['./view-pushpin.component.scss']
 })
-export class ViewPushpinComponent implements OnInit, AfterViewInit {
+export class ViewPushpinComponent implements OnInit {
 
   pushpin_id: string;
   corkboard_id: string;
@@ -43,10 +43,7 @@ export class ViewPushpinComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    // this.ngAfterViewInit();
-  }
 
-  ngAfterViewInit() {
 
     const ppid = this.router.snapshot.params['ppid'];
     console.log("pushpin id ", ppid);
@@ -57,11 +54,12 @@ export class ViewPushpinComponent implements OnInit, AfterViewInit {
     //TODO : need these values from somewhere
     this.corkboard_id = '1';
     this.cb_owner = '1';
-    this.cur_usr = '1';
+    this.cur_usr = '3';
 
     //disable like btn
     if(this.cb_owner == this.cur_usr){
       this.like_btn_disable = true;
+      this.follow_btn_disable = true;
     }
 
     // get initial data
@@ -95,6 +93,8 @@ export class ViewPushpinComponent implements OnInit, AfterViewInit {
         this.load_tags(pushpin);
         this.load_comments(pushpin);
         this.load_likers(pushpin);
+        // TODO!
+        //this.load_follow();
 
       }
     );
@@ -274,22 +274,92 @@ export class ViewPushpinComponent implements OnInit, AfterViewInit {
   // post follow
   followUser() {
 
-    //get owner of cb
-    //  if current user doesnt follow owner
+    // post follow
+    console.log('post follow')
 
-    this.userService.PostFollow(this.cur_usr, this.cb_owner);
+    this.userService.PostFollow(this.cur_usr, this.cb_owner).subscribe((f) => {
+      if (f) {
+        console.log('now following!');
+
+        this.load_follow();
+
+      }
+    });
+
 
     console.log('follow')
 
   }
 
-  // reload follows data, get follow data from db
-  refresh_follow_data() {
+  load_follow(){
 
-    //get follow data
-    // if current user follows cb_owner or current user is owner disable follow
+    this.userService.GetFollow(this.cur_usr).subscribe((following)=>{
 
-    //this.follow_btn_disable = true;
+      for(var i = 0; i < following.length; i++)
+      {
+        console.log(following[i]['fk_user_followee_id'])
+
+        if(this.cb_owner != following[i]['fk_user_followee_id'] &&  this.cb_owner != this.cur_usr){
+
+         // do nothing
+        }
+        else{
+          //TODO unfollow?
+          this.follow_btn_disable = true;
+        }
+      }
+    });
+
   }
+
+
 }
+
+
+// Following API
+// """
+// Get FOLLOWING
+// """
+// @app.route('/getfollowers/<user_id>', methods=['GET'])
+// def get_followers(user_id):
+//
+// content = request.get_json()
+// print('CONTENT:', content, file=sys.stderr)
+//
+// if request.method == 'GET':
+//
+// data = []
+//
+// cur.execute(""" SELECT fk_user_followee_id FROM follow WHERE fk_user_follower_id = %(user_id)s""",
+//   {'user_id':user_id})
+//
+// headers = [x[0] for x in cur.description]
+// rows = cur.fetchall()
+// for stuff in rows:
+// data.append(dict(zip(headers, stuff)))
+//
+// return jsonify(data)
+//
+//
+// """
+// FOLLOW USER
+// """
+// @app.route('/followuser', methods=['POST'])
+// def follow_user():
+//
+// content = request.get_json()
+// print('CONTENT:', content, file=sys.stderr)
+//
+// if request.method == 'POST':
+//
+// follower = content['follower_id']
+// followee = content['followee_id']
+//
+// cur.execute("""INSERT INTO follow (fk_user_follower_id, fk_user_followee_id)
+// VALUES (%s, %s)""", (follower, followee))
+//
+// conn.commit()
+//
+// return jsonify(status_code=201)
+
 
