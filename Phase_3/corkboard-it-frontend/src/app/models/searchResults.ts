@@ -3,4 +3,5 @@ export class SearchResults {
     title: string;
     first_name: string;
     last_name: string;
+    pushpin_id: string;
 }
