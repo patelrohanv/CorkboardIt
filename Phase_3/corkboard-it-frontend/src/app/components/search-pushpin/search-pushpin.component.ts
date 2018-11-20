@@ -1,7 +1,6 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { SearchResults } from '../../models/searchResults';
-import { PopularSitesDataSource } from '../popular-sites/popular-sites.component';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { UserService } from '../../services/user.service';
 import { DataSource } from '@angular/cdk/table';

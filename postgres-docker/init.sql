@@ -102,11 +102,16 @@ INSERT INTO Tag (fk_pushpin_id, tag)
 VALUES
     (1, 'so coool'),
     (1, 'such ice'),
-    (1, 'much bing');
+    (1, 'much bing'),
+    (2, 'much bing'),
+    (3, 'much bing'),
+    (4, 'much bing');
 
 INSERT INTO Comment (date_time, text, fk_user_id, fk_pushpin_id)
 VALUES
     ('2018-06-22 19:10:25-07', 'this is so beautiful~', 2, 1),
+    ('2018-06-22 19:10:25-07', 'foo', 3, 1),
+    ('2018-06-22 19:10:25-07', 'bar', 2, 1),
     ('2018-06-22 19:10:25-07', 'this is so ugly', 3, 1),
     ('2018-06-22 19:10:25-07', 'this is alright', 4, 1),
     ('2018-06-22 19:10:25-07', 'rachel is the best', 4, 4);
