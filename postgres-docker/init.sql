@@ -53,17 +53,20 @@ CREATE TABLE Comment (
 
 CREATE TABLE Watch (
     fk_user_id INTEGER REFERENCES CorkBoardItUser(user_id),
-    fk_public_corkboard_id INTEGER REFERENCES PublicCorkBoard(public_corkboard_id)
+    fk_public_corkboard_id INTEGER REFERENCES PublicCorkBoard(public_corkboard_id),
+    UNIQUE(fk_user_id, fk_public_corkboard_id)
 );
 
 CREATE TABLE Liked (
     fk_user_id INTEGER REFERENCES CorkBoardItUser(user_id),
-    fk_pushpin_id INTEGER REFERENCES PushPin(pushpin_id)
+    fk_pushpin_id INTEGER REFERENCES PushPin(pushpin_id),
+    UNIQUE(fk_user_id,fk_pushpin_id)
 );
 
 CREATE TABLE Follow (
     fk_user_follower_id INTEGER REFERENCES CorkBoardItUser(user_id),
-    fk_user_followee_id INTEGER REFERENCES CorkBoardItUser(user_id)
+    fk_user_followee_id INTEGER REFERENCES CorkBoardItUser(user_id),
+    UNIQUE(fk_user_follower_id, fk_user_followee_id)
 );
 
 INSERT INTO CorkBoardItUser (email, pin, first_name, last_name)

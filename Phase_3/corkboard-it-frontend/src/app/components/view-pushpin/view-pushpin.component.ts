@@ -24,6 +24,8 @@ export class ViewPushpinComponent implements OnInit {
   private url: any;
   private tags: String = '';
 
+  private website : string;
+
   private likers: String = '';
   private like = true;
   private like_btn_txt = 'Like!';
@@ -52,8 +54,6 @@ export class ViewPushpinComponent implements OnInit {
     this.pushpin_id = ppid.toString();
 
     //TODO : need these values from somewhere
-    this.corkboard_id = '1';
-    this.cb_owner = '1';
     this.cur_usr = '3';
 
     //disable like btn
@@ -73,7 +73,7 @@ export class ViewPushpinComponent implements OnInit {
 
     console.log(this.corkboard_id);
     console.log(this.pushpin_id);
-    this.userService.ViewPushpin(this.corkboard_id, this.pushpin_id).subscribe((pushpin) => {
+    this.userService.ViewPushpin(this.pushpin_id).subscribe((pushpin) => {
         // 0 = owner
         this.name = pushpin[0]['first_name'];
         this.name = this.name + " " + pushpin[0]['last_name'];
@@ -83,10 +83,28 @@ export class ViewPushpinComponent implements OnInit {
 
         //2 = title
         this.title = pushpin[2]['title'];
+        this.cb_owner = '' + pushpin[2]['fk_user_id'] +'';
+        this.corkboard_id = '' + pushpin[2]['corkboard_id'] +'';
 
         //3 = desc & url
         this.description = pushpin[3]['description'];
         this.url = pushpin[3]['url'];
+
+
+        //get website from url
+        var raw = this.url.split('/');
+
+        for(var j = 0; j < raw.length; j++){
+
+          if(!raw[j].startsWith('http') && raw[j] != ''){
+
+            this.website = raw[j];
+
+            break;
+
+        }
+
+      }
 
       //run these initially
       // each will be update afterwards if necessary
@@ -161,10 +179,15 @@ export class ViewPushpinComponent implements OnInit {
         this.likers = this.likers + pushpin[i]['first_name'] + ' ' + pushpin[i]['last_name'];
 
         //if current user already liked
+
+        console.log((pushpin[i]['user_id'].toString()))
+        console.log(this.cur_usr.toString())
+
         //TODO
         if (pushpin[i].hasOwnProperty("user_id")) {
           if (pushpin[i]['user_id'] == this.cur_usr.toString()) {
-            //this.like = false;
+              this.like = false;
+              this.like_btn_txt = "Unlike"
           }
         }
       }
@@ -177,7 +200,7 @@ export class ViewPushpinComponent implements OnInit {
   refresh_tags(){
     // reset the tags, even though this should only be called once
     this.tags = '';
-    this.userService.ViewPushpin(this.corkboard_id, this.pushpin_id).subscribe((pushpin) => {
+    this.userService.ViewPushpin(this.pushpin_id).subscribe((pushpin) => {
 
       this.load_tags(pushpin);
 
@@ -219,7 +242,7 @@ export class ViewPushpinComponent implements OnInit {
     this.comments = [];
 
     // //get the comments
-    this.userService.ViewPushpin(this.corkboard_id, this.pushpin_id,).subscribe((pushpin) => {
+    this.userService.ViewPushpin(this.pushpin_id,).subscribe((pushpin) => {
 
       this.load_comments(pushpin);
 
@@ -261,7 +284,7 @@ export class ViewPushpinComponent implements OnInit {
   // reloads like data from the database
   refresh_likes() {
 
-    this.userService.ViewPushpin(this.corkboard_id, this.pushpin_id,).subscribe((pushpin) => {
+    this.userService.ViewPushpin(this.pushpin_id,).subscribe((pushpin) => {
 
       // reset likers, this will be update with new likers data
       this.likers = '';

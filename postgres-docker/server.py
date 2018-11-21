@@ -401,42 +401,43 @@ def add_pushpin():
 """
 VIEW PUSHPIN
 """
-@app.route('/viewpushpin/<corkboard_id>/<pushpin_id>')
-def view_pushpin(corkboard_id, pushpin_id):
+@app.route('/viewpushpin/<pushpin_id>')
+def view_pushpin(pushpin_id):
     data = []
     cur.execute("""SELECT first_name, last_name
-    FROM CorkBoard AS cb
+    FROM PushPin AS pp
     INNER JOIN CorkBoardItUser AS u
-    ON u.user_id = cb.fk_user_id
-    WHERE cb.corkboard_id = %(corkboard_id)s
-    """, {"corkboard_id": corkboard_id})
+    ON u.user_id = pp.fk_user_id
+    WHERE pp.pushpin_id = %(pushpin_id)s
+    """, {"pushpin_id": pushpin_id})
 
     headers = [x[0] for x in cur.description]
     rows = cur.fetchall()
     for stuff in rows:
         data.append(dict(zip(headers, stuff)))
 
-    cur.execute("""SELECT pp. date_time
+    cur.execute("""SELECT pp.date_time
     FROM PushPin AS pp
-    INNER JOIN CorkBoard AS cb
-    ON pp.fk_corkboard_id = cb.corkboard_id
-    WHERE cb.corkboard_id = %(corkboard_id)s
-    """, {"corkboard_id": corkboard_id})
+    WHERE pp.pushpin_id = %(pushpin_id)s
+    """, {"pushpin_id": pushpin_id})
 
     headers = [x[0] for x in cur.description]
     rows = cur.fetchall()
     data.append({headers[0]:rows[0][0]})
 
-    cur.execute("""SELECT title
+    cur.execute("""SELECT title, corkboard_id, pp.fk_user_id
     FROM PushPin AS pp
-    INNER JOIN CorkBoard AS cb
+    INNER JOIN CorkBoard as cb
     ON cb.corkboard_id = pp.fk_corkboard_id
-    WHERE cb.corkboard_id = %(corkboard_id)s
-    """, {"corkboard_id": corkboard_id})
+    WHERE pp.pushpin_id = %(pushpin_id)s
+    """, {"pushpin_id": pushpin_id})
 
     headers = [x[0] for x in cur.description]
     rows = cur.fetchall()
-    data.append({headers[0]:rows[0][0]})
+
+    #data.append({headers[0]:rows[0][0]})
+    for stuff in rows:
+            data.append(dict(zip(headers, stuff)))
 
     cur.execute("""SELECT url, description
     FROM PushPin as pp
@@ -460,7 +461,7 @@ def view_pushpin(corkboard_id, pushpin_id):
     for stuff in rows:
         data.append(dict(zip(headers, stuff)))
 
-    cur.execute("""SELECT first_name, last_name
+    cur.execute("""SELECT first_name, last_name, user_id
     FROM CorkBoardItUser AS u
     INNER JOIN Liked AS ld
     ON ld.fk_user_id = u.user_id
@@ -627,7 +628,7 @@ def post_comment():
 """
 FOLLOW USER
 """
-@app.route('/followpushpin', methods = ['POST'])
+@app.route('/followuser', methods = ['POST'])
 def follow_pushpin():
     """
     ---
@@ -643,7 +644,7 @@ def follow_pushpin():
         content = request.get_json()
         follower_id = content['follower_id']
         followee_id = content['followee_id']
-        cur.execute("""INSERT INTO Follow (fk_user_follower_id, fk_user_followee_id
+        cur.execute("""INSERT INTO Follow (fk_user_follower_id, fk_user_followee_id)
         VALUES (%(follower_id)s, %(followee_id)s)
         """, {"follower_id":follower_id, "followee_id": followee_id})
         conn.commit()
@@ -652,6 +653,39 @@ def follow_pushpin():
 #########################################################################################################
 #########################################################################################################
 #########################################################################################################
+
+
+"""
+Get FOLLOWING
+"""
+@app.route('/getfollowers/<user_id>', methods=['GET'])
+def get_followers(user_id):
+
+    content = request.get_json()
+    print('CONTENT:', content, file=sys.stderr)
+
+    if request.method == 'GET':
+
+        data = []
+
+        cur.execute(""" SELECT fk_user_followee_id FROM follow WHERE fk_user_follower_id = %(user_id)s""",
+        {'user_id':user_id})
+
+        headers = [x[0] for x in cur.description]
+        rows = cur.fetchall()
+        for stuff in rows:
+            data.append(dict(zip(headers, stuff)))
+
+        return jsonify(data)
+
+
+
+#########################################################################################################
+#########################################################################################################
+#########################################################################################################
+
+
+
 """
 SEARCH PUSHPIN
 """
