@@ -269,35 +269,49 @@ def validate_private_corkboard_login(corkboard_id):
         else:
             return jsonify(isValid = True)
 
-"""
-FOLLOW CORKBOARD
-"""
-@app.route('/followcorkboard/<corkboard_id>', methods=['POST'])
-def follow_corkboard(corkboard_id):
-    cur.execute("""INSERT INTO Follow (fk_user_follower_id, fk_user_followee_id)
-    VALUES ( $UserID,
-    ( SELECT user_id
-    FROM CorkBoardItUser AS u
-    INNER JOIN CorkBoard AS cb
-    ON u.user_id = cb.fk_user_id
-    WHERE cb.corkboard_id = %(corkboard_id)s ))
-    """, {'corkboard_id':corkboard_id})
+# """
+# FOLLOW CORKBOARD
+# """
+# @app.route('/followcorkboard/<corkboard_id>', methods=['POST'])
+# def follow_corkboard(corkboard_id):
+#     cur.execute("""INSERT INTO Follow (fk_user_follower_id, fk_user_followee_id)
+#     VALUES ( $UserID,
+#     ( SELECT user_id
+#     FROM CorkBoardItUser AS u
+#     INNER JOIN CorkBoard AS cb
+#     ON u.user_id = cb.fk_user_id
+#     WHERE cb.corkboard_id = %(corkboard_id)s ))
+#     """, {'corkboard_id':corkboard_id})
 
-    return 'being built rn'
+#     return 'being built rn'
 
 """
 WATCH CORKBOARD
 """
-@app.route('/watchcorkboard/<corkboard_id>', methods=['POST'])
-def watch_corkboard(corkboard_id):
-    cur.execute("""INSERT INTO Watch(fk_user_id, fk_public_corkboard_id)
-    VALUES ($UserID,
-    ( SELECT public_corkboard_id
-    FROM PublicCorkBoard AS  public
-    WHERE public.fk_corkboard_id = %(corkboard_id)s ))
-    """, {'corkboard_id':corkboard_id})
+@app.route('/watchcorkboard', methods=['POST'])
+def watch_corkboard():
+    """
+    ---
+    tags:
+        - watch corkboard
+    parameters:
+        - name: user_id
+          in: body
+        - name: corkboard_id
+          in: body
+    """
+    if request.method == 'POST':
+        content = request.get_json()
+        user_id = content['user_id']
+        corkboard_id = content['corkboard_id']
+        cur.execute("""INSERT INTO Watch(fk_user_id, fk_public_corkboard_id)
+        VALUES (%(user_id)s,
+        ( SELECT public_corkboard_id
+        FROM PublicCorkBoard AS public
+        WHERE public.fk_corkboard_id = %(corkboard_id)s ))
+        """, {'user_id':user_id, 'corkboard_id':corkboard_id})
 
-    return 'being built rn'
+        return jsonify(status_code=201)
 #########################################################################################################
 #########################################################################################################
 #########################################################################################################
@@ -478,31 +492,31 @@ def view_pushpin(corkboard_id, pushpin_id):
     return jsonify(data)
 
 
-"""
-FOLLOW FOR PUSHPIN
-"""
-@app.route('/followpushpin', methods = ['POST'])
-def follow_pushpin():
-    """
-    ---
-    tags:
-        - Comments on pushpins
-    parameters:
-        - name: pushpin_id
-          in: body
-        - name: text
-    """
-    if request.method == 'POST':
-        content = request.get_json()
-        user_id = content['user_id']
-        cur.execute("""INSERT INTO Follow (fk_user_follower_id, fk_user_followee_id)
-        VALUES ((SELECT user_id FROM CorkBoardItUser AS u
-        WHERE u.user_id = $UserID), (SELECT fk_user_id
-        FROM CorkBoard WHERE corkboard.corkboard_id = $CorkBoardID
-        AND corkboard.fk_user_id != %(user_id)s))
-        """, {"user_id": user_id})
-        conn.commit()
-        return 'being built rn'
+# """
+# FOLLOW FOR PUSHPIN
+# """
+# @app.route('/followpushpin', methods = ['POST'])
+# def follow_pushpin():
+#     """
+#     ---
+#     tags:
+#         - Comments on pushpins
+#     parameters:
+#         - name: pushpin_id
+#           in: body
+#         - name: text
+#     """
+#     if request.method == 'POST':
+#         content = request.get_json()
+#         user_id = content['user_id']
+#         cur.execute("""INSERT INTO Follow (fk_user_follower_id, fk_user_followee_id)
+#         VALUES ((SELECT user_id FROM CorkBoardItUser AS u
+#         WHERE u.user_id = $UserID), (SELECT fk_user_id
+#         FROM CorkBoard WHERE corkboard.corkboard_id = $CorkBoardID
+#         AND corkboard.fk_user_id != %(user_id)s))
+#         """, {"user_id": user_id})
+#         conn.commit()
+#         return 'being built rn'
 
 """
 LIKE FOR PUSHPIN
@@ -605,6 +619,34 @@ def post_comment():
 
         conn.commit()
 
+        return jsonify(status_code=201)
+
+#########################################################################################################
+#########################################################################################################
+#########################################################################################################
+"""
+FOLLOW USER
+"""
+@app.route('/followpushpin', methods = ['POST'])
+def follow_pushpin():
+    """
+    ---
+    tags:
+        - Follow User
+    parameters:
+        - name: follower_id
+          in: body
+        - name: followee_id
+          in: body
+    """
+    if request.method == 'POST':
+        content = request.get_json()
+        follower_id = content['follower_id']
+        followee_id = content['followee_id']
+        cur.execute("""INSERT INTO Follow (fk_user_follower_id, fk_user_followee_id
+        VALUES (%(follower_id)s, %(followee_id)s)
+        """, {"follower_id":follower_id, "followee_id": followee_id})
+        conn.commit()
         return jsonify(status_code=201)
 
 #########################################################################################################
