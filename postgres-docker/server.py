@@ -570,7 +570,7 @@ def unlike_pushpin():
         """, {"user_id": user_id, "pushpin_id": pushpin_id})
 
         conn.commit()
-        return 'being built rn'
+        return jsonify(status_code=201)
 """
 POST COMMENT FOR PUSHPIN
 """
