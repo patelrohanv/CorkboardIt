@@ -32,6 +32,6 @@
   </ng-container>
 
   <tr mat-header-row class="pre" *matHeaderRowDef="cb_stats_displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: cb_stats_displayedColumns;"></tr>
+  <tr mat-row *matRowDef="let row; columns: cb_stats_displayedColumns;" ngClass="{{row.id}}"></tr>
 
 </table>

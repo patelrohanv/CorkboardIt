@@ -1,32 +1,32 @@
-<mat-card>
-    <mat-card-header>
+    <mat-card>
+      <mat-card-header [style.backgroundColor]="'deep purple'">
         <mat-card-title>Login</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
+      </mat-card-header>
+      <mat-card-content>
         <form>
-            <mat-form-field>
-                <input [(ngModel)]="email_input" matInput placeholder="Email" [formControl]="email" type="email" name="email">
-                <mat-error *ngIf="email.hasError('required')">
-                    Incorrect <strong>Email</strong>
-                </mat-error>
-            </mat-form-field>
-            <br>
-            <br>
-            <mat-form-field>
-                <input [(ngModel)]="pin_input" matInput placeholder="Pin" [formControl]="pin" type="password" name="pin">
-                <mat-error *ngIf="pin.hasError('incorrect')">
-                    Incorrect <strong>pin</strong>
-                </mat-error>
-                <mat-error *ngIf="pin.hasError('required')">
-                    Pin is <strong>required</strong>
-                </mat-error>
-                <mat-error *ngIf="pin.hasError('maxLength')">
-                    Entered pin is <strong>NaN</strong>
-                </mat-error>
-            </mat-form-field>
+          <mat-form-field class="full-width">
+            <input [(ngModel)]="email_input" matInput placeholder="Email" [formControl]="email" type="email" name="email">
+            <mat-error *ngIf="email.hasError('required')">
+              Incorrect <strong>Email</strong>
+            </mat-error>
+          </mat-form-field>
+          <br>
+          <br>
+          <mat-form-field class="full-width">
+            <input [(ngModel)]="pin_input" matInput placeholder="Pin" [formControl]="pin" type="password" name="pin">
+            <mat-error *ngIf="pin.hasError('incorrect')">
+              Incorrect <strong>pin</strong>
+            </mat-error>
+            <mat-error *ngIf="pin.hasError('required')">
+              Pin is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="pin.hasError('maxLength')">
+              Entered pin is <strong>NaN</strong>
+            </mat-error>
+          </mat-form-field>
         </form>
-    </mat-card-content>
-    <mat-card-actions>
+      </mat-card-content>
+      <mat-card-actions>
         <button mat-raised-button (click)="checkPassword()">Login</button>
-    </mat-card-actions>
-</mat-card>
+      </mat-card-actions>
+    </mat-card>
