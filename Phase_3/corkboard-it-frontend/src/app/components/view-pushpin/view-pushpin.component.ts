@@ -112,7 +112,7 @@ export class ViewPushpinComponent implements OnInit {
         this.load_comments(pushpin);
         this.load_likers(pushpin);
         // TODO!
-        //this.load_follow();
+        this.load_follow();
 
       }
     );
