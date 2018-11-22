@@ -395,6 +395,30 @@ def add_pushpin():
         #return corkboard_id
         return jsonify(corkboard_id)
 
+@app.route('/addtags', methods=['POST'])
+def add_tags():
+    """
+    ---
+    tags:
+        - add tags
+    parameters:
+        - name: pushpin_id
+          in: body
+        - name: tag
+          in: body
+    """
+    if request.method == 'POST':
+        content = request.get_json()
+        pushpin_id = content['pushpin_id']
+        tag = content['tag']
+
+        cur.execute("""INSERT INTO Tag (fk_pushpin_id, tag)
+        VALUES (%(pushpin_id)s, %(tag)s)
+        """, {'pushpin_id': pushpin_id, 'tag': tag})
+
+        conn.commit()
+        return jsonify(status_code=201)
+
 #########################################################################################################
 #########################################################################################################
 #########################################################################################################
@@ -629,7 +653,7 @@ def post_comment():
 FOLLOW USER
 """
 @app.route('/followuser', methods = ['POST'])
-def follow_pushpin():
+def follow_user():
     """
     ---
     tags:
