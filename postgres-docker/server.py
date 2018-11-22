@@ -531,7 +531,7 @@ def like_pushpin():
         - name: user_id
           in: body
         - name: pushpin_id
-           in: body
+          in: body
     """
     if request.method == 'POST':
         content = request.get_json()
@@ -570,7 +570,7 @@ def unlike_pushpin():
         - name: user_id
           in: body
         - name: pushpin_id
-           in: body
+          in: body
     """
     if request.method == 'POST':
         content = request.get_json()
@@ -600,9 +600,9 @@ def post_comment():
         - name: text
           in: body
         - name: user_id
-           in: body
+          in: body
         - name: date_time
-           in: body
+          in: body
     """
 
     if request.method == 'POST':
