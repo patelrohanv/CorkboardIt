@@ -19,7 +19,6 @@ import {ViewPushpinComponent} from "../view-pushpin/view-pushpin.component";
 export class ViewCorkboardComponent implements OnInit {
     cb: Corkboard = null;
 
-    fakeCd = 'test';
     watch: boolean;
     follow: boolean;
     pushpins = [];
