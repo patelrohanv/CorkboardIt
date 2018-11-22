@@ -1,8 +1,8 @@
 <div>
-    <mat-toolbar>{{corkBoardDetails.owner.first_name}} {{corkBoardDetails.owner.last_name}}</mat-toolbar>
-    <mat-toolbar>{{corkBoardDetails.stat.title</mat-toolbar>
-    <mat-toolbar>{{corkBoardDetails.stat.category}}</mat-toolbar>
-    <mat-toolbar>{{corkBoardDetails.stat.date}}</mat-toolbar>
+    <mat-toolbar>{{corkboard_details?.owner.first_name}} {{corkboard_details?.owner.last_name}}</mat-toolbar>
+    <mat-toolbar>{{corkboard_details?.stat.title}}</mat-toolbar>
+    <mat-toolbar>{{corkboard_details?.stat.category}}</mat-toolbar>
+    <mat-toolbar>{{corkboard_details?.stat.date}}</mat-toolbar>
     <div *ngIf="canFollow">
         <mat-button-toggle value="follow" (click)="followCorkboard()">
             Follow
@@ -17,7 +17,7 @@
         <button mat-button (click)="addPushpin()">Add Pushpin</button> 
     </div>
 
-    <div *ngFor="let pushpin of corkBoardDetails.images">
+    <div *ngFor="let pushpin of corkboard_details.images">
             <mat-card>
                 <img mat-card-image src={{pushpin.url}} alt="Pushpin Photo">
             </mat-card>

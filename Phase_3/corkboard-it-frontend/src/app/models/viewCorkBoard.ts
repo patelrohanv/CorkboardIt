@@ -17,6 +17,6 @@ export class ViewCorkBoardStat {
 
 export class PushpinImage {
     url: string
-    pushpin_id: number
+    pushpin_id: string
 }
 

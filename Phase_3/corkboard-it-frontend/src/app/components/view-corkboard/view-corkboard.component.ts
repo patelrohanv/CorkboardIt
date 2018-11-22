@@ -12,8 +12,6 @@ import { AddPushpinComponent } from '../add-pushpin/add-pushpin.component';
     styleUrls: ['./view-corkboard.component.scss']
 })
 export class ViewCorkboardComponent implements OnInit {
-    cb: Corkboard = null;
-
     user_id = "";
     corkboard_details: ViewCorkBoard
     current_corkboard: Corkboard
@@ -25,13 +23,15 @@ export class ViewCorkboardComponent implements OnInit {
     ngOnInit() {
         this.cbid = this.router.snapshot.params['cbid'];
         this.userService.getViewCorkboard(this.cbid).subscribe((data: ViewCorkBoard) => {
+            console.log(data);
             this.user_id = this.userService.getCurrentUser()
             this.corkboard_details = data
+            console.log(this.corkboard_details, this.user_id)
             this.updateCanAdd()
             this.updateCanFollow()
             this.updateCanWatch()
             this.setCurrentCorkBoard()
-            console.log(this.corkboard_details, this.user_id, this.canAdd)
+            console.log('here', this.corkboard_details, this.user_id, this.canAdd)
             
         })
       
@@ -40,10 +40,10 @@ export class ViewCorkboardComponent implements OnInit {
 
     setCurrentCorkBoard() {
         this.current_corkboard.category = this.corkboard_details.stat.category;
-        this.current_corkboard.corkboard_id = parseInt(this.cbid);
+        this.current_corkboard.corkboard_id = this.cbid;
         this.current_corkboard.date_time = this.corkboard_details.stat.date;
         this.current_corkboard.email = this.corkboard_details.owner.email;
-        this.current_corkboard.fk_user_id = this.corkboard_details.owner.id;
+        this.current_corkboard.fk_user_id = this.corkboard_details.owner.user_id;
         this.current_corkboard.title = this.corkboard_details.stat.title;
         this.current_corkboard.visibility = this.corkboard_details.stat.visibility;
     }
@@ -60,13 +60,7 @@ export class ViewCorkboardComponent implements OnInit {
     }
 
     updateCanFollow() {
-        console.log(this.corkboard_details.owner.user_id, this.user_id)
-        console.log(this.corkboard_details.owner.user_id != this.user_id)
-        if(this.corkboard_details.owner.user_id != this.user_id) {
-            this.canFollow = true;
-        } else {
-            this.canFollow = false;
-        }
+        this.canFollow = this.corkboard_details.owner.user_id != this.user_id ? true : false
     }
 
     addPushpin(): void {

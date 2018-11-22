@@ -34,8 +34,10 @@ export class HomescreenComponent implements OnInit {
     ngOnInit() {
 
         const uid = this.router.snapshot.params['cbuid'];
-        this.userService.getUser_ID(uid).subscribe((user: User) => {
+        console.log(uid)
+        this.userService.getUser_ID(uid.toString()).subscribe((user: User) => {
             this.current_user = user;
+            console.log(user)
             this.getOwnedCorkBoards();
             this.getRecentCorkBoards();
         });
@@ -80,13 +82,13 @@ export class HomescreenComponent implements OnInit {
     }
 
     getOwnedCorkBoards() {
-        this.userService.getHomescreenOwned(this.current_user.id).subscribe((res: OwnedCorkBoard[]) => {
+        this.userService.getHomescreenOwned(this.current_user.user_id).subscribe((res: OwnedCorkBoard[]) => {
             this.owned_corkboards = res;
         });
     }
 
     getRecentCorkBoards() {
-        this.userService.getHomescreenRecent(this.current_user.id).subscribe((res: RecentCorkBoard[]) => {
+        this.userService.getHomescreenRecent(this.current_user.user_id).subscribe((res: RecentCorkBoard[]) => {
             this.recent_corkboards = res;
         });
     }

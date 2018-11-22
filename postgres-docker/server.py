@@ -81,7 +81,7 @@ def get_user_id():
         return jsonify(user = None), 404
     else:
         user_dict = {
-            'id': rows[0][2],
+            'user_id': rows[0][2],
             'first_name': rows[0][0],
             'last_name': rows[0][1],
             'email': rows[0][3]
@@ -308,11 +308,7 @@ def watch_corkboard():
         VALUES (%(user_id)s,
         ( SELECT public_corkboard_id
         FROM PublicCorkBoard AS public
-<<<<<<< HEAD
-        WHERE public.fk_corkboard_id = %(corkboard_id)s ))
-=======
         WHERE public.fk_corkboard_id = %(corkboard_id)s )) ON CONFLICT (fk_user_id,fk_public_corkboard_id) DO NOTHING
->>>>>>> aef9376b2487e2d6fb0b1fdc32499f4fb1e6e017
         """, {'user_id':user_id, 'corkboard_id':corkboard_id})
 
         return jsonify(status_code=201)
@@ -599,11 +595,7 @@ def unlike_pushpin():
         - name: user_id
           in: body
         - name: pushpin_id
-<<<<<<< HEAD
            in: body
-=======
-          in: body
->>>>>>> aef9376b2487e2d6fb0b1fdc32499f4fb1e6e017
     """
     if request.method == 'POST':
         content = request.get_json()
@@ -661,11 +653,7 @@ def post_comment():
 FOLLOW USER
 """
 @app.route('/followuser', methods = ['POST'])
-<<<<<<< HEAD
-def follow_pushpin():
-=======
 def follow_user():
->>>>>>> aef9376b2487e2d6fb0b1fdc32499f4fb1e6e017
     """
     ---
     tags:
@@ -681,11 +669,7 @@ def follow_user():
         follower_id = content['follower_id']
         followee_id = content['followee_id']
         cur.execute("""INSERT INTO Follow (fk_user_follower_id, fk_user_followee_id)
-<<<<<<< HEAD
-        VALUES (%(follower_id)s, %(followee_id)s)
-=======
         VALUES (%(follower_id)s, %(followee_id)s) ON CONFLICT (fk_user_follower_id,fk_user_followee_id) DO NOTHING
->>>>>>> aef9376b2487e2d6fb0b1fdc32499f4fb1e6e017
         """, {"follower_id":follower_id, "followee_id": followee_id})
         conn.commit()
         return jsonify(status_code=201)
@@ -701,26 +685,13 @@ Get FOLLOWING
 @app.route('/getfollowers/<user_id>', methods=['GET'])
 def get_followers(user_id):
 
-<<<<<<< HEAD
-    content = request.get_json()
-    print('CONTENT:', content, file=sys.stderr)
-
     if request.method == 'GET':
-
-        data = []
-
-=======
-    if request.method == 'GET':
->>>>>>> aef9376b2487e2d6fb0b1fdc32499f4fb1e6e017
         cur.execute(""" SELECT fk_user_followee_id FROM follow WHERE fk_user_follower_id = %(user_id)s""",
         {'user_id':user_id})
 
         headers = [x[0] for x in cur.description]
         rows = cur.fetchall()
-<<<<<<< HEAD
-=======
         data = []
->>>>>>> aef9376b2487e2d6fb0b1fdc32499f4fb1e6e017
         for stuff in rows:
             data.append(dict(zip(headers, stuff)))
 
