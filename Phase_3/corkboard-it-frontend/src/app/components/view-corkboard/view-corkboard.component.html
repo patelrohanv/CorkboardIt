@@ -2,7 +2,7 @@
     <div>
         <div>
             {{fakeCd}}
-            <mat-button-toggle value="follow">
+            <mat-button-toggle (click)="followCorkboard()" value="follow">
                     Follow
             </mat-button-toggle>
             {{fakeCd}}
@@ -13,7 +13,7 @@
             {{fakeCd}}
             <br>
             <br>
-            <button mat-button>Add Pushpin</button>
+            <button mat-button (click)="addPushpin()">Add Pushpin</button>
         </div>
     </div>
     <div *ngFor="let i of pushpins">
@@ -21,7 +21,7 @@
     </div>
     <div>
         This Corkboard Has {{fakeCd}} watchers
-        <mat-button-toggle value="watch">
+        <mat-button-toggle (click)="watchCorkboard()" value="watch">
                 Watch
         </mat-button-toggle>
     </div>
