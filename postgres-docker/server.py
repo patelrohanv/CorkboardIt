@@ -308,7 +308,7 @@ def watch_corkboard():
         VALUES (%(user_id)s,
         ( SELECT public_corkboard_id
         FROM PublicCorkBoard AS public
-        WHERE public.fk_corkboard_id = %(corkboard_id)s ))
+        WHERE public.fk_corkboard_id = %(corkboard_id)s )) ON CONFLICT (fk_user_id,fk_public_corkboard_id) DO NOTHING
         """, {'user_id':user_id, 'corkboard_id':corkboard_id})
 
         return jsonify(status_code=201)
@@ -541,7 +541,7 @@ def like_pushpin():
         pushpin_id = content['pushpin_id']
 
         cur.execute("""INSERT INTO Liked (fk_user_id, fk_pushpin_id)
-        VALUES (%(user_id)s, %(pushpin_id)s)
+        VALUES (%(user_id)s, %(pushpin_id)s) ON CONFLICT (fk_user_id,fk_pushpin_id) DO NOTHING
         """, {"user_id": user_id, "pushpin_id": pushpin_id})
 
         conn.commit()
@@ -645,7 +645,7 @@ def follow_pushpin():
         follower_id = content['follower_id']
         followee_id = content['followee_id']
         cur.execute("""INSERT INTO Follow (fk_user_follower_id, fk_user_followee_id)
-        VALUES (%(follower_id)s, %(followee_id)s)
+        VALUES (%(follower_id)s, %(followee_id)s) ON CONFLICT (fk_user_follower_id,fk_user_followee_id) DO NOTHING
         """, {"follower_id":follower_id, "followee_id": followee_id})
         conn.commit()
         return jsonify(status_code=201)
