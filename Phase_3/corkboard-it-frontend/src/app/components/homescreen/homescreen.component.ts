@@ -43,7 +43,7 @@ export class HomescreenComponent implements OnInit {
 
     getPopularSites(): void {
         const dialogRef = this.dialog.open(PopularSitesComponent, {
-            width: '500x',
+            width: 'auto',
             data: {}
         });
 
@@ -54,7 +54,7 @@ export class HomescreenComponent implements OnInit {
 
     getPopularTags(): void {
         const dialogRef = this.dialog.open(PopularTagsComponent, {
-            width: '400px',
+            width: 'auto',
             data: {}
         });
 
@@ -64,10 +64,15 @@ export class HomescreenComponent implements OnInit {
     }
 
     getCorkBoardStats(): void {
-        const dialogRef = this.dialog.open(CorkboardStatsComponent, {
-            width: '500x',
-            data: {}
-        });
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.autoFocus = true;
+        dialogConfig.data = this.current_user
+        const dialogRef = this.dialog.open(CorkboardStatsComponent, dialogConfig);
+
+        // const dialogRef = this.dialog.open(CorkboardStatsComponent, {
+        //     width: '500x',
+        //     data: {}
+        // });
 
         dialogRef.afterClosed().subscribe(result => {
             console.log('The dialog was closed');
@@ -91,7 +96,7 @@ export class HomescreenComponent implements OnInit {
         console.log('sent data');
         console.log(this.search_text);
         const dialogRef = this.dialog.open(SearchPushpinComponent, {
-            width: '500px',
+            width: 'auto',
             data: { dataKey: this.search_text.value.toString() }
         });
 

@@ -3,8 +3,9 @@
   <br>
   <p>Pinned {{date}} on <a routerLink="/viewcorkboard/{{corkboard_id}}" routerLinkActive="active">{{title}}</a> </p>
 </div>
+<div>from {{website}}</div>
 <div>
-  <img src={{url}} width="400" height="300">
+  <a href="{{url}}"><img src={{url}} width="400" height="300"></a>
   <p>{{description}}</p>
   <p>Tags: <b>{{tags}}</b></p>
 </div>

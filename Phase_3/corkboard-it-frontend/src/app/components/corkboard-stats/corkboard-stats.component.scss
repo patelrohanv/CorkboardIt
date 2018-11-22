@@ -1,3 +1,8 @@
-table {
-  width: 100%;
+.mat-column {
+  flex: 0 0 100px !important;
+  white-space: unset !important;
+}
+
+.highlight {
+  background: red;
 }
