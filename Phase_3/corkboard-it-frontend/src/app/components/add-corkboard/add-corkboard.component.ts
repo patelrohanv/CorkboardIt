@@ -23,7 +23,7 @@ export class AddCorkboardComponent implements OnInit {
     categories: string[];
 
     constructor( private router: Router, private userService: UserService,
-        dialogRef: MatDialogRef<AddCorkboardComponent>,
+        private dialogRef: MatDialogRef<AddCorkboardComponent>,
         @Inject(MAT_DIALOG_DATA) public data: User) {
         this.categories = Categories;
     }
@@ -45,6 +45,7 @@ export class AddCorkboardComponent implements OnInit {
         console.log(cb);
         this.userService.postAddCorkboard(cb).subscribe((corkboard) => {
             console.log(corkboard)
+            this.dialogRef.close()
             this.router.navigate(['/viewcorkboard/', corkboard]);
         });
     }

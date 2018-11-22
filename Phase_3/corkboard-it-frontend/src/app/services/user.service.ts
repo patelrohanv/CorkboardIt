@@ -16,9 +16,17 @@ import { Corkboard } from '../models/corkboard';
 })
 export class UserService {
     private baseUrl;
-
+    current_user = "";
     constructor(private http: HttpClient) {
         this.baseUrl = environment.baseUrl;
+    }
+
+    updateCurrentUser(user_id: string) {
+        this.current_user = user_id;
+    }
+
+    getCurrentUser() {
+        return this.current_user;
     }
 
     // /logi
@@ -79,7 +87,7 @@ export class UserService {
     }
 
     // /viewCorkboard/<corkboard_id>
-    ViewCorkboard(corkboard_id: string): Observable<Object> {
+    getViewCorkboard(corkboard_id: string): Observable<Object> {
         const requestURL = this.baseUrl + '/viewcorkboard/' + corkboard_id;
         return this.http.get<Object>(requestURL);
 

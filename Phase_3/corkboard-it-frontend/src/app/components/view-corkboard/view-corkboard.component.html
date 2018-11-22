@@ -1,10 +1,8 @@
-<div>
+<!-- <div>
     <div>
         <div>
-            {{fakeCd}}
-            <mat-button-toggle value="follow">
-                    Follow
-            </mat-button-toggle>
+            <!-- {{fakeCd}}
+            
             {{fakeCd}}
             <br>
             Last Updated {{fakeCd}}
@@ -24,5 +22,28 @@
         <mat-button-toggle value="watch">
                 Watch
         </mat-button-toggle>
+    </div> -->
+<div>
+        <mat-toolbar>{{corkBoardDetails.owner.first_name}} {{corkBoardDetails.owner.last_name}}</mat-toolbar>
+    
+    <div *ngIf="canFollow">
+        <mat-button-toggle value="follow">
+            Follow
+    </mat-button-toggle>
     </div>
-  </div>
+    <div *ngIf="canWatch">
+        <mat-button-toggle value="watch">
+            Watch
+        </mat-button-toggle>
+    </div>
+    <div *ngIf="canAdd">
+        <button mat-button>Add Pushpin</button> 
+    </div>
+
+    <div *ngFor="let pushpin of corkBoardDetails.images">
+            <mat-card>
+                <img mat-card-image src={{pushpin.url}} alt="Pushpin Photo">
+            </mat-card>
+                
+    </div>
+</div> 
