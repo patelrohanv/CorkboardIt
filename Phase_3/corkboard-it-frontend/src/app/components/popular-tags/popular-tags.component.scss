@@ -1,3 +1,10 @@
-table {
+.mat-table {
+  width: 100%;
+}
+.mat-header-cell {
+  width: 100%;
+  padding:10px;
+}
+.mat-row {
   width: 100%;
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
+import { HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
@@ -7,9 +7,10 @@ import { Observable, ErrorObserver } from 'rxjs';
 import { PopularTag } from '../models/popularTag';
 import { PopularSite } from '../models/popularSite';
 import { CorkboardStat } from '../models/corkboardStat';
-import {SearchResults} from "../models/searchResults";
-import {RequestOptions} from "@angular/http"
+import { SearchResults } from "../models/searchResults";
+import { RequestOptions } from "@angular/http"
 import { Corkboard } from '../models/corkboard';
+import { Pushpin } from '../models/pushpin';
 
 @Injectable({
     providedIn: 'root'
@@ -32,10 +33,10 @@ export class UserService {
     // /logi
     postLogin(user_id: string, password: string): Observable<Object> {
         const requestURL = this.baseUrl + '/login';
-        const user_login = {'user_id': user_id, 'pin': password};
+        const user_login = { 'user_id': user_id, 'pin': password };
         const httpOptions = {
             headers: new HttpHeaders({
-              'Content-Type':  'application/json',
+                'Content-Type': 'application/json',
             })
         }
         return this.http.post<Object>(requestURL, user_login, httpOptions);
@@ -45,11 +46,11 @@ export class UserService {
     // login for private corkboard
     postLoginPrivateCorkBoard(corkboard_id: string, password: string): Observable<Object> {
         const requestURL = this.baseUrl + '/private_login/' + corkboard_id;
-        const user_login = {'password': password};
+        const user_login = { 'password': password };
         const httpOptions = {
             headers: new HttpHeaders({
-                'Content-Type':  'application/json',
-              })
+                'Content-Type': 'application/json',
+            })
         }
 
         return this.http.post<Object>(requestURL, user_login, httpOptions);
@@ -94,78 +95,86 @@ export class UserService {
     }
 
     // /addPushpin/<corkboard_id>
-    postAddPushpin(corkboard_id: string): Observable<Object> {
-        const requestURL = this.baseUrl + '/addpushpin/' + corkboard_id;
+    postAddPushpin(pushpin: Pushpin): Observable<Object> {
+        const requestURL = this.baseUrl + '/addpushpin/' + pushpin.corkboard_id;
         return this.http.post<Object>(requestURL, '');
     }
 
     // /viewPushpin/<corkboard_id>/<pushpin_id>
-    ViewPushpin(corkboard_id: string, pushpin_id: string, ): Observable<Object[]> {
-        const requestURL = this.baseUrl + '/viewpushpin/' + corkboard_id +'/' + pushpin_id;
+    ViewPushpin(pushpin_id: string): Observable<Object[]> {
+        const requestURL = this.baseUrl + '/viewpushpin/' + pushpin_id;
         return this.http.get<Object[]>(requestURL);
     }
 
     //postcomment
-    postComment(pushpin_id: string, user_id: string, text: string, date_time: string): Observable<Object>  {
-      const requestURL = this.baseUrl + '/postcomment';
-      const body = {'pushpin_id': pushpin_id,
-                    'user_id': user_id,
-                    'text': text,
-                    'date_time': date_time};
-        const httpOptions = {
-          headers: new HttpHeaders({
-            'Content-Type':  'application/json',
-          })
+    postComment(pushpin_id: string, user_id: string, text: string, date_time: string): Observable<Object> {
+        const requestURL = this.baseUrl + '/postcomment';
+        const body = {
+            'pushpin_id': pushpin_id,
+            'user_id': user_id,
+            'text': text,
+            'date_time': date_time
         };
-      return this.http.post<Object>(requestURL, body, httpOptions);
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            })
+        };
+        return this.http.post<Object>(requestURL, body, httpOptions);
     }
 
-    LikePushpin(pushpin_id: string, user_id: string): Observable<Object>{
+    LikePushpin(pushpin_id: string, user_id: string): Observable<Object> {
 
-      const requestURL = this.baseUrl + '/likepushpin';
-      const body = {'pushpin_id': pushpin_id,
-        'user_id': user_id};
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type':  'application/json',
-        })
-      };
-      return this.http.post<Object>(requestURL, body, httpOptions);
+        const requestURL = this.baseUrl + '/likepushpin';
+        const body = {
+            'pushpin_id': pushpin_id,
+            'user_id': user_id
+        };
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            })
+        };
+        return this.http.post<Object>(requestURL, body, httpOptions);
     }
 
-  UnikePushpin(pushpin_id: string, user_id: string): Observable<Object>{
+    UnikePushpin(pushpin_id: string, user_id: string): Observable<Object> {
 
-    const requestURL = this.baseUrl + '/unlikepushpin';
-    const body = {'pushpin_id': pushpin_id,
-      'user_id': user_id};
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-      })
-    };
-    return this.http.post<Object>(requestURL, body, httpOptions);
-  }
+        const requestURL = this.baseUrl + '/unlikepushpin';
+        const body = {
+            'pushpin_id': pushpin_id,
+            'user_id': user_id
+        };
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            })
+        };
+        return this.http.post<Object>(requestURL, body, httpOptions);
+    }
 
-  // TODO: Need to test this
-  PostFollow(current_user_id: string, follow_user_id: string): Observable<Object>{
+    // TODO: Need to test this
+    PostFollow(current_user_id: string, follow_user_id: string): Observable<Object> {
 
-    const requestURL = this.baseUrl + '/followuser';
-    const body = {'follower_id' : current_user_id,
-                  'followee_id': follow_user_id};
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-      })
-    };
-    return this.http.post<Object>(requestURL, body, httpOptions);
-  }
+        const requestURL = this.baseUrl + '/followuser';
+        const body = {
+            'follower_id': current_user_id,
+            'followee_id': follow_user_id
+        };
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            })
+        };
+        return this.http.post<Object>(requestURL, body, httpOptions);
+    }
 
-  // TODO: need this call
-  GetFollow(current_user_id: string): Observable<Object[]> {
-    const requestURL = this.baseUrl + '/getfollowers/' + current_user_id;
+    // TODO: need this call
+    GetFollow(current_user_id: string): Observable<Object[]> {
+        const requestURL = this.baseUrl + '/getfollowers/' + current_user_id;
 
-    return this.http.get<Object[]>(requestURL);
-  }
+        return this.http.get<Object[]>(requestURL);
+    }
 
     // '/searchpushpin/<search_text>)'
     SearchPushpin(search_text: string): Observable<SearchResults[]> {

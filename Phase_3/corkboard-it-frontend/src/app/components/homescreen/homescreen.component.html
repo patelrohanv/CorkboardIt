@@ -1,23 +1,24 @@
 <mat-toolbar>Welcome {{current_user?.first_name}} {{current_user?.last_name}}</mat-toolbar>
-
+<div class="buttons">
 <button mat-flat-button color="primary" (click)="getPopularTags()">Popular Tags</button>
 <button mat-flat-button color="primary" (click)="getPopularSites()">Popular Sites</button>
 <button mat-flat-button color="primary" (click)="getCorkBoardStats()">Corkboard Statistics</button>
 <button mat-flat-button color="primary" (click)="addCorkBoard()">Add CorkBoard</button>
+</div>
+<hr>
 
-
-<h3>Recent CorkBoards</h3>
+<h3 class="center-text">Recent CorkBoards</h3>
 <div *ngFor="let corkboard of recent_corkboards">
     <app-recentCorkboard-tile [corkboard]="corkboard"></app-recentCorkboard-tile>
 </div>
-  
-<h3>My CorkBoards</h3>
+ <hr> 
+<h3 class="center-text">My CorkBoards</h3>
 <div *ngFor="let corkboard of owned_corkboards">
     <app-ownedCorkboard-tile [corkboard]="corkboard"></app-ownedCorkboard-tile>
 </div>
-  
+  <hr>
 <form>
-  <mat-form-field>
+  <mat-form-field class="full-width">
     <input matInput placeholder="Search description, tags, and CorkBoard category" [formControl]="search_text" name="search_text" >
   </mat-form-field>
   <button mat-flat-button color="primary" (click)="getPushPinSearchResults()">PushPin Search</button>

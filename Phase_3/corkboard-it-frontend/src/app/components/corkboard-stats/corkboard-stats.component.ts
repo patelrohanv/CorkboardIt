@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { CorkboardStat } from '../../models/corkboardStat';
 import { DataSource } from '@angular/cdk/table';
 import { Observable } from 'rxjs';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { User } from 'src/app/models/user';
 
 @Component({
     selector: 'app-corkboard-stats',
@@ -17,7 +18,8 @@ export class CorkboardStatsComponent implements OnInit {
 
     cb_stats_displayedColumns: string[] = ['user_name', 'public_cb', 'pub_pushpins', 'private_cb', 'private_pushpins'];
 
-    constructor(public dialogRef: MatDialogRef<CorkboardStatsComponent>, private userService: UserService) { }
+    constructor(public dialogRef: MatDialogRef<CorkboardStatsComponent>, private userService: UserService,
+        @Inject(MAT_DIALOG_DATA) public data: User) { }
 
     ngOnInit() {
     }

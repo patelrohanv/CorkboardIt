@@ -3,6 +3,8 @@ import { UserService } from '../../services/user.service';
 import { Corkboard } from '../../models/corkboard';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ViewCorkBoard } from 'src/app/models/viewCorkBoard';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogConfig } from '@angular/material';
+import { AddPushpinComponent } from '../add-pushpin/add-pushpin.component';
 
 @Component({
     selector: 'app-view-corkboard',
@@ -13,45 +15,70 @@ export class ViewCorkboardComponent implements OnInit {
     cb: Corkboard = null;
 
     user_id = "";
-    corkBoardDetails: ViewCorkBoard
+    corkboard_details: ViewCorkBoard
+    current_corkboard: Corkboard
+    cbid: string
     canAdd: boolean
     canWatch: boolean
     canFollow: boolean
-    constructor(private userService: UserService, private router: ActivatedRoute) { }
+    constructor(public dialog: MatDialog, private userService: UserService, private router: ActivatedRoute) { }
     ngOnInit() {
-        const cbid = this.router.snapshot.params['cbid'];
-        this.userService.getViewCorkboard(cbid).subscribe((data: ViewCorkBoard) => {
+        this.cbid = this.router.snapshot.params['cbid'];
+        this.userService.getViewCorkboard(this.cbid).subscribe((data: ViewCorkBoard) => {
             this.user_id = this.userService.getCurrentUser()
-            this.corkBoardDetails = data
+            this.corkboard_details = data
             this.updateCanAdd()
             this.updateCanFollow()
             this.updateCanWatch()
-            console.log(this.corkBoardDetails, this.user_id, this.canAdd)
+            this.setCurrentCorkBoard()
+            console.log(this.corkboard_details, this.user_id, this.canAdd)
             
         })
-        // console.log(this.userService.getCurrentUser);
       
 
     }
 
+    setCurrentCorkBoard() {
+        this.current_corkboard.category = this.corkboard_details.stat.category;
+        this.current_corkboard.corkboard_id = parseInt(this.cbid);
+        this.current_corkboard.date_time = this.corkboard_details.stat.date;
+        this.current_corkboard.email = this.corkboard_details.owner.email;
+        this.current_corkboard.fk_user_id = this.corkboard_details.owner.id;
+        this.current_corkboard.title = this.corkboard_details.stat.title;
+        this.current_corkboard.visibility = this.corkboard_details.stat.visibility;
+    }
+
     updateCanAdd() {
-        this.canAdd = this.user_id == this.corkBoardDetails.owner.user_id ?
+        this.canAdd = this.user_id == this.corkboard_details.owner.user_id ?
                       true : false;
     }
 
     updateCanWatch() {
-        this.canWatch = this.corkBoardDetails.stat.visibility == true &&
-                        this.user_id != this.corkBoardDetails.owner.user_id ?
+        this.canWatch = this.corkboard_details.stat.visibility == true &&
+                        this.user_id != this.corkboard_details.owner.user_id ?
                         true : false;
     }
 
     updateCanFollow() {
-        console.log(this.corkBoardDetails.owner.user_id, this.user_id)
-        console.log(this.corkBoardDetails.owner.user_id != this.user_id)
-        if(this.corkBoardDetails.owner.user_id != this.user_id) {
+        console.log(this.corkboard_details.owner.user_id, this.user_id)
+        console.log(this.corkboard_details.owner.user_id != this.user_id)
+        if(this.corkboard_details.owner.user_id != this.user_id) {
             this.canFollow = true;
         } else {
             this.canFollow = false;
         }
+    }
+
+    addPushpin(): void {
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.autoFocus = true;
+        dialogConfig.data = this.current_corkboard
+
+        const dialogRef = this.dialog.open(AddPushpinComponent, dialogConfig);
+    }
+    followCorkboard(): void {
+
+    }
+    watchCorkboard(): void {
     }
 }
