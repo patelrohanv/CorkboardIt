@@ -685,18 +685,13 @@ Get FOLLOWING
 @app.route('/getfollowers/<user_id>', methods=['GET'])
 def get_followers(user_id):
 
-    content = request.get_json()
-    print('CONTENT:', content, file=sys.stderr)
-
     if request.method == 'GET':
-
-        data = []
-
         cur.execute(""" SELECT fk_user_followee_id FROM follow WHERE fk_user_follower_id = %(user_id)s""",
         {'user_id':user_id})
 
         headers = [x[0] for x in cur.description]
         rows = cur.fetchall()
+        data = []
         for stuff in rows:
             data.append(dict(zip(headers, stuff)))
 
