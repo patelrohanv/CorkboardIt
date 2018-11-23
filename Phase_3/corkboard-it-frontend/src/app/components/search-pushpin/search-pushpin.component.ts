@@ -14,8 +14,6 @@ import { Observable } from 'rxjs';
 })
 export class SearchPushpinComponent implements OnInit {
 
-   pushpin_id = '1';
-
     search_displayedColumns: string[] = ['description', 'corkBoard', 'owner'];
     private search_results_ds: SearchResultsDataSource;
     private search_txt;

@@ -31,6 +31,7 @@ export class LoginComponent implements OnInit {
                 console.log(user);
                 if (user) {
                     this.userService.updateCurrentUser(id)
+                    localStorage.setItem('cur_user_id', id);
                     this.router.navigate(['/home/', id]);
                 } else {
                     console.log('Incorrect!');

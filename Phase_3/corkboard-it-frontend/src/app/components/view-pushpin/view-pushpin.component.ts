@@ -42,37 +42,19 @@ export class ViewPushpinComponent implements OnInit {
 
 
   constructor( private userService: UserService, private router: ActivatedRoute) {
+
   }
 
   ngOnInit() {
-
-
     const ppid = this.router.snapshot.params['ppid'];
-    console.log("pushpin id ", ppid);
-    //console.log("cb id ", this.pushpin_data.corkboard_id);
-    //this.pushpin_id = this.pushpin_data.pushpin_id;
     this.pushpin_id = ppid.toString();
-
-    //TODO : need these values from somewhere
-    this.cur_usr = '3';
-
-    //disable like btn
-    if(this.cb_owner == this.cur_usr){
-      this.like_btn_disable = true;
-      this.follow_btn_disable = true;
-    }
-
-    // get initial data
+    this.cur_usr = localStorage.getItem('cur_user_id');
     this.get_view_pushpin_data();
-
   }
 
   // gets the pushpin data dealing with pin owner name, board name, date it was pinned
   // title, url and description.
   get_view_pushpin_data() {
-
-    console.log(this.corkboard_id);
-    console.log(this.pushpin_id);
     this.userService.ViewPushpin(this.pushpin_id).subscribe((pushpin) => {
         // 0 = owner
         this.name = pushpin[0]['first_name'];
@@ -95,15 +77,19 @@ export class ViewPushpinComponent implements OnInit {
         var raw = this.url.split('/');
 
         for(var j = 0; j < raw.length; j++){
-
           if(!raw[j].startsWith('http') && raw[j] != ''){
-
             this.website = raw[j];
-
             break;
-
         }
+      }
 
+      console.log('current user: ', this.cur_usr);
+        console.log('cb owner: ', this.cb_owner);
+
+      //disable like btn
+      if(this.cb_owner == this.cur_usr){
+        this.like_btn_disable = true;
+        this.follow_btn_disable = true;
       }
 
       //run these initially
@@ -111,7 +97,6 @@ export class ViewPushpinComponent implements OnInit {
         this.load_tags(pushpin);
         this.load_comments(pushpin);
         this.load_likers(pushpin);
-        // TODO!
         this.load_follow();
 
       }
@@ -163,7 +148,6 @@ export class ViewPushpinComponent implements OnInit {
 
   }
 
-
 // get like data out of pushpin
   load_likers(pushpin){
 
@@ -179,11 +163,6 @@ export class ViewPushpinComponent implements OnInit {
         this.likers = this.likers + pushpin[i]['first_name'] + ' ' + pushpin[i]['last_name'];
 
         //if current user already liked
-
-        console.log((pushpin[i]['user_id'].toString()))
-        console.log(this.cur_usr.toString())
-
-        //TODO
         if (pushpin[i].hasOwnProperty("user_id")) {
           if (pushpin[i]['user_id'] == this.cur_usr.toString()) {
               this.like = false;
@@ -192,7 +171,6 @@ export class ViewPushpinComponent implements OnInit {
         }
       }
     }
-
   }
 
 
@@ -243,9 +221,7 @@ export class ViewPushpinComponent implements OnInit {
 
     // //get the comments
     this.userService.ViewPushpin(this.pushpin_id,).subscribe((pushpin) => {
-
       this.load_comments(pushpin);
-
 
     });
 
@@ -298,7 +274,7 @@ export class ViewPushpinComponent implements OnInit {
   followUser() {
 
     // post follow
-    console.log('post follow')
+    console.log('post follow');
 
     this.userService.PostFollow(this.cur_usr, this.cb_owner).subscribe((f) => {
       if (f) {
@@ -320,7 +296,7 @@ export class ViewPushpinComponent implements OnInit {
 
       for(var i = 0; i < following.length; i++)
       {
-        console.log(following[i]['fk_user_followee_id'])
+        console.log(following[i]['fk_user_followee_id']);
 
         if(this.cb_owner != following[i]['fk_user_followee_id'] &&  this.cb_owner != this.cur_usr){
 

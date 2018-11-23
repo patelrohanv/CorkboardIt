@@ -15,6 +15,7 @@ import { Pushpin } from '../models/pushpin';
 @Injectable({
     providedIn: 'root'
 })
+
 export class UserService {
     private baseUrl;
     current_user = "";
@@ -58,7 +59,7 @@ export class UserService {
 
     // /user/
     getUser_ID(id: string): Observable<Object> {
-        const requestURL = this.baseUrl + '/user/?id=' + id
+        const requestURL = this.baseUrl + '/user/?id=' + id;
         return this.http.get<Object>(requestURL);
     }
 
