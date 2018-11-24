@@ -110,28 +110,36 @@ def owned_corkboards(user_id):
     """
     user_id = user_id
 
-    cur.execute("""SELECT board.corkboard_id, board.title, board.visibility, pins_count.pins_count
-    FROM (SELECT owned_corkboard.corkboard_id, COUNT(pin.fk_corkboard_id) as pins_count
-    FROM (SELECT board.title, board.visibility, board.corkboard_id
-    FROM CorkBoard board
-    WHERE board.fk_user_id= %(user)s) owned_corkboard
-    LEFT OUTER JOIN PushPin pin
-    ON pin.fk_corkboard_id = owned_corkboard.corkboard_id
-    GROUP BY owned_corkboard.corkboard_id) pins_count
-    INNER JOIN CorkBoard board
-    ON board.corkboard_id=pins_count.corkboard_id
-    ORDER BY board.title ASC;""", {"user": user_id})
+    try:
+        cur.execute("""SELECT board.corkboard_id, board.title, board.visibility, pins_count.pins_count
+        FROM (SELECT owned_corkboard.corkboard_id, COUNT(pin.fk_corkboard_id) as pins_count
+        FROM (SELECT board.title, board.visibility, board.corkboard_id
+        FROM CorkBoard board
+        WHERE board.fk_user_id= %(user)s) owned_corkboard
+        LEFT OUTER JOIN PushPin pin
+        ON pin.fk_corkboard_id = owned_corkboard.corkboard_id
+        GROUP BY owned_corkboard.corkboard_id) pins_count
+        INNER JOIN CorkBoard board
+        ON board.corkboard_id=pins_count.corkboard_id
+        ORDER BY board.title ASC;""", {"user": user_id})
 
-    headers = [x[0] for x in cur.description]
-    rows = cur.fetchall()
-    data = []
-    for stuff in rows:
-        data.append(dict(zip(headers, stuff)))
+        data = []
 
-    if len(rows) == 0:
-        return jsonify(data = None), 404
-    else:
-        return jsonify(data)
+
+        headers = [x[0] for x in cur.description]
+        rows = cur.fetchall()
+
+        if len(rows) == 0:
+            return jsonify(data), 201
+
+        for stuff in rows:
+            data.append(dict(zip(headers, stuff)))
+
+        else:
+            return jsonify(data)
+    except:
+        return jsonify(data), 201
+
 """
 RECENT CORKBOARD UPDATES
 """
@@ -147,41 +155,44 @@ def recent_updates(user_id):
     """
     user_id = user_id
 
-    cur.execute("""
-    SELECT ckbd.corkboard_id, ckbd.title, ckbd.date_time, ckbd.visibility, CorkBoardItUser.first_name, CorkBoardItUser.last_name
-    FROM (
-    SELECT fcorkboard.corkboard_id, fcorkboard.title, fcorkboard.date_time, fcorkboard.visibility, fcorkboard.fk_user_id
-    FROM (SELECT Follow.fk_user_follower_id
-    FROM Follow
-    WHERE Follow.fk_user_followee_id = %(user)s) fid
-    INNER JOIN CorkBoard fcorkboard
-    ON fcorkboard.fk_user_id = fid.fk_user_follower_id
-    UNION
-    SELECT wcorkboard.corkboard_id, wcorkboard.title, wcorkboard.date_time, wcorkboard.visibility, wcorkboard.fk_user_id
-    FROM (SELECT w.fk_public_corkboard_id
-    FROM Watch w
-    WHERE w.fk_user_id = %(user)s) wid
-    INNER JOIN CorkBoard wcorkboard
-    ON wcorkboard.corkboard_id = wid.fk_public_corkboard_id
-    UNION
-    SELECT CorkBoard.corkboard_id, CorkBoard.title, CorkBoard.date_time, CorkBoard.visibility, CorkBoard.fk_user_id
-    FROM CorkBoard
-    WHERE CorkBoard.fk_user_id = %(user)s
-    ORDER BY date_time DESC
-    LIMIT 4) ckbd
-    INNER JOIN CorkBoardItUser
-    ON CorkBoardItUser.user_id = ckbd.fk_user_id""", {"user": user_id})
+    try:
+        cur.execute("""
+        SELECT ckbd.corkboard_id, ckbd.title, ckbd.date_time, ckbd.visibility, CorkBoardItUser.first_name, CorkBoardItUser.last_name
+        FROM (
+        SELECT fcorkboard.corkboard_id, fcorkboard.title, fcorkboard.date_time, fcorkboard.visibility, fcorkboard.fk_user_id
+        FROM (SELECT Follow.fk_user_follower_id
+        FROM Follow
+        WHERE Follow.fk_user_followee_id = %(user)s) fid
+        INNER JOIN CorkBoard fcorkboard
+        ON fcorkboard.fk_user_id = fid.fk_user_follower_id
+        UNION
+        SELECT wcorkboard.corkboard_id, wcorkboard.title, wcorkboard.date_time, wcorkboard.visibility, wcorkboard.fk_user_id
+        FROM (SELECT w.fk_public_corkboard_id
+        FROM Watch w
+        WHERE w.fk_user_id = %(user)s) wid
+        INNER JOIN CorkBoard wcorkboard
+        ON wcorkboard.corkboard_id = wid.fk_public_corkboard_id
+        UNION
+        SELECT CorkBoard.corkboard_id, CorkBoard.title, CorkBoard.date_time, CorkBoard.visibility, CorkBoard.fk_user_id
+        FROM CorkBoard
+        WHERE CorkBoard.fk_user_id = %(user)s
+        ORDER BY date_time DESC
+        LIMIT 4) ckbd
+        INNER JOIN CorkBoardItUser
+        ON CorkBoardItUser.user_id = ckbd.fk_user_id""", {"user": user_id})
 
-    headers = [x[0] for x in cur.description]
-    rows = cur.fetchall()
-    data = []
-    for stuff in rows:
-        data.append(dict(zip(headers, stuff)))
+        data = []
+        headers = [x[0] for x in cur.description]
+        rows = cur.fetchall()
+        for stuff in rows:
+            data.append(dict(zip(headers, stuff)))
 
-    if len(rows) == 0:
-        return jsonify(data = None), 404
-    else:
-        return jsonify(data)
+        if len(rows) == 0:
+            return jsonify(data = None), 201
+        else:
+            return jsonify(data)
+    except:
+        return jsonify(data), 201
 
 #########################################################################################################
 #########################################################################################################
@@ -191,62 +202,67 @@ VIEW CORKBOARD
 """
 @app.route('/viewcorkboard/<corkboard_id>')
 def view_corkboard(corkboard_id):
-    data = {}
 
-    cur.execute("""SELECT u.first_name, u.last_name, u.user_id, u.email
-    FROM CorkBoard AS cb
-    INNER JOIN CorkBoardItUser AS u
-    ON u.user_id = cb.fk_user_id
-    WHERE cb.corkboard_id = %(corkboard_id)s""", {'corkboard_id':corkboard_id})
+    try:
 
-    headers = [x[0] for x in cur.description]
-    rows = cur.fetchall()
-    for stuff in rows:
-        data['owner'] = (dict(zip(headers, stuff)))
+        data = {}
 
-    cur.execute("""SELECT title, category, date_time, cb.email, COUNT(w.fk_user_id), cb.visibility
-    FROM CorkBoard AS cb
-    LEFT OUTER JOIN PublicCorkBoard AS public
-    ON cb.corkboard_id = public.fk_corkboard_id
-    LEFT OUTER  JOIN Watch AS w
-    ON public.public_corkboard_id = w.fk_public_corkboard_id
-    WHERE cb.corkboard_id = %(corkboard_id)s
-    GROUP BY title, cb.category,  cb.date_time, cb.email, cb.visibility
-    """, {'corkboard_id':corkboard_id})
+        cur.execute("""SELECT u.first_name, u.last_name, u.user_id, u.email
+        FROM CorkBoard AS cb
+        INNER JOIN CorkBoardItUser AS u
+        ON u.user_id = cb.fk_user_id
+        WHERE cb.corkboard_id = %(corkboard_id)s""", {'corkboard_id':corkboard_id})
 
-    headers = [x[0] for x in cur.description]
-    rows = cur.fetchall()
-    for stuff in rows:
-        data['stat'] = (dict(zip(headers, stuff)))
+        headers = [x[0] for x in cur.description]
+        rows = cur.fetchall()
+        for stuff in rows:
+            data['owner'] = (dict(zip(headers, stuff)))
 
-    cur.execute("""SELECT url, pushpin_id
-    FROM Pushpin AS p
-    INNER JOIN CorkBoard AS cb
-    ON p.fk_corkboard_id = cb.corkboard_id
-    WHERE p.fk_corkboard_id = %(corkboard_id)s
-    """, {'corkboard_id':corkboard_id})
+        cur.execute("""SELECT title, category, date_time, cb.email, COUNT(w.fk_user_id), cb.visibility
+        FROM CorkBoard AS cb
+        LEFT OUTER JOIN PublicCorkBoard AS public
+        ON cb.corkboard_id = public.fk_corkboard_id
+        LEFT OUTER  JOIN Watch AS w
+        ON public.public_corkboard_id = w.fk_public_corkboard_id
+        WHERE cb.corkboard_id = %(corkboard_id)s
+        GROUP BY title, cb.category,  cb.date_time, cb.email, cb.visibility
+        """, {'corkboard_id':corkboard_id})
 
-    headers = [x[0] for x in cur.description]
-    rows = cur.fetchall()
-    data['images'] = []
-    for stuff in rows:
-        data['images'].append((dict(zip(headers, stuff))))
+        headers = [x[0] for x in cur.description]
+        rows = cur.fetchall()
+        for stuff in rows:
+            data['stat'] = (dict(zip(headers, stuff)))
 
-    # cur.execute("""SELECT u.user_id
-    # FROM CorkBoardItUser AS u
-    # INNER JOIN Corkboard AS cb
-    # ON u.user_id = cb.fk_user_id
-    # INNER JOIN PublicCorkBoard AS public
-    # ON cb.corkboard_id = public.fk_corkboard_id
-    # WHERE cb.corkboard_id = %(corkboard_id)s
-    # """, {'corkboard_id':corkboard_id})
+        cur.execute("""SELECT url, pushpin_id
+        FROM Pushpin AS p
+        INNER JOIN CorkBoard AS cb
+        ON p.fk_corkboard_id = cb.corkboard_id
+        WHERE p.fk_corkboard_id = %(corkboard_id)s
+        """, {'corkboard_id':corkboard_id})
 
-    # headers = [x[0] for x in cur.description]
-    # rows = cur.fetchall()
-    # for stuff in rows:
-    #     data.append(dict(zip(headers, stuff)))
+        headers = [x[0] for x in cur.description]
+        rows = cur.fetchall()
+        data['images'] = []
+        for stuff in rows:
+            data['images'].append((dict(zip(headers, stuff))))
 
-    return jsonify(data)
+        # cur.execute("""SELECT u.user_id
+        # FROM CorkBoardItUser AS u
+        # INNER JOIN Corkboard AS cb
+        # ON u.user_id = cb.fk_user_id
+        # INNER JOIN PublicCorkBoard AS public
+        # ON cb.corkboard_id = public.fk_corkboard_id
+        # WHERE cb.corkboard_id = %(corkboard_id)s
+        # """, {'corkboard_id':corkboard_id})
+
+        # headers = [x[0] for x in cur.description]
+        # rows = cur.fetchall()
+        # for stuff in rows:
+        #     data.append(dict(zip(headers, stuff)))
+
+        return jsonify(data)
+    except:
+        return jsonify(data)
 
 """
 PRIVATE CORKBOARD - LOGIN
@@ -428,94 +444,96 @@ VIEW PUSHPIN
 @app.route('/viewpushpin/<pushpin_id>')
 def view_pushpin(pushpin_id):
     data = []
-    cur.execute("""SELECT first_name, last_name
-    FROM PushPin AS pp
-    INNER JOIN CorkBoardItUser AS u
-    ON u.user_id = pp.fk_user_id
-    WHERE pp.pushpin_id = %(pushpin_id)s
-    """, {"pushpin_id": pushpin_id})
+    try:
+        cur.execute("""SELECT first_name, last_name
+        FROM PushPin AS pp
+        INNER JOIN CorkBoardItUser AS u
+        ON u.user_id = pp.fk_user_id
+        WHERE pp.pushpin_id = %(pushpin_id)s
+        """, {"pushpin_id": pushpin_id})
 
-    headers = [x[0] for x in cur.description]
-    rows = cur.fetchall()
-    for stuff in rows:
-        data.append(dict(zip(headers, stuff)))
-
-    cur.execute("""SELECT pp.date_time
-    FROM PushPin AS pp
-    WHERE pp.pushpin_id = %(pushpin_id)s
-    """, {"pushpin_id": pushpin_id})
-
-    headers = [x[0] for x in cur.description]
-    rows = cur.fetchall()
-    data.append({headers[0]:rows[0][0]})
-
-    cur.execute("""SELECT title, corkboard_id, pp.fk_user_id
-    FROM PushPin AS pp
-    INNER JOIN CorkBoard as cb
-    ON cb.corkboard_id = pp.fk_corkboard_id
-    WHERE pp.pushpin_id = %(pushpin_id)s
-    """, {"pushpin_id": pushpin_id})
-
-    headers = [x[0] for x in cur.description]
-    rows = cur.fetchall()
-
-    #data.append({headers[0]:rows[0][0]})
-    for stuff in rows:
+        headers = [x[0] for x in cur.description]
+        rows = cur.fetchall()
+        for stuff in rows:
             data.append(dict(zip(headers, stuff)))
 
-    cur.execute("""SELECT url, description
-    FROM PushPin as pp
-    WHERE pp.pushpin_id = %(pushpin_id)s
-    """, {"pushpin_id": pushpin_id})
+        cur.execute("""SELECT pp.date_time
+        FROM PushPin AS pp
+        WHERE pp.pushpin_id = %(pushpin_id)s
+        """, {"pushpin_id": pushpin_id})
 
-    headers = [x[0] for x in cur.description]
-    rows = cur.fetchall()
-    for stuff in rows:
-        data.append(dict(zip(headers, stuff)))
+        headers = [x[0] for x in cur.description]
+        rows = cur.fetchall()
+        data.append({headers[0]:rows[0][0]})
 
-    cur.execute("""SELECT tag
-    FROM Tag AS t
-    INNER JOIN PushPin AS pp
-    ON pp.pushpin_id = t.fk_pushpin_id
-    WHERE t.fk_pushpin_id = %(pushpin_id)s
-    """, {"pushpin_id": pushpin_id})
+        cur.execute("""SELECT title, corkboard_id, pp.fk_user_id
+        FROM PushPin AS pp
+        INNER JOIN CorkBoard as cb
+        ON cb.corkboard_id = pp.fk_corkboard_id
+        WHERE pp.pushpin_id = %(pushpin_id)s
+        """, {"pushpin_id": pushpin_id})
 
-    headers = [x[0] for x in cur.description]
-    rows = cur.fetchall()
-    for stuff in rows:
-        data.append(dict(zip(headers, stuff)))
+        headers = [x[0] for x in cur.description]
+        rows = cur.fetchall()
 
-    cur.execute("""SELECT first_name, last_name, user_id
-    FROM CorkBoardItUser AS u
-    INNER JOIN Liked AS ld
-    ON ld.fk_user_id = u.user_id
-    INNER JOIN PushPin as pp
-    ON pp.pushpin_id  = ld.fk_pushpin_id
-    WHERE  pp.pushpin_id = %(pushpin_id)s
-    """, {"pushpin_id": pushpin_id})
+        #data.append({headers[0]:rows[0][0]})
+        for stuff in rows:
+                data.append(dict(zip(headers, stuff)))
 
-    headers = [x[0] for x in cur.description]
-    rows = cur.fetchall()
-    for stuff in rows:
-        data.append(dict(zip(headers, stuff)))
+        cur.execute("""SELECT url, description
+        FROM PushPin as pp
+        WHERE pp.pushpin_id = %(pushpin_id)s
+        """, {"pushpin_id": pushpin_id})
 
-    cur.execute("""SELECT u.first_name, u.last_name, c.text, c.date_time
-    FROM Comment AS c
-    INNER JOIN CorkBoardItUser AS u
-    ON u.user_id = c.fk_user_id
-    INNER JOIN PushPin as pp
-    ON pp.pushpin_id = c.fk_pushpin_id
-    WHERE c.fk_pushpin_id = %(pushpin_id)s
-    ORDER BY c.date_time DESC
-    """, {"pushpin_id": pushpin_id})
+        headers = [x[0] for x in cur.description]
+        rows = cur.fetchall()
+        for stuff in rows:
+            data.append(dict(zip(headers, stuff)))
 
-    headers = [x[0] for x in cur.description]
-    rows = cur.fetchall()
-    for stuff in rows:
-        data.append(dict(zip(headers, stuff)))
+        cur.execute("""SELECT tag
+        FROM Tag AS t
+        INNER JOIN PushPin AS pp
+        ON pp.pushpin_id = t.fk_pushpin_id
+        WHERE t.fk_pushpin_id = %(pushpin_id)s
+        """, {"pushpin_id": pushpin_id})
 
-    return jsonify(data)
+        headers = [x[0] for x in cur.description]
+        rows = cur.fetchall()
+        for stuff in rows:
+            data.append(dict(zip(headers, stuff)))
 
+        cur.execute("""SELECT first_name, last_name, user_id
+        FROM CorkBoardItUser AS u
+        INNER JOIN Liked AS ld
+        ON ld.fk_user_id = u.user_id
+        INNER JOIN PushPin as pp
+        ON pp.pushpin_id  = ld.fk_pushpin_id
+        WHERE  pp.pushpin_id = %(pushpin_id)s
+        """, {"pushpin_id": pushpin_id})
+
+        headers = [x[0] for x in cur.description]
+        rows = cur.fetchall()
+        for stuff in rows:
+            data.append(dict(zip(headers, stuff)))
+
+        cur.execute("""SELECT u.first_name, u.last_name, c.text, c.date_time
+        FROM Comment AS c
+        INNER JOIN CorkBoardItUser AS u
+        ON u.user_id = c.fk_user_id
+        INNER JOIN PushPin as pp
+        ON pp.pushpin_id = c.fk_pushpin_id
+        WHERE c.fk_pushpin_id = %(pushpin_id)s
+        ORDER BY c.date_time DESC
+        """, {"pushpin_id": pushpin_id})
+
+        headers = [x[0] for x in cur.description]
+        rows = cur.fetchall()
+        for stuff in rows:
+            data.append(dict(zip(headers, stuff)))
+
+        return jsonify(data)
+    except:
+        return jsonify(data), 201
 
 # """
 # FOLLOW FOR PUSHPIN
@@ -685,17 +703,22 @@ Get FOLLOWING
 @app.route('/getfollowers/<user_id>', methods=['GET'])
 def get_followers(user_id):
 
-    if request.method == 'GET':
-        cur.execute(""" SELECT fk_user_followee_id FROM follow WHERE fk_user_follower_id = %(user_id)s""",
-        {'user_id':user_id})
+    data = []
+    try:
 
-        headers = [x[0] for x in cur.description]
-        rows = cur.fetchall()
-        data = []
-        for stuff in rows:
-            data.append(dict(zip(headers, stuff)))
+        if request.method == 'GET':
+            cur.execute(""" SELECT fk_user_followee_id FROM follow WHERE fk_user_follower_id = %(user_id)s""",
+            {'user_id':user_id})
 
+            headers = [x[0] for x in cur.description]
+            rows = cur.fetchall()
+            for stuff in rows:
+                data.append(dict(zip(headers, stuff)))
+
+            return jsonify(data)
+    except:
         return jsonify(data)
+
 
 
 
@@ -710,27 +733,32 @@ SEARCH PUSHPIN
 """
 @app.route('/searchpushpin/<search_text>')
 def search_pushpin(search_text):
-    cur.execute("""SELECT DISTINCT ON (search.description) search.description,  search.pushpin_id,
-    search.title, search.first_name, search.last_name
-    FROM(SELECT PushPin.description,  PushPin.pushpin_id, CorkBoard.title, CorkBoard.category,
-    CorkBoardItUser.first_name, CorkBoardItUser.last_name, Tag.tag
-    FROM CorkBoard INNER JOIN CorkBoardItUser ON CorkBoard.fk_user_id = CorkBoardItUser.user_id
-    INNER JOIN PushPin ON CorkBoard.corkboard_id = PushPin.fk_corkboard_id
-    FULL OUTER JOIN Tag ON Tag.fk_pushpin_id = PushPin.pushpin_id NATURAL JOIN PublicCorkBoard
-    WHERE description LIKE %(search)s OR category
-    LIKE %(search)s OR tag LIKE %(search)s)search
-    ORDER BY description ASC""", {'search': '%'+search_text+'%'})
-
-    headers = [x[0] for x in cur.description]
-    rows = cur.fetchall()
     data = []
-    for stuff in rows:
-        data.append(dict(zip(headers, stuff)))
+    try:
+        cur.execute("""SELECT DISTINCT ON (search.description) search.description,  search.pushpin_id,
+        search.title, search.first_name, search.last_name
+        FROM(SELECT PushPin.description,  PushPin.pushpin_id, CorkBoard.title, CorkBoard.category,
+        CorkBoardItUser.first_name, CorkBoardItUser.last_name, Tag.tag
+        FROM CorkBoard INNER JOIN CorkBoardItUser ON CorkBoard.fk_user_id = CorkBoardItUser.user_id
+        INNER JOIN PushPin ON CorkBoard.corkboard_id = PushPin.fk_corkboard_id
+        FULL OUTER JOIN Tag ON Tag.fk_pushpin_id = PushPin.pushpin_id NATURAL JOIN PublicCorkBoard
+        WHERE description LIKE %(search)s OR category
+        LIKE %(search)s OR tag LIKE %(search)s)search
+        ORDER BY description ASC""", {'search': '%'+search_text+'%'})
 
-    if len(rows) == 0:
-        return jsonify(data = None), 404
-    else:
+        headers = [x[0] for x in cur.description]
+        rows = cur.fetchall()
+
+        for stuff in rows:
+            data.append(dict(zip(headers, stuff)))
+
+        if len(rows) == 0:
+            return jsonify(data = None), 201
+        else:
+            return jsonify(data)
+    except:
         return jsonify(data)
+
 
 #########################################################################################################
 #########################################################################################################
@@ -740,22 +768,27 @@ POPULAR TAGS
 """
 @app.route('/populartags')
 def popular_tags():
-    cur.execute("""SELECT Tag.tag, COUNT(Tag.Tag) AS pushpins, COUNT(DISTINCT Corkboard.corkboard_id) as unique_cb
-    FROM Tag INNER JOIN PushPin ON Tag.fk_pushpin_id = PushPin.pushpin_id
-    INNER JOIN CorkBoard ON CorkBoard.corkboard_id = PushPin.fk_corkboard_id
-    GROUP BY tag
-    ORDER BY pushpins DESC
-    LIMIT 5""")
-
-    headers = [x[0] for x in cur.description]
-    rows = cur.fetchall()
     data = []
-    for stuff in rows:
-        data.append(dict(zip(headers, stuff)))
+    try:
 
-    if len(rows) == 0:
-        return jsonify(data = None), 404
-    else:
+        cur.execute("""SELECT Tag.tag, COUNT(Tag.Tag) AS pushpins, COUNT(DISTINCT Corkboard.corkboard_id) as unique_cb
+        FROM Tag INNER JOIN PushPin ON Tag.fk_pushpin_id = PushPin.pushpin_id
+        INNER JOIN CorkBoard ON CorkBoard.corkboard_id = PushPin.fk_corkboard_id
+        GROUP BY tag
+        ORDER BY pushpins DESC
+        LIMIT 5""")
+
+        headers = [x[0] for x in cur.description]
+        rows = cur.fetchall()
+
+        for stuff in rows:
+            data.append(dict(zip(headers, stuff)))
+
+        if len(rows) == 0:
+            return jsonify(data = None), 404
+        else:
+            return jsonify(data)
+    except:
         return jsonify(data)
 
 #########################################################################################################
@@ -766,21 +799,25 @@ POPULAR TAGS
 """
 @app.route('/popularsites')
 def get_popular_sites():
-    cur.execute("""SELECT PushPin.url as site, COUNT(PushPin.url) as pushpins
-    FROM PushPin
-    GROUP BY site
-    ORDER BY pushpins DESC
-    LIMIT 4""")
-
-    headers = [x[0] for x in cur.description]
-    rows = cur.fetchall()
     data = []
-    for stuff in rows:
-        data.append(dict(zip(headers, stuff)))
+    try:
+        cur.execute("""SELECT PushPin.url as site, COUNT(PushPin.url) as pushpins
+        FROM PushPin
+        GROUP BY site
+        ORDER BY pushpins DESC
+        LIMIT 4""")
 
-    if len(rows) == 0:
-        return jsonify(data = None), 404
-    else:
+        headers = [x[0] for x in cur.description]
+        rows = cur.fetchall()
+
+        for stuff in rows:
+            data.append(dict(zip(headers, stuff)))
+
+        if len(rows) == 0:
+            return jsonify(data = None), 404
+        else:
+            return jsonify(data)
+    except:
         return jsonify(data)
 
 #########################################################################################################
@@ -791,26 +828,30 @@ CORKBOARD STATISTICS
 """
 @app.route('/corkboardstats')
 def corkboard_stats():
-    cur.execute("""SELECT CorkBoardItUser.first_name, CorkBoardItUser.last_name, COUNT(DISTINCT
-    PublicCorkBoard.fk_corkboard_id) AS public_cb, COUNT(DISTINCT pub_pin.pushpin_id) AS
-    pub_pushpins, COUNT(DISTINCT PrivateCorkBoard.fk_corkboard_id) AS private_cb,
-    COUNT(DISTINCT pr_pin.pushpin_id) AS private_pushpins
-    FROM CorkBoardItUser FULL OUTER JOIN CorkBoard ON CorkBoardItUser.user_id = CorkBoard.fk_user_id
-    FULL OUTER JOIN PublicCorkBoard ON CorkBoard.corkboard_id = PublicCorkBoard.fk_corkboard_id
-    LEFT OUTER JOIN Pushpin pub_pin ON PublicCorkBoard.fk_corkboard_id = pub_pin.fk_corkboard_id
-    FULL OUTER JOIN PrivateCorkBoard ON CorkBoard.corkboard_id = PrivateCorkBoard.fk_corkboard_id
-    LEFT OUTER JOIN Pushpin pr_pin ON PrivateCorkBoard.fk_corkboard_id = pr_pin.fk_corkboard_id
-    GROUP BY first_name, last_name""")
-
-    headers = [x[0] for x in cur.description]
-    rows = cur.fetchall()
     data = []
-    for stuff in rows:
-        data.append(dict(zip(headers, stuff)))
+    try:
+        cur.execute("""SELECT CorkBoardItUser.first_name, CorkBoardItUser.last_name, COUNT(DISTINCT
+        PublicCorkBoard.fk_corkboard_id) AS public_cb, COUNT(DISTINCT pub_pin.pushpin_id) AS
+        pub_pushpins, COUNT(DISTINCT PrivateCorkBoard.fk_corkboard_id) AS private_cb,
+        COUNT(DISTINCT pr_pin.pushpin_id) AS private_pushpins
+        FROM CorkBoardItUser FULL OUTER JOIN CorkBoard ON CorkBoardItUser.user_id = CorkBoard.fk_user_id
+        FULL OUTER JOIN PublicCorkBoard ON CorkBoard.corkboard_id = PublicCorkBoard.fk_corkboard_id
+        LEFT OUTER JOIN Pushpin pub_pin ON PublicCorkBoard.fk_corkboard_id = pub_pin.fk_corkboard_id
+        FULL OUTER JOIN PrivateCorkBoard ON CorkBoard.corkboard_id = PrivateCorkBoard.fk_corkboard_id
+        LEFT OUTER JOIN Pushpin pr_pin ON PrivateCorkBoard.fk_corkboard_id = pr_pin.fk_corkboard_id
+        GROUP BY first_name, last_name""")
 
-    if len(rows) == 0:
-        return jsonify(data = None), 404
-    else:
+        headers = [x[0] for x in cur.description]
+        rows = cur.fetchall()
+
+        for stuff in rows:
+            data.append(dict(zip(headers, stuff)))
+
+        if len(rows) == 0:
+            return jsonify(data = None), 404
+        else:
+            return jsonify(data)
+    except:
         return jsonify(data)
 
 @app.route('/')
