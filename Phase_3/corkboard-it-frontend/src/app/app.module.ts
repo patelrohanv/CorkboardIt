@@ -13,6 +13,7 @@ import {
     MatSelectModule,
     MatRadioModule,
     MatFormFieldModule,
+    MatGridListModule,
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import * as rxjs from 'rxjs';
@@ -57,6 +58,7 @@ import { UiModule } from './ui.module';
         MatSelectModule,
         MatRadioModule,
         MatFormFieldModule,
+        MatGridListModule,
     ],
     bootstrap: [AppComponent],
     entryComponents: [

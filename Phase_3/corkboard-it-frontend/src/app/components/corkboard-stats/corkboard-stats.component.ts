@@ -17,13 +17,21 @@ export class CorkboardStatsComponent implements OnInit {
     dataSource = new CorkboardStatsDataSource(this.userService);
 
     cb_stats_displayedColumns: string[] = ['user_name', 'public_cb', 'pub_pushpins', 'private_cb', 'private_pushpins'];
+    
+    u: string;
 
     constructor(public dialogRef: MatDialogRef<CorkboardStatsComponent>, private userService: UserService,
-        @Inject(MAT_DIALOG_DATA) public data: User) { }
+        @Inject(MAT_DIALOG_DATA) public data: User) { 
+            this.u = data.first_name + "_" + data.last_name;
+        }
 
     ngOnInit() {
     }
-}
+    
+    logRow(row): void {
+        console.log(row);
+    }
+ }
 
 export class CorkboardStatsDataSource extends DataSource<any> {
     constructor(private userService: UserService) {

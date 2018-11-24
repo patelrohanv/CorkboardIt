@@ -40,10 +40,10 @@ export class ViewCorkboardComponent implements OnInit {
 
     setCurrentCorkBoard() {
         this.current_corkboard.category = this.corkboard_details.stat.category;
-        this.current_corkboard.corkboard_id = this.cbid;
+        this.current_corkboard.corkboard_id = this.cbid.toString();
         this.current_corkboard.date_time = this.corkboard_details.stat.date;
         this.current_corkboard.email = this.corkboard_details.owner.email;
-        this.current_corkboard.fk_user_id = this.corkboard_details.owner.user_id;
+        this.current_corkboard.fk_user_id = this.corkboard_details.owner.user_id.toString();
         this.current_corkboard.title = this.corkboard_details.stat.title;
         this.current_corkboard.visibility = this.corkboard_details.stat.visibility;
     }
