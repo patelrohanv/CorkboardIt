@@ -25,6 +25,8 @@ export class ViewPushpinComponent implements OnInit {
   private tags: String = '';
 
   private website : string;
+  private http: string;
+  private domainName: string = '';
 
   private likers: String = '';
   private like = true;
@@ -77,8 +79,24 @@ export class ViewPushpinComponent implements OnInit {
         var raw = this.url.split('/');
 
         for(var j = 0; j < raw.length; j++){
+          if(raw[j].startsWith('http')){
+            this.http = raw[j];
+          }
           if(!raw[j].startsWith('http') && raw[j] != ''){
+
             this.website = raw[j];
+
+            var tmp = raw[j].split('.');
+            for(var k = 0; k < tmp.length; k++){
+              if(this.domainName.length > 0){
+                this.domainName = this.domainName + ".";
+              }
+              if(!tmp[k].startsWith('www')){
+                this.domainName = this.domainName +tmp[k];
+              }
+            }
+
+            //this.website = raw[j];
             break;
         }
       }
