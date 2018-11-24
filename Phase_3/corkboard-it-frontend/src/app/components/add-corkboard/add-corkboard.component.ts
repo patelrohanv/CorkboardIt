@@ -31,7 +31,7 @@ export class AddCorkboardComponent implements OnInit {
     }
 
     addCorkBoard() {
-      if(this.visibility.valid) {
+      if(this.visibility.valid && this.title.valid && this.category.valid) {
         console.log(this.data);
         const cb = new Corkboard();
         cb.title = this.title.value;
