@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { Corkboard } from '../../models/corkboard';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ViewCorkBoard, PushpinImage } from 'src/app/models/viewCorkBoard';
+import { ViewCorkBoard, PushpinImage, ViewCorkBoardStat } from 'src/app/models/viewCorkBoard';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogConfig } from '@angular/material';
 import { AddPushpinComponent } from '../add-pushpin/add-pushpin.component';
+import { User } from 'src/app/models/user';
 
 @Component({
     selector: 'app-view-corkboard',
@@ -12,60 +13,106 @@ import { AddPushpinComponent } from '../add-pushpin/add-pushpin.component';
     styleUrls: ['./view-corkboard.component.scss']
 })
 export class ViewCorkboardComponent implements OnInit {
-    user_id = "";
-    corkboard_details: ViewCorkBoard
-    current_corkboard: Corkboard
-    cbid: string
-    canAdd: boolean
-    canWatch: boolean
-    canFollow: boolean
+    cur_user_id = "";
+    owner: User;
+    corkboard_stat: ViewCorkBoardStat
     pushpins: PushpinImage[]
+
+    cbid: string
+    add_btn_disable: boolean
+    watch_btn_disable: boolean
+    follow_btn_disable: boolean
+
     constructor(public dialog: MatDialog, private userService: UserService, private router: ActivatedRoute, private navigator: Router) { }
     ngOnInit() {
         this.cbid = this.router.snapshot.params['cbid'];
+        this.updateData()
+    }
+
+    updateData() {
         this.userService.getViewCorkboard(this.cbid).subscribe((data: ViewCorkBoard) => {
-            console.log(data);
-            this.user_id = localStorage.getItem['cur_user_id']
-            this.corkboard_details = data
-            console.log(this.corkboard_details, this.user_id)
+            this.cur_user_id = localStorage.getItem('cur_user_id')
+            this.owner = data.owner
+            this.corkboard_stat = data.stat
+            this.pushpins = data.images
+            this.load_watch()
             this.updateCanAdd()
             this.updateCanFollow()
             this.updateCanWatch()
-            this.pushpins = this.corkboard_details.images
-            console.log(this.pushpins)
-            console.log('here', this.corkboard_details, this.user_id, this.canAdd)
-            
+            this.load_follow()
         })
-    
     }
 
     updateCanAdd() {
-        this.canAdd = this.user_id == this.corkboard_details.owner.user_id ?
-                      true : false;
+        this.add_btn_disable = this.cur_user_id == this.owner.user_id ?
+                      false : true;
     }
 
     updateCanWatch() {
-        this.canWatch = this.corkboard_details.stat.visibility == true &&
-                        this.user_id != this.corkboard_details.owner.user_id ?
-                        true : false;
+        this.watch_btn_disable = this.corkboard_stat.visibility == true &&
+                        this.cur_user_id != this.owner.user_id ?
+                        false : true;
     }
 
     updateCanFollow() {
-        this.canFollow = this.corkboard_details.owner.user_id != this.user_id ? true : false
+        this.follow_btn_disable = this.owner.user_id != this.cur_user_id ? false : true
     }
 
     addPushpin(): void {
         const dialogConfig = new MatDialogConfig();
         dialogConfig.autoFocus = true;
-        dialogConfig.data = this.current_corkboard
 
         const dialogRef = this.dialog.open(AddPushpinComponent, dialogConfig);
     }
-    followCorkboard(): void {
 
+    watch_corkboard() {
+        this.userService.PostWatch(this.cur_user_id, this.cbid).subscribe((f) => {
+            this.updateData()
+        })
     }
-    watchCorkboard(): void {
-        
+
+    load_watch() {
+        this.userService.GetWatch(this.cbid).subscribe((watch: []) => {
+            for(let i = 0; i < watch.length; i++) {
+                console.log(watch[i]['fk_user_id'])
+                if(watch[i]['fk_user_id'] == this.cur_user_id) {
+                    this.watch_btn_disable = true;
+                    break;
+                }
+            }
+        })
+    }
+
+    follow_user() {
+        console.log('post follow');
+        console.log(localStorage.getItem('cur_user_id'))
+        console.log(this.cur_user_id, this.owner.user_id)
+        this.userService.PostFollow(this.cur_user_id, this.owner.user_id).subscribe((f) => {
+            if (f) {
+                console.log('now following!');
+                this.load_follow();
+            }
+        });
+        console.log('follow')
+    }
+
+    load_follow() {
+        this.userService.GetFollow(this.cur_user_id).subscribe((following)=>{
+
+        for(var i = 0; i < following.length; i++)
+        {
+            console.log(following[i]['fk_user_followee_id']);
+
+            if(this.owner.user_id != following[i]['fk_user_followee_id'] &&  this.owner.user_id != this.cur_user_id){
+
+            // do nothing
+            }
+            else{
+            //TODO unfollow?
+            this.follow_btn_disable = true;
+            }
+        }
+        });
     }
 
     navigateToPushPin(id): void {

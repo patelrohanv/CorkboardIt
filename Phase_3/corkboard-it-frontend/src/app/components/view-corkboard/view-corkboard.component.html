@@ -1,30 +1,24 @@
 <div>
-  <div>
-    <div class="info">
-      <mat-toolbar>Owner: {{corkboard_details?.owner.first_name}} {{corkboard_details?.owner.last_name}}</mat-toolbar>
-      <mat-toolbar>Title: {{corkboard_details?.stat.title}}</mat-toolbar>
-      <mat-toolbar>Category: {{corkboard_details?.stat.category}}</mat-toolbar>
-      <mat-toolbar>{{corkboard_details?.stat.date}}</mat-toolbar>
-    </div>
-    <div *ngIf="canFollow" class="follow">
-      <mat-button-toggle value="follow" (click)="followCorkboard()">
-        Follow
-      </mat-button-toggle>
-    </div>
-    <div *ngIf="canWatch" class="watch">
-      <mat-button-toggle value="watch" (click)="watchCorkboard()">
-        Watch
-      </mat-button-toggle>
-    </div>
-    <div *ngIf="canAdd" class="add">
-      <button mat-button (click)="addPushpin()">Add Pushpin</button>
-    </div>
-  </div>
+    <mat-card>
+        <mat-card-header>
+          <mat-card-title>{{owner?.first_name}} {{owner?.last_name}}</mat-card-title>
+          <mat-card-title>{{corkboard_stat?.title}}</mat-card-title>
+          <mat-card-subtitle>{{corkboard_stat?.category}}</mat-card-subtitle>
+          <mat-card-subtitle>{{corkboard_stat?.date_time}}</mat-card-subtitle>
+          <mat-card-subtitle>{{corkboard_stat?.count}} watching</mat-card-subtitle>
+        </mat-card-header>
 
+        <mat-card-actions>
+            <button mat-flat-button [disabled]="follow_btn_disable" (click)="follow_user()">FOLLOW</button>
+            <button mat-flat-button [disabled]="watch_btn_disable" (click)="watch_corkboard()">WATCH</button>
+            <button mat-flat-button [disabled]="add_btn_disable" (click)="addPushpin()">ADD PUSHPIN</button>
+        </mat-card-actions>
+    </mat-card>
   
-
-  <div *ngFor="let pushpin of pushpins">
-      <img (click)="navigateToPushPin(pushpin.pushpin_id)" mat-card-image src={{pushpin.url}} alt="Pushpin Photo">
+    <div class="container" fxLayout="row wrap" fxLayoutAlign="center">
+    <ng-container *ngFor="let pushpin of pushpins">
+        <img (click)="navigateToPushPin(pushpin.pushpin_id)" src={{pushpin.url}} alt="Pushpin Photo">
+    </ng-container>
   </div>
 
 </div>

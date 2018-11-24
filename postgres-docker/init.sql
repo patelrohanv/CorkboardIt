@@ -87,8 +87,8 @@ VALUES
     (4, 'juliematchamer@gg.com', '2018-06-20 19:10:25-07', 'College Stuff', 'Education', true),
     (1, 'icyling@gg.com', '2018-06-21 19:10:25-07', 'Peeps', 'People', true),
     (2, 'ronpatel@gg.com', '2018-06-22 19:10:25-07', 'Cool Buildings', 'Architecture', false),
-    (9, 'puccio@gg.com', '2018-06-20 19:10:25-07', 'I love Climbing', 'Sports', true),
-    (8, 'sharma@gg.com', '2018-06-20 19:10:25-07', 'Good Drinks', 'Food & Drink', false),
+    (9, 'puccio@gg.com', '2018-06-20 19:10:25-07', 'I love Climbing', 'Sports', false),
+    (8, 'sharma@gg.com', '2018-06-20 19:10:25-07', 'Good Drinks', 'Food & Drink', true),
     (7, 'sharma@gg.com', '2018-06-20 19:10:25-07', 'Cool Tech Stuff', 'Technology', true),
     (6, 'steve@gg.com', '2018-06-20 19:10:25-07', 'Places I want to go', 'Travel', false),
     (4, 'juliematchamer@gg.com', '2018-06-20 19:10:25-07', 'Cats', 'Pest', true),
@@ -98,7 +98,8 @@ INSERT INTO PublicCorkBoard(fk_corkboard_id)
 VALUES 
     (1),
     (2),
-    (4),
+    (3),
+
     (6),
     (7),
     (9),
@@ -106,7 +107,7 @@ VALUES
 
 INSERT INTO PrivateCorkBoard(fk_corkboard_id, password)
 VALUES
-    (3, 'imsoop'),
+    (4, 'imsoop'),
     (5, 'imsoop'),
     (8, 'imsoop');
 

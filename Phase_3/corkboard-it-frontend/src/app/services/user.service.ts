@@ -144,6 +144,26 @@ export class UserService {
         };
         return this.http.post<Object>(requestURL, body, httpOptions);
     }
+    
+    GetWatch(current_corkboard_id: string): Observable<Object> {
+        const requestURL = this.baseUrl + '/corkboardwatchers/' + current_corkboard_id;
+        return this.http.get(requestURL);
+    }
+
+    PostWatch(current_user_id: string, corkboard_id: string): Observable<Object> {
+        console.log('posting watch', current_user_id)
+        const requestURL = this.baseUrl + '/watchcorkboard';
+        const body = {
+            'user_id': current_user_id,
+            'corkboard_id': corkboard_id
+        };
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            })
+        };
+        return this.http.post<Object>(requestURL, body, httpOptions);
+    }
 
     // TODO: Need to test this
     PostFollow(current_user_id: string, follow_user_id: string): Observable<Object> {

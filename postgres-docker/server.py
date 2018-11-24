@@ -138,6 +138,7 @@ def owned_corkboards(user_id):
         else:
             return jsonify(data)
     except:
+        print(user_id, file=sys.stderr)
         return jsonify(data), 201
 
 """
@@ -300,6 +301,31 @@ def validate_private_corkboard_login(corkboard_id):
 #     """, {'corkboard_id':corkboard_id})
 
 #     return 'being built rn'
+
+"""
+GET WATCH CORKBOARD
+"""
+@app.route('/corkboardwatchers/<corkboard_id>')
+def get_watchers(corkboard_id):
+    corkboard_watchers = []
+    try:
+        cur.execute("""SELECT *
+        FROM Watch
+        WHERE fk_public_corkboard_id = %(corkboard_id)s
+        """, {'corkboard_id': corkboard_id})
+
+        headers = [x[0] for x in cur.description]
+        rows = cur.fetchall()
+
+        for stuff in rows:
+            corkboard_watchers.append((dict(zip(headers, stuff))))
+        
+        return jsonify(corkboard_watchers)
+    except:
+        return jsonify(corkboard_watchers)
+
+
+       
 
 """
 WATCH CORKBOARD
