@@ -4,6 +4,15 @@
 .center-text {
     text-align: center;
 }
-.buttons {
-    margin: 0 auto;
+
+button {
+    margin: 1em 0.5em;
+}
+
+.container {
+    margin: 1em 2em;
+}
+
+mat-card {
+    margin: 0.5em 0;
 }

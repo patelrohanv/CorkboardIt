@@ -421,21 +421,32 @@ def corkboard_title(corkboard_id):
 
 @app.route('/addpushpin', methods=['POST'])
 def add_pushpin():
-    if request.method == 'POST':
-        content = request.get_json()
-        user_id = content['user_id']
-        corkboard_id = content['corkboard_id']
-        date_time = content['date_time']
-        url = content['url']
-        description = content['description']
+    try:
+        if request.method == 'POST':
+            content = request.get_json()
+            user_id = content['user_id']
+            corkboard_id = content['corkboard_id']
+            date_time = content['date_time']
+            url = content['url']
+            description = content['description']
 
-        cur.execute("""INSERT INTO PushPin (pushpin_id, fk_user_id, fk_corkboard_id, date_time, url, description)
-        VALUES (DEFAULT, %(user_id)s, %(corkboard_id)s, %(date_time)s, %(url)s, %(description)s)
-        """, {"user_id": user_id, "corkboard_id": corkboard_id, "date_time": date_time, "url": url, "description": description})
+            cur.execute("""INSERT INTO PushPin (pushpin_id, fk_user_id, fk_corkboard_id, date_time, url, description)
+            VALUES (DEFAULT, %(user_id)s, %(corkboard_id)s, %(date_time)s, %(url)s, %(description)s)
+            """, {"user_id": user_id, "corkboard_id": corkboard_id, "date_time": date_time, "url": url, "description": description})
 
-        conn.commit()
-        #return corkboard_id
-        return jsonify(corkboard_id)
+            conn.commit()
+
+            # update corkboard time
+            cur.execute("""UPDATE corkboard SET date_time = %(date_time)s WHERE corkboard_id = %(corkboard_id)""",
+            {"date_time": date_time, "corkboard_id":corkboard_id})
+
+            conn.commit()
+
+            #return corkboard_id
+            return jsonify(corkboard_id)
+    except:
+        print('error adding pushpin')
+
 
 @app.route('/addtags', methods=['POST'])
 def add_tags():
