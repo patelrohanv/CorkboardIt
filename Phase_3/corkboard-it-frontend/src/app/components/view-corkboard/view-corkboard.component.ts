@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { Corkboard } from '../../models/corkboard';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ViewCorkBoard } from 'src/app/models/viewCorkBoard';
+import { ViewCorkBoard, PushpinImage } from 'src/app/models/viewCorkBoard';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogConfig } from '@angular/material';
 import { AddPushpinComponent } from '../add-pushpin/add-pushpin.component';
 
@@ -19,33 +19,24 @@ export class ViewCorkboardComponent implements OnInit {
     canAdd: boolean
     canWatch: boolean
     canFollow: boolean
-    constructor(public dialog: MatDialog, private userService: UserService, private router: ActivatedRoute) { }
+    pushpins: PushpinImage[]
+    constructor(public dialog: MatDialog, private userService: UserService, private router: ActivatedRoute, private navigator: Router) { }
     ngOnInit() {
         this.cbid = this.router.snapshot.params['cbid'];
         this.userService.getViewCorkboard(this.cbid).subscribe((data: ViewCorkBoard) => {
             console.log(data);
-            this.user_id = this.userService.getCurrentUser()
+            this.user_id = localStorage.getItem['cur_user_id']
             this.corkboard_details = data
             console.log(this.corkboard_details, this.user_id)
             this.updateCanAdd()
             this.updateCanFollow()
             this.updateCanWatch()
-            this.setCurrentCorkBoard()
+            this.pushpins = this.corkboard_details.images
+            console.log(this.pushpins)
             console.log('here', this.corkboard_details, this.user_id, this.canAdd)
             
         })
-      
-
-    }
-
-    setCurrentCorkBoard() {
-        this.current_corkboard.category = this.corkboard_details.stat.category;
-        this.current_corkboard.corkboard_id = this.cbid.toString();
-        this.current_corkboard.date_time = this.corkboard_details.stat.date;
-        this.current_corkboard.email = this.corkboard_details.owner.email;
-        this.current_corkboard.fk_user_id = this.corkboard_details.owner.user_id.toString();
-        this.current_corkboard.title = this.corkboard_details.stat.title;
-        this.current_corkboard.visibility = this.corkboard_details.stat.visibility;
+    
     }
 
     updateCanAdd() {
@@ -74,5 +65,11 @@ export class ViewCorkboardComponent implements OnInit {
 
     }
     watchCorkboard(): void {
+        
+    }
+
+    navigateToPushPin(id): void {
+        console.log('clikced')
+        this.navigator.navigate(['/viewpushpin/', id]);
     }
 }

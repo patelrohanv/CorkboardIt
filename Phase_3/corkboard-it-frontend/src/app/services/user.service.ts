@@ -18,17 +18,8 @@ import { Pushpin } from '../models/pushpin';
 
 export class UserService {
     private baseUrl;
-    current_user = "";
     constructor(private http: HttpClient) {
         this.baseUrl = environment.baseUrl;
-    }
-
-    updateCurrentUser(user_id: string) {
-        this.current_user = user_id;
-    }
-
-    getCurrentUser() {
-        return this.current_user;
     }
 
     // /logi

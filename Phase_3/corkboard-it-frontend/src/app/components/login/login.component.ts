@@ -30,7 +30,6 @@ export class LoginComponent implements OnInit {
             this.userService.postLogin(id, this.pin_input).subscribe((user) => {
                 console.log(user);
                 if (user) {
-                    this.userService.updateCurrentUser(id)
                     localStorage.setItem('cur_user_id', id);
                     this.router.navigate(['/home/', id]);
                 } else {

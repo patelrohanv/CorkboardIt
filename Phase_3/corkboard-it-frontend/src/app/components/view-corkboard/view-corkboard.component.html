@@ -20,16 +20,11 @@
       <button mat-button (click)="addPushpin()">Add Pushpin</button>
     </div>
   </div>
-  <div class="pins">
-    <mat-grid-list cols="2" rowHeight="2:1">
-      <div *ngFor="let pushpin of corkboard_details.images">
-        <mat-grid-tile>
-          <mat-card>
-            <img mat-card-image src={{pushpin.url}} alt="Pushpin Photo">
-          </mat-card>
-        </mat-grid-tile>
-      </div>
-    </mat-grid-list>
+
+  
+
+  <div *ngFor="let pushpin of pushpins">
+      <img (click)="navigateToPushPin(pushpin.pushpin_id)" mat-card-image src={{pushpin.url}} alt="Pushpin Photo">
   </div>
 
 </div>
