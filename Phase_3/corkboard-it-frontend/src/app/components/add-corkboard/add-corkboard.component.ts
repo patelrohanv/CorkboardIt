@@ -31,6 +31,7 @@ export class AddCorkboardComponent implements OnInit {
     }
 
     addCorkBoard() {
+      if(this.visibility.valid) {
         console.log(this.data);
         const cb = new Corkboard();
         cb.title = this.title.value;
@@ -40,14 +41,15 @@ export class AddCorkboardComponent implements OnInit {
         cb.category = this.category.value;
         cb.visibility = this.visibility.value;
         if (!cb.visibility) {
-            cb.password = this.password.value;
+          cb.password = this.password.value;
         }
         console.log(cb);
         this.userService.postAddCorkboard(cb).subscribe((corkboard) => {
-            console.log(corkboard)
-            this.dialogRef.close()
-            this.router.navigate(['/viewcorkboard/', corkboard]);
+          console.log(corkboard)
+          this.dialogRef.close()
+          this.router.navigate(['/viewcorkboard/', corkboard]);
         });
+      }
     }
 
     disablePassword() {
