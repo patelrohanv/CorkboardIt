@@ -4,7 +4,7 @@
   <!-- User Column -->
   <ng-container matColumnDef="user_name">
     <th mat-header-cell *matHeaderCellDef> User </th>
-    <td mat-cell *matCellDef="let stat"> {{stat.first_name}} {{stat.last_name}} </td>
+    <td [ngClass]="{'highlight': isCurrentUser(stat)}" mat-cell *matCellDef="let stat"> {{stat.first_name}} {{stat.last_name}} </td>
   </ng-container>
 
   <!-- Public CorkBoard Column -->

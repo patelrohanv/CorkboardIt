@@ -19,10 +19,11 @@ export class CorkboardStatsComponent implements OnInit {
     cb_stats_displayedColumns: string[] = ['user_name', 'public_cb', 'pub_pushpins', 'private_cb', 'private_pushpins'];
     
     u: string;
-
+    uid: string;
     constructor(public dialogRef: MatDialogRef<CorkboardStatsComponent>, private userService: UserService,
         @Inject(MAT_DIALOG_DATA) public data: User) { 
             this.u = data.first_name + "_" + data.last_name;
+            this.uid = data.user_id
         }
 
     ngOnInit() {
@@ -30,6 +31,11 @@ export class CorkboardStatsComponent implements OnInit {
     
     logRow(row): void {
         console.log(row);
+    }
+
+    isCurrentUser(user_id: string) {
+        console.log(user_id);
+        return (user_id == this.uid) ? true : false;
     }
  }
 

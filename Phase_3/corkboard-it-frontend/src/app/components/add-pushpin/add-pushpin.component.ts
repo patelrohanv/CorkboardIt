@@ -37,7 +37,7 @@ export class AddPushpinComponent implements OnInit {
         const tags = this.tags.value.split(",");
         this.userService.postAddPushpin(pushpin).subscribe((pin) => {
             const id = pin['pushpin_id'];
-            this.dialogRef.componentInstance.ngOnInit();
+            // this.dialogRef.componentInstance.ngOnInit();
             this.dialogRef.close();
         })
     }
