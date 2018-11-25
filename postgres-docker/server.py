@@ -126,7 +126,7 @@ def owned_corkboards(user_id):
         data = []
 
         conn.commit()
-        
+
         headers = [x[0] for x in cur.description]
         rows = cur.fetchall()
 
@@ -887,7 +887,7 @@ def corkboard_stats():
         LEFT OUTER JOIN Pushpin pub_pin ON PublicCorkBoard.fk_corkboard_id = pub_pin.fk_corkboard_id
         FULL OUTER JOIN PrivateCorkBoard ON CorkBoard.corkboard_id = PrivateCorkBoard.fk_corkboard_id
         LEFT OUTER JOIN Pushpin pr_pin ON PrivateCorkBoard.fk_corkboard_id = pr_pin.fk_corkboard_id
-        GROUP BY user_id, first_name, last_name""")
+        GROUP BY first_name, last_name, user_id""")
 
         headers = [x[0] for x in cur.description]
         rows = cur.fetchall()
