@@ -120,7 +120,21 @@ export class UserService {
         };
         return this.http.post<Object>(requestURL, body, httpOptions);
     }
-        
+    
+    PostAddTags(pushpin_id: string, tags: string): Observable<Object> {
+        const requestURL = this.baseUrl + '/addtags';
+        const body = {
+            'pushpin_id': pushpin_id,
+            'tag': tags
+        };
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            })
+        };
+        return this.http.post<Object>(requestURL, body, httpOptions);
+    }
+
     LikePushpin(pushpin_id: string, user_id: string): Observable<Object> {
 
         const requestURL = this.baseUrl + '/likepushpin';
