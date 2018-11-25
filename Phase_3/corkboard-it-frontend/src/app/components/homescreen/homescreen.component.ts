@@ -27,6 +27,9 @@ export class HomescreenComponent implements OnInit {
     owned_corkboards: OwnedCorkBoard[];
     recent_corkboards: RecentCorkBoard[];
 
+    has_updates = false;
+    has_corkboards = false;
+
     public search_text = new FormControl('', [Validators.required, Validators.minLength(1)]);
 
   constructor(public dialog: MatDialog, private userService: UserService, private router: ActivatedRoute) { }
@@ -84,12 +87,18 @@ export class HomescreenComponent implements OnInit {
     getOwnedCorkBoards() {
         this.userService.getHomescreenOwned(this.current_user.user_id).subscribe((res: OwnedCorkBoard[]) => {
             this.owned_corkboards = res;
+            if(this.owned_corkboards.length > 0){
+              this.has_corkboards = true;
+            }
         });
     }
 
     getRecentCorkBoards() {
         this.userService.getHomescreenRecent(this.current_user.user_id).subscribe((res: RecentCorkBoard[]) => {
             this.recent_corkboards = res;
+            if(this.recent_corkboards.length > 0){
+              this.has_updates = true;
+            }
         });
     }
 

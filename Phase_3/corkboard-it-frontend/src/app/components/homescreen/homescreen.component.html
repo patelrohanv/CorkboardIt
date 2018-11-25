@@ -9,7 +9,7 @@
 
     
     <h2>Recent CorkBoards</h2>
-  <div *ngIf="recent_corkboards.length>0; then showRecentCorkBoards else showNone">
+  <div *ngIf="has_updates; then showRecentCorkBoards else showNone">
   </div>
   <ng-template #showRecentCorkBoards>
     <div *ngFor="let corkboard of recent_corkboards">
@@ -20,7 +20,7 @@
     No Updates.
   </ng-template>
     <h2>My CorkBoards</h2>
-  <div *ngIf="owned_corkboards.length>0; then showOwnedCorkBoards else showNoneOwner">
+  <div *ngIf="has_corkboards; then showOwnedCorkBoards else showNoneOwner">
   </div>
   <ng-template #showOwnedCorkBoards>
     <div *ngFor="let corkboard of owned_corkboards">
