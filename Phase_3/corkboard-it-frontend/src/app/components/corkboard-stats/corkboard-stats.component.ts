@@ -26,6 +26,7 @@ export class CorkboardStatsComponent implements OnInit {
         }
 
     ngOnInit() {
+        document.getElementById(this.u).style.color = 'red';
     }
     
     logRow(row): void {
