@@ -437,7 +437,7 @@ def add_pushpin():
             conn.commit()
 
             # update corkboard time
-            cur.execute("""UPDATE corkboard SET date_time = %(date_time)s WHERE corkboard_id = %(corkboard_id)""",
+            cur.execute("""UPDATE corkboard SET date_time = %(date_time)s WHERE corkboard_id = %(corkboard_id)s""",
             {"date_time": date_time, "corkboard_id":corkboard_id})
 
             conn.commit()
