@@ -9,14 +9,27 @@
 
     
     <h2>Recent CorkBoards</h2>
+  <div *ngIf="has_updates; then showRecentCorkBoards else showNone">
+  </div>
+  <ng-template #showRecentCorkBoards>
     <div *ngFor="let corkboard of recent_corkboards">
-        <app-recentCorkboard-tile [corkboard]="corkboard"></app-recentCorkboard-tile>
+      <app-recentCorkboard-tile [corkboard]="corkboard"></app-recentCorkboard-tile>
     </div>
-
+  </ng-template>
+  <ng-template #showNone>
+    No Updates.
+  </ng-template>
     <h2>My CorkBoards</h2>
+  <div *ngIf="has_corkboards; then showOwnedCorkBoards else showNoneOwner">
+  </div>
+  <ng-template #showOwnedCorkBoards>
     <div *ngFor="let corkboard of owned_corkboards">
-        <app-ownedCorkboard-tile [corkboard]="corkboard"></app-ownedCorkboard-tile>
+      <app-ownedCorkboard-tile [corkboard]="corkboard"></app-ownedCorkboard-tile>
     </div>
+  </ng-template>
+  <ng-template #showNoneOwner>
+    You have no corkboards.
+  </ng-template>
 
     <form>
       <mat-form-field class="full-width">

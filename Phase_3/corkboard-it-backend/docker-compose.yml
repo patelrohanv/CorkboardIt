@@ -1,0 +1,31 @@
+version: '3'
+services: 
+  postgresdb:
+    image: postgres:latest
+    env_file:
+      - ./pg_db.env
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    container_name: postgresdb1
+ 
+  # shell:
+  #   restart: always
+  #   image: postgres:latest
+  #   depends_on:
+  #     - postgresdb
+
+  web:
+    restart: always
+    build: 
+      context: ./
+      dockerfile: flask.Dockerfile
+    ports:
+      - "5001:5001"
+    depends_on:
+      - "postgresdb"
+    command: /flask_dev/wait_for.sh postgresdb python server.py
+
+# docker-compose run shell psql -h postgresdb1 -U postgres
+# docker run -it --rm --link my-postgres:postgres postgres psql -h postgres -U postgres

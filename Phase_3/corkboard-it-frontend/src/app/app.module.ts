@@ -15,6 +15,7 @@ import {
     MatFormFieldModule,
     MatGridListModule,
     MatSnackBarModule,
+    MatChipsModule,
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import * as rxjs from 'rxjs';
@@ -61,6 +62,7 @@ import { UiModule } from './ui.module';
         MatFormFieldModule,
         MatGridListModule,
         MatSnackBarModule,
+        MatChipsModule,
     ],
     bootstrap: [AppComponent],
     entryComponents: [

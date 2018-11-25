@@ -16,8 +16,13 @@
   <mat-card>
       <mat-card-header>
         <mat-card-title>{{description}}</mat-card-title>
-        <mat-card-title>Tags: {{tags}}</mat-card-title>
-        <mat-card-subtitle>Likers: {{likers}}</mat-card-subtitle>
+        <mat-card-subtitle>
+            <p>Tags:</p>
+              <mat-chip-list *ngFor="let tag of tagsList">
+                  <mat-chip>{{tag}}</mat-chip>
+                </mat-chip-list>
+          </mat-card-subtitle>
+        <mat-card-subtitle>Likers: {{likers}}<a routerLink="/viewcorkboard/{{corkboard_id}}" routerLinkActive="active">{{title}}</a></mat-card-subtitle>
       </mat-card-header>
   </mat-card>
 
