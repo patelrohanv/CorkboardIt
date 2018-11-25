@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { RouterModule, Router, Route } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
     selector: 'app-login',
@@ -15,7 +16,7 @@ export class LoginComponent implements OnInit {
 
     email_input: string;
     pin_input: string;
-    constructor(private router: Router, private userService: UserService) {
+    constructor(private router: Router, private userService: UserService, public snackBar: MatSnackBar) {
 
     }
 
@@ -35,8 +36,16 @@ export class LoginComponent implements OnInit {
                 } else {
                     console.log('Incorrect!');
                 }
+            }, err => {
+                this.snackBar.open("Incorrect pin", "Close", {
+                    duration: 2000,
+                });
             })
-        })
-      
+        }, err => {
+            this.snackBar.open("User Does Not Exist", "Close", {
+                duration: 2000,
+            });
+        });
+
     }
 }

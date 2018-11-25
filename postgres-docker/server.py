@@ -319,13 +319,13 @@ def get_watchers(corkboard_id):
 
         for stuff in rows:
             corkboard_watchers.append((dict(zip(headers, stuff))))
-        
+
         return jsonify(corkboard_watchers)
     except:
         return jsonify(corkboard_watchers)
 
 
-       
+
 
 """
 WATCH CORKBOARD
@@ -463,13 +463,14 @@ def add_tags():
     if request.method == 'POST':
         content = request.get_json()
         pushpin_id = content['pushpin_id']
-        tag = content['tag']
+        tag = content['tag'].split(',')
 
-        cur.execute("""INSERT INTO Tag (fk_pushpin_id, tag)
-        VALUES (%(pushpin_id)s, %(tag)s)
-        """, {'pushpin_id': pushpin_id, 'tag': tag})
+        for item in tag:
+            cur.execute("""INSERT INTO Tag (fk_pushpin_id, tag)
+            VALUES (%(pushpin_id)s, %(tag)s)
+            """, {'pushpin_id': pushpin_id, 'tag': item})
 
-        conn.commit()
+            conn.commit()
         return jsonify(status_code=201)
 
 #########################################################################################################
@@ -893,7 +894,7 @@ def corkboard_stats():
 
 @app.route('/')
 def get_home():
-    return 'welcome to the api' 
+    return 'welcome to the api'
 
 if __name__ == '__main__':
     app.run(port=5001, threaded=True, host=('0.0.0.0'))              #  Start a development server

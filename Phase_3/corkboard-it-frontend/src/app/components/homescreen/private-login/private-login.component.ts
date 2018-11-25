@@ -3,39 +3,45 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
-  selector: 'app-private-login',
-  templateUrl: './private-login.component.html',
-  styleUrls: ['./private-login.component.scss']
+    selector: 'app-private-login',
+    templateUrl: './private-login.component.html',
+    styleUrls: ['./private-login.component.scss']
 })
 export class PrivateLoginComponent implements OnInit {
-  title: string;
-  id: string;
-  form: FormGroup;
-  password: string
-  constructor(
-              private dialogRef: MatDialogRef<PrivateLoginComponent>,  
-              @Inject(MAT_DIALOG_DATA) data,
-              private userService: UserService,
-              private router: Router) { 
-                this.title = data['title']
-                this.id = data['id']
-              }
+    title: string;
+    id: string;
+    form: FormGroup;
+    password: string
+    constructor(
+        private dialogRef: MatDialogRef<PrivateLoginComponent>,
+        @Inject(MAT_DIALOG_DATA) data,
+        private userService: UserService,
+        private router: Router,
+        public snackBar: MatSnackBar) {
+        this.title = data['title']
+        this.id = data['id']
+    }
 
-  ngOnInit() {
-    console.log(this.title, this.id)
-  }
+    ngOnInit() {
+        console.log(this.title, this.id)
+    }
 
-  close() {
-    this.userService.postLoginPrivateCorkBoard(this.id, this.password).subscribe((data) => {
-      console.log(data);
-      if(data['isValid'] == true) {
-        this.router.navigate(['/viewcorkboard/', this.id]);
-      }
-      this.dialogRef.close()
-    })
-    
-  }
+    close() {
+        this.userService.postLoginPrivateCorkBoard(this.id, this.password).subscribe((data) => {
+            console.log(data);
+            if (data['isValid'] == true) {
+                this.router.navigate(['/viewcorkboard/', this.id]);
+            } else {
+                this.snackBar.open("Incorrect Password", "Close", {
+                    duration: 2000,
+                });
+            }
+            this.dialogRef.close()
+        });
+
+    }
 
 }
