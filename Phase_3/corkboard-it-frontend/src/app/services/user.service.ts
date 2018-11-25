@@ -88,8 +88,13 @@ export class UserService {
 
     // /addPushpin/<corkboard_id>
     postAddPushpin(pushpin: Pushpin): Observable<Object> {
-        const requestURL = this.baseUrl + '/addpushpin/' + pushpin.corkboard_id;
-        return this.http.post<Object>(requestURL, '');
+        const requestURL = this.baseUrl + '/addpushpin';
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            })
+        }
+        return this.http.post<Object>(requestURL, pushpin, httpOptions);
     }
 
     // /viewPushpin/<corkboard_id>/<pushpin_id>

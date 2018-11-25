@@ -25,6 +25,7 @@ export class ViewCorkboardComponent implements OnInit {
 
     constructor(public dialog: MatDialog, private userService: UserService, private router: ActivatedRoute, private navigator: Router) { }
     ngOnInit() {
+        console.log('load')
         this.cbid = this.router.snapshot.params['cbid'];
         this.updateData()
     }
@@ -61,8 +62,16 @@ export class ViewCorkboardComponent implements OnInit {
     addPushpin(): void {
         const dialogConfig = new MatDialogConfig();
         dialogConfig.autoFocus = true;
+        dialogConfig.data = {
+            user_id: this.owner.user_id,
+            corkboard_id: this.cbid
+          };
+      
 
         const dialogRef = this.dialog.open(AddPushpinComponent, dialogConfig);
+        dialogRef.afterClosed().subscribe(() => {
+            this.updateData();
+        })
     }
 
     watch_corkboard() {
