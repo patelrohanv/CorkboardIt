@@ -1,0 +1,18 @@
+Team 070
+
+Team Members:
+    Bing Lin
+    Julie Marie Machamer
+    Rohan Vipul Patel
+    David Tsui
+
+SQL Files:
+    Table Creation
+        File: init.SQL
+        Path: /PHASE_3/corkboard-it-backend/init.sql
+    Preloading Data
+        File: init.SQL
+        Path: /PHASE_3/corkboard-it-backend/init.sql
+    SQL Queries
+        File: server.py
+        Path: /PHASE_3/corkboard-it-backend/server.py
