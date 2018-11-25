@@ -23,6 +23,7 @@ export class ViewPushpinComponent implements OnInit {
   private description: any;
   private url: any;
   private tags: String = '';
+  private tagsList: String[] = [];
 
   private website : string;
   private http: string;
@@ -134,6 +135,7 @@ export class ViewPushpinComponent implements OnInit {
         }
         // concat tags
         this.tags = this.tags + pushpin[i]['tag'];
+        this.tagsList = this.tags.split(',');
       }
     }
   }
