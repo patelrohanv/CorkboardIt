@@ -23,7 +23,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
-import { AddCorkboardComponent } from './components/add-corkboard/add-corkboard.component';
+import { AddCorkboardComponent, PasswordErrorComponent } from './components/add-corkboard/add-corkboard.component';
 import { ViewCorkboardComponent } from './components/view-corkboard/view-corkboard.component';
 import { AddPushpinComponent } from './components/add-pushpin/add-pushpin.component';
 import { ViewPushpinComponent } from './components/view-pushpin/view-pushpin.component';
@@ -46,7 +46,8 @@ import { UiModule } from './ui.module';
         SearchPushpinComponent,
         PopularTagsComponent,
         PopularSitesComponent,
-        CorkboardStatsComponent
+        CorkboardStatsComponent,
+        PasswordErrorComponent
     ],
     imports: [
         HomeScreenModule,
@@ -72,6 +73,8 @@ import { UiModule } from './ui.module';
         PopularTagsComponent,   
         PopularTagsComponent,
         CorkboardStatsComponent,
-        SearchPushpinComponent, ViewPushpinComponent]
+        SearchPushpinComponent, ViewPushpinComponent,
+        PasswordErrorComponent],
+    exports: [ PasswordErrorComponent ]
 })
 export class AppModule { }

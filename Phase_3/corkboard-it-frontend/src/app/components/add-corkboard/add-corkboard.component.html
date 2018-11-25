@@ -14,13 +14,13 @@
     </mat-form-field>
     <br>
     <mat-form-field>
-        <mat-select placeholder="Visbility" [formControl]="visibility" (change)=disablePassword()>
-          <mat-option value="true" (click)="public = true">Public</mat-option>
-          <mat-option value="false" (click)="public = false">Private</mat-option>
+        <mat-select placeholder="Visbility" [formControl]="visibility">
+          <mat-option value="true" (click)="changeVisibility()">Public</mat-option>
+          <mat-option value="false" (click)="changeVisibility()">Private</mat-option>
         </mat-select>
       </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="Password" [formControl]="password" [disabled]="!public"> 
+    <mat-form-field *ngIf="!isPublic">
+      <input matInput placeholder="Password" [formControl]="password"> 
     </mat-form-field>
   </form>
 </div>

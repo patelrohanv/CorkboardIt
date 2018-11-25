@@ -125,7 +125,8 @@ def owned_corkboards(user_id):
 
         data = []
 
-
+        conn.commit()
+        
         headers = [x[0] for x in cur.description]
         rows = cur.fetchall()
 
@@ -181,6 +182,8 @@ def recent_updates(user_id):
         LIMIT 4) ckbd
         INNER JOIN CorkBoardItUser
         ON CorkBoardItUser.user_id = ckbd.fk_user_id""", {"user": user_id})
+
+        conn.commit()
 
         data = []
         headers = [x[0] for x in cur.description]
@@ -350,7 +353,7 @@ def watch_corkboard():
         VALUES (%(user_id)s,
         ( SELECT public_corkboard_id
         FROM PublicCorkBoard AS public
-        WHERE public.fk_corkboard_id = %(corkboard_id)s )) ON CONFLICT (fk_user_id,fk_public_corkboard_id) DO NOTHING
+        WHERE public.fk_corkboard_id = %(corkboard_id)s )) ON CONFLICT (fk_user_id, fk_public_corkboard_id) DO NOTHING
         """, {'user_id':user_id, 'corkboard_id':corkboard_id})
 
         return jsonify(status_code=201)
@@ -385,14 +388,18 @@ def add_corkboard():
     rows = cur.fetchall()
     corkboard_id = rows[0][0]
 
+    print(visibility, file=sys.stderr)
     conn.commit()
-    if visibility == True:
+    if visibility is True:
+        print('inserting into public', file=sys.stderr)
         cur.execute("""INSERT INTO PublicCorkBoard (fk_corkboard_id)
         VALUES(%(corkboard_id)s)""", {"corkboard_id": corkboard_id})
     else:
+        print('inserting into private', file=sys.stderr)
         cur.execute("""INSERT INTO PrivateCorkBoard  (fk_corkboard_id, password)
         VALUES (%(corkboard_id)s, %(password)s)""", {"corkboard_id": corkboard_id, "password": password})
 
+    conn.commit()
     #return corkboard_id
     return jsonify(corkboard_id)
 
@@ -421,31 +428,33 @@ def corkboard_title(corkboard_id):
 
 @app.route('/addpushpin', methods=['POST'])
 def add_pushpin():
-    try:
-        if request.method == 'POST':
-            content = request.get_json()
-            user_id = content['user_id']
-            corkboard_id = content['corkboard_id']
-            date_time = content['date_time']
-            url = content['url']
-            description = content['description']
+    if request.method == 'POST':
+        content = request.get_json()
+        user_id = content['user_id']
+        corkboard_id = content['corkboard_id']
+        date_time = content['date_time']
+        url = content['url']
+        description = content['description']
 
-            cur.execute("""INSERT INTO PushPin (pushpin_id, fk_user_id, fk_corkboard_id, date_time, url, description)
-            VALUES (DEFAULT, %(user_id)s, %(corkboard_id)s, %(date_time)s, %(url)s, %(description)s)
-            """, {"user_id": user_id, "corkboard_id": corkboard_id, "date_time": date_time, "url": url, "description": description})
+        data = []
 
-            conn.commit()
+        cur.execute("""INSERT INTO PushPin (pushpin_id, fk_user_id, fk_corkboard_id, date_time, url, description)
+        VALUES (DEFAULT, %(user_id)s, %(corkboard_id)s, %(date_time)s, %(url)s, %(description)s) RETURNING pushpin_id;
+        """, {"user_id": user_id, "corkboard_id": corkboard_id, "date_time": date_time, "url": url, "description": description})
+        
+        id_of_new_row = cur.fetchone()[0]
 
-            # update corkboard time
-            cur.execute("""UPDATE corkboard SET date_time = %(date_time)s WHERE corkboard_id = %(corkboard_id)s""",
-            {"date_time": date_time, "corkboard_id":corkboard_id})
+        conn.commit()
 
-            conn.commit()
+        # update corkboard time
+        cur.execute("""UPDATE corkboard SET date_time = %(date_time)s WHERE corkboard_id = %(corkboard_id)s""",
+        {"date_time": date_time, "corkboard_id":corkboard_id})
 
-            #return corkboard_id
-            return jsonify(corkboard_id)
-    except:
-        print('error adding pushpin')
+        conn.commit()
+    
+        #return corkboard_id
+        return jsonify(id_of_new_row)
+
 
 
 @app.route('/addtags', methods=['POST'])
@@ -462,12 +471,13 @@ def add_tags():
     """
     if request.method == 'POST':
         content = request.get_json()
+        print('CONTENT:', content, file=sys.stderr)
         pushpin_id = content['pushpin_id']
         tag = content['tag'].split(',')
 
         for item in tag:
             cur.execute("""INSERT INTO Tag (fk_pushpin_id, tag)
-            VALUES (%(pushpin_id)s, %(tag)s)
+            VALUES (%(pushpin_id)s, %(tag)s) 
             """, {'pushpin_id': pushpin_id, 'tag': item})
 
             conn.commit()

@@ -3,7 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { Categories } from 'src/app/models/category';
 import { DISABLED } from '@angular/forms/src/model';
 import { Corkboard } from '../../models/corkboard';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
 import { User } from 'src/app/models/user';
 import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
     styleUrls: ['./add-corkboard.component.scss']
 })
 export class AddCorkboardComponent implements OnInit {
-    public = true;
+    isPublic = true;
     title = new FormControl('', [Validators.required]);
     category = new FormControl('', [Validators.required]);
     visibility = new FormControl('', [Validators.required]);
@@ -24,7 +24,7 @@ export class AddCorkboardComponent implements OnInit {
 
     constructor( private router: Router, private userService: UserService,
         private dialogRef: MatDialogRef<AddCorkboardComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: User) {
+        @Inject(MAT_DIALOG_DATA) public data: User, public snackBar: MatSnackBar) {
         this.categories = Categories;
     }
     ngOnInit() {
@@ -39,11 +39,16 @@ export class AddCorkboardComponent implements OnInit {
         cb.email = this.data.email;
         cb.date_time = new Date().toLocaleString();
         cb.category = this.category.value;
-        cb.visibility = this.visibility.value;
+        cb.visibility = this.visibility.value == 'true' ? true : false;
+        console.log(cb.visibility);
         if (!cb.visibility) {
-          cb.password = this.password.value;
+           if (this.password.value.length == 0) {
+               this.openSnackBar();
+               return;
+           } 
+           cb.password = this.password.value;
         }
-        console.log(cb);
+        // console.log(cb);
         this.userService.postAddCorkboard(cb).subscribe((corkboard) => {
           console.log(corkboard)
           this.dialogRef.close()
@@ -52,14 +57,33 @@ export class AddCorkboardComponent implements OnInit {
       }
     }
 
-    disablePassword() {
+    openSnackBar() {
+        this.snackBar.openFromComponent(PasswordErrorComponent, {
+          duration: 700,
+        });
+      }
+
+    changeVisibility() {
         console.log(this.visibility);
-        if (this.visibility.value) {
-            this.public = true;
+        if (this.visibility.value == 'true') {
+            console.log('public')
+            this.isPublic = true;
             this.password.reset();
-        } else if (!this.visibility.value) {
-            this.public = false;
+        } else if (this.visibility.value == 'false') {
+            console.log('private')
+            this.isPublic = false;
         }
     }
 
 }
+
+@Component({
+    selector: 'snack-bar-component-password-error',
+    template: '<span class="error">Please enter password!</span>',
+    styles: [`
+      .error {
+        color: hotpink;
+      }
+    `],
+  })
+  export class PasswordErrorComponent {}
