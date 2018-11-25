@@ -10,9 +10,9 @@ SQL Files:
     Table Creation
         File: init.SQL
         Path: /PHASE_3/corkboard-it-backend/init.sql
-    Preloading Data
+    Inserting Sample Data
         File: init.SQL
         Path: /PHASE_3/corkboard-it-backend/init.sql
-    SQL Queries
+    SQL Queries for CorkBoardIt functionality
         File: server.py
         Path: /PHASE_3/corkboard-it-backend/server.py
