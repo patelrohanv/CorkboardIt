@@ -16,7 +16,9 @@ export class AddPushpinComponent implements OnInit {
     description = new FormControl('', [Validators.required]);
     tags = new FormControl('', [Validators.required]);
 
-    current_cork_board = 'Gardens I Love';
+
+    current_cork_board = this.data['corkboard_title'].toString();
+
 
     constructor( private router: Router, private userService: UserService,
         private dialogRef: MatDialogRef<AddPushpinComponent>,

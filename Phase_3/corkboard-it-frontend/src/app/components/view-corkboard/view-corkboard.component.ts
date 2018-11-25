@@ -64,7 +64,8 @@ export class ViewCorkboardComponent implements OnInit {
         dialogConfig.autoFocus = true;
         dialogConfig.data = {
             user_id: this.owner.user_id,
-            corkboard_id: this.cbid
+            corkboard_id: this.cbid,
+            corkboard_title : this.corkboard_stat.title
           };
       
 

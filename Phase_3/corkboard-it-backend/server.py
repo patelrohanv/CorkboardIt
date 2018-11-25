@@ -12,7 +12,8 @@ CORS(app)
 
 connection = "host='postgresdb' dbname='postgres' user='postgres' password='secret'"
 conn = psycopg2.connect(connection)
-cur = conn.cursor()
+
+
 
 """
 LOGIN
@@ -29,6 +30,8 @@ def get_is_valid():
         - name: password
           in: body
     """
+    cur = conn.cursor()
+
     if request.method == 'POST':
         content = request.get_json()
         print('CONTENT:', content, file=sys.stderr)
@@ -66,15 +69,22 @@ def get_user_id():
     """
     user_email = request.args.get('email')
     user_id = request.args.get('id')
+    cur = conn.cursor()
 
     if user_email is not None:
         cur.execute("""SELECT first_name, last_name, user_id, email
         FROM CorkBoardItUser
         WHERE CorkBoardItUser.email=%(lname)s;""", {"lname": user_email})
     else:
-        cur.execute("""SELECT first_name, last_name, user_id, email
-        FROM CorkBoardItUser
-        WHERE CorkBoardItUser.user_id=%(lname)s;""", {"lname": user_id})
+       for x in range(1,6):
+           print("Inside by ID, We're on time %d" % (x), file=sys.stderr)
+
+           cur.execute("""SELECT first_name, last_name, user_id, email
+           FROM CorkBoardItUser
+           WHERE CorkBoardItUser.user_id=%s""", (user_id, ))
+           if cur.description is not None:
+               break
+
     rows = cur.fetchall()
 
     if len(rows) == 0:
@@ -109,38 +119,49 @@ def owned_corkboards(user_id):
         in: path
     """
     user_id = user_id
+    data = []
+    cur = conn.cursor()
 
-    try:
-        cur.execute("""SELECT board.corkboard_id, board.title, board.visibility, pins_count.pins_count
-        FROM (SELECT owned_corkboard.corkboard_id, COUNT(pin.fk_corkboard_id) as pins_count
-        FROM (SELECT board.title, board.visibility, board.corkboard_id
-        FROM CorkBoard board
-        WHERE board.fk_user_id= %(user)s) owned_corkboard
-        LEFT OUTER JOIN PushPin pin
-        ON pin.fk_corkboard_id = owned_corkboard.corkboard_id
-        GROUP BY owned_corkboard.corkboard_id) pins_count
-        INNER JOIN CorkBoard board
-        ON board.corkboard_id=pins_count.corkboard_id
-        ORDER BY board.title ASC;""", {"user": user_id})
+    for x in range(1, 6):
+        print("Inside Owned Corkboards, We're on time %d" % (x), file=sys.stderr)
 
-        data = []
+        try:
+            cur.execute("""SELECT board.corkboard_id, board.title, board.visibility, pins_count.pins_count
+            FROM (SELECT owned_corkboard.corkboard_id, COUNT(pin.fk_corkboard_id) as pins_count
+            FROM (SELECT board.title, board.visibility, board.corkboard_id
+            FROM CorkBoard board
+            WHERE board.fk_user_id= %(user)s) owned_corkboard
+            LEFT OUTER JOIN PushPin pin
+            ON pin.fk_corkboard_id = owned_corkboard.corkboard_id
+            GROUP BY owned_corkboard.corkboard_id) pins_count
+            INNER JOIN CorkBoard board
+            ON board.corkboard_id=pins_count.corkboard_id
+            ORDER BY board.title ASC;""", {"user": user_id})
 
-        conn.commit()
-        
-        headers = [x[0] for x in cur.description]
-        rows = cur.fetchall()
+            rows = cur.fetchall()
 
-        if len(rows) == 0:
-            return jsonify(data), 201
+            if len(rows) == 0:
+                return jsonify(data), 201
+            else:
+                break
 
-        for stuff in rows:
-            data.append(dict(zip(headers, stuff)))
+            # if cur.description is not None:
+            #     break
+        except:
+            if x == 5:
+                print("X = 5, Errors, User Id: ", user_id, file=sys.stderr)
+                return jsonify(data), 201
 
-        else:
-            return jsonify(data)
-    except:
-        print(user_id, file=sys.stderr)
-        return jsonify(data), 201
+
+    headers = [x[0] for x in cur.description]
+
+    for stuff in rows:
+        data.append(dict(zip(headers, stuff)))
+
+    else:
+        return jsonify(data)
+
+
 
 """
 RECENT CORKBOARD UPDATES
@@ -156,6 +177,8 @@ def recent_updates(user_id):
         in: path
     """
     user_id = user_id
+    data = []
+    cur = conn.cursor()
 
     try:
         cur.execute("""
@@ -183,9 +206,8 @@ def recent_updates(user_id):
         INNER JOIN CorkBoardItUser
         ON CorkBoardItUser.user_id = ckbd.fk_user_id""", {"user": user_id})
 
-        conn.commit()
+        #conn.commit()
 
-        data = []
         headers = [x[0] for x in cur.description]
         rows = cur.fetchall()
         for stuff in rows:
@@ -206,6 +228,7 @@ VIEW CORKBOARD
 """
 @app.route('/viewcorkboard/<corkboard_id>')
 def view_corkboard(corkboard_id):
+    cur = conn.cursor()
 
     try:
 
@@ -273,6 +296,8 @@ PRIVATE CORKBOARD - LOGIN
 """
 @app.route('/private_login/<corkboard_id>', methods=['POST'])
 def validate_private_corkboard_login(corkboard_id):
+    cur = conn.cursor()
+
     if request.method == 'POST':
     # print(corkboard_id, file=sys.stderr)
         content = request.get_json()
@@ -311,6 +336,8 @@ GET WATCH CORKBOARD
 @app.route('/corkboardwatchers/<corkboard_id>')
 def get_watchers(corkboard_id):
     corkboard_watchers = []
+    cur = conn.cursor()
+
     try:
         cur.execute("""SELECT *
         FROM Watch
@@ -345,6 +372,8 @@ def watch_corkboard():
         - name: corkboard_id
           in: body
     """
+    cur = conn.cursor()
+
     if request.method == 'POST':
         content = request.get_json()
         user_id = content['user_id']
@@ -365,6 +394,8 @@ ADD CORKBOARD
 """
 @app.route('/addcorkboard', methods=['POST'])
 def add_corkboard():
+    cur = conn.cursor()
+
     if request.method == 'POST':
         content = request.get_json()
         print(content, file=sys.stderr)
@@ -411,6 +442,8 @@ ADD PUSHPIN
 """
 @app.route('/corkboardtitle/<corkboard_id>')
 def corkboard_title(corkboard_id):
+    cur = conn.cursor()
+
     cur.execute("""SELECT title
     FROM CorkBoard AS cb
     WHERE cb.corkboard_id = %(corkboard_id)s""", {"corkboard_id": corkboard_id})
@@ -428,6 +461,8 @@ def corkboard_title(corkboard_id):
 
 @app.route('/addpushpin', methods=['POST'])
 def add_pushpin():
+    cur = conn.cursor()
+
     if request.method == 'POST':
         content = request.get_json()
         user_id = content['user_id']
@@ -469,6 +504,8 @@ def add_tags():
         - name: tag
           in: body
     """
+    cur = conn.cursor()
+
     if request.method == 'POST':
         content = request.get_json()
         print('CONTENT:', content, file=sys.stderr)
@@ -492,6 +529,8 @@ VIEW PUSHPIN
 @app.route('/viewpushpin/<pushpin_id>')
 def view_pushpin(pushpin_id):
     data = []
+    cur = conn.cursor()
+
     try:
         cur.execute("""SELECT first_name, last_name
         FROM PushPin AS pp
@@ -624,6 +663,8 @@ def like_pushpin():
         - name: pushpin_id
           in: body
     """
+    cur = conn.cursor()
+
     if request.method == 'POST':
         content = request.get_json()
         print('CONTENT:', content, file=sys.stderr)
@@ -663,6 +704,8 @@ def unlike_pushpin():
         - name: pushpin_id
            in: body
     """
+    cur = conn.cursor()
+
     if request.method == 'POST':
         content = request.get_json()
         print('CONTENT:', content, file=sys.stderr)
@@ -695,6 +738,7 @@ def post_comment():
         - name: date_time
           in: body
     """
+    cur = conn.cursor()
 
     if request.method == 'POST':
         content = request.get_json()
@@ -730,6 +774,8 @@ def follow_user():
         - name: followee_id
           in: body
     """
+    cur = conn.cursor()
+
     if request.method == 'POST':
         content = request.get_json()
         follower_id = content['follower_id']
@@ -752,6 +798,8 @@ Get FOLLOWING
 def get_followers(user_id):
 
     data = []
+    cur = conn.cursor()
+
     try:
 
         if request.method == 'GET':
@@ -782,6 +830,8 @@ SEARCH PUSHPIN
 @app.route('/searchpushpin/<search_text>')
 def search_pushpin(search_text):
     data = []
+    cur = conn.cursor()
+
     try:
         cur.execute("""SELECT DISTINCT ON (search.description) search.description,  search.pushpin_id,
         search.title, search.first_name, search.last_name
@@ -817,6 +867,8 @@ POPULAR TAGS
 @app.route('/populartags')
 def popular_tags():
     data = []
+    cur = conn.cursor()
+
     try:
 
         cur.execute("""SELECT Tag.tag, COUNT(Tag.Tag) AS pushpins, COUNT(DISTINCT Corkboard.corkboard_id) as unique_cb
@@ -848,6 +900,8 @@ POPULAR TAGS
 @app.route('/popularsites')
 def get_popular_sites():
     data = []
+    cur = conn.cursor()
+
     try:
         cur.execute("""SELECT PushPin.url as site, COUNT(PushPin.url) as pushpins
         FROM PushPin
@@ -877,6 +931,8 @@ CORKBOARD STATISTICS
 @app.route('/corkboardstats')
 def corkboard_stats():
     data = []
+    cur = conn.cursor()
+
     try:
         cur.execute("""SELECT CorkBoardItUser.user_id, CorkBoardItUser.first_name, CorkBoardItUser.last_name, COUNT(DISTINCT
         PublicCorkBoard.fk_corkboard_id) AS public_cb, COUNT(DISTINCT pub_pin.pushpin_id) AS
