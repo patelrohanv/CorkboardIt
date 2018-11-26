@@ -439,7 +439,7 @@ CATEGORY
 """
 @app.route('/category')
 def cateogry():
-    cur.execute("""SELECT category FROM Category ORDER BY category ASC""")
+    cur.execute("""SELECT category FROM Category ORDER BY category DESC""")
     headers = [x[0] for x in cur.description]
     data = []
     rows = cur.fetchall()
