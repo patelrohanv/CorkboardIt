@@ -25,7 +25,12 @@ export class AddCorkboardComponent implements OnInit {
     constructor( private router: Router, private userService: UserService,
         private dialogRef: MatDialogRef<AddCorkboardComponent>,
         @Inject(MAT_DIALOG_DATA) public data: User, public snackBar: MatSnackBar) {
-        this.categories = Categories;
+            this.userService.GetCategories().subscribe((categories: any) => {
+                this.categories = []
+                for(let c of categories) {
+                    this.categories.push(c['category'])
+                }
+            })
     }
     ngOnInit() {
     }

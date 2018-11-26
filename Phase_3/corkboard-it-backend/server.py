@@ -529,6 +529,7 @@ def add_tags():
         tag = content['tag'].split(',')
 
         for item in tag:
+            item = item.strip()
             cur.execute("""INSERT INTO Tag (fk_pushpin_id, tag)
             VALUES (%(pushpin_id)s, %(tag)s)
             """, {'pushpin_id': pushpin_id, 'tag': item})

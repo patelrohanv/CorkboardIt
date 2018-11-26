@@ -41,9 +41,14 @@ export class AddPushpinComponent implements OnInit {
             
             const id = pin;
             console.log(id, this.tags.value);
-            this.userService.PostAddTags(id, this.tags.value).subscribe(() => {
-                this.dialogRef.close();
-            })
+            if (this.tags.value.length > 0) {
+                this.userService.PostAddTags(id, this.tags.value).subscribe(() => {
+                    this.dialogRef.close();
+                })
+            } else {
+                this.dialogRef.close(); 
+            }
+          
          
         })
     }

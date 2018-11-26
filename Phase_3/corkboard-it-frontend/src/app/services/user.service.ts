@@ -234,4 +234,9 @@ export class UserService {
         return this.http.get<CorkboardStat[]>(requestURL);
     }
 
+    GetCategories(): Observable<String[]> {
+        const requestURL = this.baseUrl + '/category';
+        return this.http.get<String[]>(requestURL);
+    }
+
 }
