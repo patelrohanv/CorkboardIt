@@ -18,10 +18,10 @@ CREATE TABLE CorkBoard (
     visibility BOOLEAN NOT NULL
 );
 
-CREATE TABLE Category {
-  catgory_id SERIAL PRIMARY KEY,
+CREATE TABLE Category (
+  category_id SERIAL PRIMARY KEY,
   category VARCHAR(50) NOT NULL
-};
+);
 
 CREATE TABLE PublicCorkBoard (
     public_corkboard_id SERIAL PRIMARY KEY,
