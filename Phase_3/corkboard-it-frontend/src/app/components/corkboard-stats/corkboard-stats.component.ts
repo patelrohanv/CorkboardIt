@@ -35,7 +35,7 @@ export class CorkboardStatsComponent implements OnInit {
     }
 
     isCurrentUser(user_id: string) {
-        console.log(user_id);
+        // console.log(user_id);
         return (user_id == this.uid) ? true : false;
     }
  }
@@ -45,7 +45,7 @@ export class CorkboardStatsDataSource extends DataSource<any> {
         super();
     }
     connect(): Observable<CorkboardStat[]> {
-        console.log('connecting');
+        // console.log('connecting');
         return this.userService.CorkboardStats();
     }
     disconnect() { }
