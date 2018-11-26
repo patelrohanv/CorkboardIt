@@ -185,11 +185,11 @@ def recent_updates(user_id):
         SELECT ckbd.corkboard_id, ckbd.title, ckbd.date_time, ckbd.visibility, CorkBoardItUser.first_name, CorkBoardItUser.last_name
         FROM (
         SELECT fcorkboard.corkboard_id, fcorkboard.title, fcorkboard.date_time, fcorkboard.visibility, fcorkboard.fk_user_id
-        FROM (SELECT Follow.fk_user_follower_id
+        FROM (SELECT Follow.fk_user_followee_id
         FROM Follow
-        WHERE Follow.fk_user_followee_id = %(user)s) fid
+        WHERE Follow.fk_user_follower_id = %(user)s) fid
         INNER JOIN CorkBoard fcorkboard
-        ON fcorkboard.fk_user_id = fid.fk_user_follower_id
+        ON fcorkboard.fk_user_id = fid.fk_user_followee_id
         UNION
         SELECT wcorkboard.corkboard_id, wcorkboard.title, wcorkboard.date_time, wcorkboard.visibility, wcorkboard.fk_user_id
         FROM (SELECT w.fk_public_corkboard_id
@@ -529,7 +529,7 @@ def add_tags():
         tag = content['tag'].split(',')
 
         for item in tag:
-            item = item.strip()
+            item = item.strip();
             cur.execute("""INSERT INTO Tag (fk_pushpin_id, tag)
             VALUES (%(pushpin_id)s, %(tag)s)
             """, {'pushpin_id': pushpin_id, 'tag': item})
