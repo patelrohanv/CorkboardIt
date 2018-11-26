@@ -77,6 +77,7 @@ export class ViewCorkboardComponent implements OnInit {
 
     watch_corkboard() {
         this.userService.PostWatch(this.cur_user_id, this.cbid).subscribe((f) => {
+            console.log(this.cur_user_id, this.cbid)
             this.updateData()
         })
     }

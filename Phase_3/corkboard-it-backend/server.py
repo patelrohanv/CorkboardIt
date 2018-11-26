@@ -191,20 +191,24 @@ def recent_updates(user_id):
         INNER JOIN CorkBoard fcorkboard
         ON fcorkboard.fk_user_id = fid.fk_user_followee_id
         UNION
-        SELECT wcorkboard.corkboard_id, wcorkboard.title, wcorkboard.date_time, wcorkboard.visibility, wcorkboard.fk_user_id
+        SELECT corkboard.corkboard_id, corkboard.title, corkboard.date_time, corkboard.visibility, corkboard.fk_user_id
+        FROM (
+        SELECT wid.fk_public_corkboard_id, wcorkboard.fk_corkboard_id
         FROM (SELECT w.fk_public_corkboard_id
         FROM Watch w
         WHERE w.fk_user_id = %(user)s) wid
-        INNER JOIN CorkBoard wcorkboard
-        ON wcorkboard.corkboard_id = wid.fk_public_corkboard_id
+        INNER JOIN PublicCorkBoard wcorkboard
+        ON wcorkboard.public_corkboard_id = wid.fk_public_corkboard_id) public_corkboard
+        INNER JOIN CorkBoard corkboard
+        ON corkboard.corkboard_id = public_corkboard.fk_corkboard_id
         UNION
         SELECT CorkBoard.corkboard_id, CorkBoard.title, CorkBoard.date_time, CorkBoard.visibility, CorkBoard.fk_user_id
         FROM CorkBoard
-        WHERE CorkBoard.fk_user_id = %(user)s
-        ORDER BY date_time DESC
-        LIMIT 4) ckbd
+        WHERE CorkBoard.fk_user_id = %(user)s) ckbd
         INNER JOIN CorkBoardItUser
-        ON CorkBoardItUser.user_id = ckbd.fk_user_id""", {"user": user_id})
+        ON CorkBoardItUser.user_id = ckbd.fk_user_id
+        ORDER BY ckbd.date_time DESC
+        LIMIT 4""", {"user": user_id})
 
         #conn.commit()
 
@@ -339,9 +343,10 @@ def get_watchers(corkboard_id):
     cur = conn.cursor()
 
     try:
-        cur.execute("""SELECT *
-        FROM Watch
-        WHERE fk_public_corkboard_id = %(corkboard_id)s
+        cur.execute("""SELECT fk_user_id
+        FROM Watch INNER JOIN PublicCorkBoard
+        ON Watch.fk_public_corkboard_id = PublicCorkBoard.public_corkboard_id 
+        WHERE fk_corkboard_id = %(corkboard_id)s
         """, {'corkboard_id': corkboard_id})
 
         headers = [x[0] for x in cur.description]
@@ -384,7 +389,8 @@ def watch_corkboard():
         FROM PublicCorkBoard AS public
         WHERE public.fk_corkboard_id = %(corkboard_id)s )) ON CONFLICT (fk_user_id, fk_public_corkboard_id) DO NOTHING
         """, {'user_id':user_id, 'corkboard_id':corkboard_id})
-
+        print(user_id, corkboard_id, file=sys.stderr)
+        conn.commit()
         return jsonify(status_code=201)
 #########################################################################################################
 #########################################################################################################
@@ -960,7 +966,8 @@ def corkboard_stats():
         LEFT OUTER JOIN Pushpin pub_pin ON PublicCorkBoard.fk_corkboard_id = pub_pin.fk_corkboard_id
         FULL OUTER JOIN PrivateCorkBoard ON CorkBoard.corkboard_id = PrivateCorkBoard.fk_corkboard_id
         LEFT OUTER JOIN Pushpin pr_pin ON PrivateCorkBoard.fk_corkboard_id = pr_pin.fk_corkboard_id
-        GROUP BY user_id, first_name, last_name""")
+        GROUP BY user_id, first_name, last_name
+        ORDER BY public_cb DESC, private_cb DESC""")
 
         headers = [x[0] for x in cur.description]
         rows = cur.fetchall()
