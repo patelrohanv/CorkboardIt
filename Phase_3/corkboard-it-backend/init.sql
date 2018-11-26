@@ -18,6 +18,11 @@ CREATE TABLE CorkBoard (
     visibility BOOLEAN NOT NULL
 );
 
+CREATE TABLE Category {
+  catgory_id SERIAL PRIMARY KEY,
+  category VARCHAR(50) NOT NULL
+};
+
 CREATE TABLE PublicCorkBoard (
     public_corkboard_id SERIAL PRIMARY KEY,
     fk_corkboard_id INTEGER REFERENCES CorkBoard(corkboard_id)
@@ -71,7 +76,7 @@ CREATE TABLE Follow (
 
 INSERT INTO CorkBoardItUser (email, pin, first_name, last_name)
 VALUES
-    ('icylin@gg.com', 1234, 'Bing', 'Lin'), 
+    ('icylin@gg.com', 1234, 'Bing', 'Lin'),
     ('ronpatel@gg.com', 1234, 'Rohan', 'Patel'),
     ('juliematchamer@gg.com', 1234, 'Julie', 'Matchamer'),
     ('dtsui@gg.com', 1234, 'David', 'Tsui'),
@@ -79,8 +84,17 @@ VALUES
     ('steve@gg.com', 1234, 'Steve', 'Watson'),
     ('dwoods@gg.com', 1234, 'Daniel', 'Woods');
 
-
-
-
-
-
+INSERT INTO Category(category)
+VALUES
+    ('Education'),
+    ('Architecture'),
+    ('Home & Garden'),
+    ('People'),
+    ('Travel'),
+    ('Photography'),
+    ('Sports'),
+    ('Pets'),
+    ('Technology'),
+    ('Other'),
+    ('Food & Drink'),
+    ('Art');

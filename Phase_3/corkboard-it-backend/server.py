@@ -434,9 +434,24 @@ def add_corkboard():
     #return corkboard_id
     return jsonify(corkboard_id)
 
+"""
+CATEGORY
+"""
+@app.route('/category')
+def cateogry():
+    cur.execute("""SELECT category FROM Category ORDER BY category ASC""")
+    headers = [x[0] for x in cur.description]
+    data = []
+    rows = cur.fetchall()
+    for stuff in rows:
+        data.append(dict(zip(headers, stuff)))
+
+    return jsonify(data)
+
 #########################################################################################################
 #########################################################################################################
 #########################################################################################################
+
 """
 ADD PUSHPIN
 """
@@ -476,7 +491,7 @@ def add_pushpin():
         cur.execute("""INSERT INTO PushPin (pushpin_id, fk_user_id, fk_corkboard_id, date_time, url, description)
         VALUES (DEFAULT, %(user_id)s, %(corkboard_id)s, %(date_time)s, %(url)s, %(description)s) RETURNING pushpin_id;
         """, {"user_id": user_id, "corkboard_id": corkboard_id, "date_time": date_time, "url": url, "description": description})
-        
+
         id_of_new_row = cur.fetchone()[0]
 
         conn.commit()
@@ -486,7 +501,7 @@ def add_pushpin():
         {"date_time": date_time, "corkboard_id":corkboard_id})
 
         conn.commit()
-    
+
         #return corkboard_id
         return jsonify(id_of_new_row)
 
@@ -514,7 +529,7 @@ def add_tags():
 
         for item in tag:
             cur.execute("""INSERT INTO Tag (fk_pushpin_id, tag)
-            VALUES (%(pushpin_id)s, %(tag)s) 
+            VALUES (%(pushpin_id)s, %(tag)s)
             """, {'pushpin_id': pushpin_id, 'tag': item})
 
             conn.commit()
